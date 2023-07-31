@@ -133,6 +133,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+maerstanas-venv/
 
 # Spyder project settings
 .spyderproject
