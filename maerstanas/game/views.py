@@ -11,7 +11,7 @@ def index(request):
 
 def game(request):
     if "player2" not in request.session:
-        request.session["player2"] = "human"
+        request.session["player2"] = "computer"
     if "data" not in request.session:
         my_game = Game()
         request.session["data"] = {
@@ -34,7 +34,6 @@ def game(request):
             col_dict[col] = request.session["data"]["board"][row][col]
             board_dict[row] = col_dict
     context = {
-        # "board_list": [1, 2, 3, 4, 5, 6, 7],
         "reversed_list": reversed_list,
         "board_dict": board_dict
     }
@@ -47,7 +46,7 @@ def new_game(request, players):
         request.session["player2"] = "computer"
     if players == 2:
         request.session["player2"] = "human"
-    return redirect("/")
+    return redirect("/game")
 
 
 def process(request, row, col):
@@ -59,9 +58,9 @@ def process(request, row, col):
             best_row, best_col = get_best_move(request.session["data"], sim_num=100, depth=49)
             request.session["data"] = assign_move(request.session["data"], best_row, best_col)
     request.session["data"]["game_over"] = request.session["data"]["moves_left"] == []
-    return redirect("/")
+    return redirect("/game")
 
 
 def reset(request):
-    request.session.clear()
-    return redirect("/")
+    request.session.pop("data")
+    return redirect("/game")
