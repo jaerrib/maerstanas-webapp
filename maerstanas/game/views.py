@@ -6,7 +6,7 @@ from .game_logic.ai_player import get_best_move
 
 # Create your views here.
 def index(request):
-    return redirect("/game")
+    return render(request, "index.html")
 
 
 def game(request):
