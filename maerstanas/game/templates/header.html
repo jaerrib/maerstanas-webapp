@@ -35,8 +35,17 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/reset">Restart</a>
                             </li>
+
+                            {% if user %}
+                            <li><p class="nav-link my-0 ms-5 text-body-emphasis">Welcome, {{user.username}}!</p></li>
+                            <li><a class="nav-link text-body-emphasis" href="/users/logout/">Log Out</a></li>
+                            {% else %}
+
                             <li><a class="nav-link" href="/users/login/">Log In</a></li>
                             <li><a class="nav-link" href="/users/registration/">Sign Up</a></li>
+
+                            {% endif %}
+
                         </ul>
                     </div>
                 </div>
