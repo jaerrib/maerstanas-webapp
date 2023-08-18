@@ -55,9 +55,15 @@ def process(request, row, col):
     if (request.session["data"]["active_player"] == 2) and (
             request.session["data"]["player2"] == "computer"):
         if len(request.session["data"]["moves_left"]):
-            best_row, best_col = get_best_move(request.session["data"], sim_num=100, depth=49)
-            request.session["data"] = assign_move(request.session["data"], best_row, best_col)
-    request.session["data"]["game_over"] = request.session["data"]["moves_left"] == []
+            best_row, best_col = get_best_move(request.session["data"],
+                                               sim_num=100,
+                                               depth=49)
+            request.session["data"] = assign_move(request.session["data"],
+                                                  best_row,
+                                                  best_col)
+    request.session["data"]["game_over"] = (
+            request.session["data"]["moves_left"] == []
+    )
     return redirect("/game")
 
 

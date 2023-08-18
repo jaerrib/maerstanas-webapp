@@ -13,6 +13,10 @@
 </head>
 
 <body>
+    {% block header %}
+    {% include "header.html" %}
+    {% endblock header %}
+
   <div class="container p-4">
     <div class="mb-3">
         <form action="login/process/" method="post">
