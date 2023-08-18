@@ -19,7 +19,7 @@
 
   <div class="container p-4">
     <div class="mb-3">
-        <form action="login/process/" method="post">
+        <form action="/users/login/process/" method="post">
             {% csrf_token %}
             <label for="email" class="form_label">Email:</label>
             <input type="text" name="email" class="form-control mb-3" id="email">
