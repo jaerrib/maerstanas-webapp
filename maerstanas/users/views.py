@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .models import User
 from django.contrib import messages
+from game.models import SessionGame
 import bcrypt
 
 # Create your views here.
 
 
 def index(request):
-    return HttpResponse('route test')
+    return HttpResponse('user route test')
 
 
 def login(request):
@@ -51,7 +52,10 @@ def registration_process(request):
         user = User.objects.create(
             username=request.POST["username"],
             email=request.POST["email"],
-            password=pw_hash)
+            password=pw_hash,
+            record={"w": 0,
+                    "l": 0,
+                    "t": 0})
         user.save()
         request.session['userid'] = user.id
         return redirect("/users/dashboard/")
@@ -62,12 +66,25 @@ def dashboard(request):
         return redirect("/")
     else:
         user = User.objects.get(id=request.session["userid"])
-        # user_organizations = Organization.objects.filter(creator=user)
+        hosted_games = SessionGame.objects.filter(player_one=user)
+        joined_games = SessionGame.objects.filter(player_two=user)
         context = {
-            # "user_organizations": user_organizations,
+            "hosted_games": hosted_games,
+            "joined_games": joined_games,
             "user": user
             }
         return render(request, "dashboard.html", context)
+
+
+def profile(request):
+    if "userid" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["userid"])
+        context = {
+            "user": user
+            }
+    return render(request, 'profile.html', context)
 
 
 def logout(request):
