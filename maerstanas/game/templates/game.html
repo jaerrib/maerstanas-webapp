@@ -37,13 +37,13 @@
                             <div class="square">{{key}}</div>
                             {% for col_key, col_val in value.items %}
                                 <a href="/process/{{key}}/{{col_key}}">
-                                <div class="square bg-body-secondary border border-tertiary">
+                                <div class="square bg-secondary border border-secondary-subtle">
                                 {% if col_val == 1 %}
                                     <img src="{% static 'img/dark_stone.svg' %}" class="stone"
-                                        alt="dark stone">
+                                        alt="dark stone" role="img">
                                     {% elif col_val == 2 %}
                                     <img src="{% static 'img/light_stone.svg' %}" class="stone"
-                                        alt="light stone">
+                                        alt="light stone" role="img">
                                 {% endif %}
                                 </div>
                                 </a>
