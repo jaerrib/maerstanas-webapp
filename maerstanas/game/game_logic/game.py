@@ -1,4 +1,4 @@
-from .board import  Board
+from .board import Board
 from .game_logic import remaining_moves
 
 

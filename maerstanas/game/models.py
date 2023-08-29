@@ -1,8 +1,6 @@
 from django.db import models
 from .game_logic.game import Game
 from users.models import User
-
-
 # from maerstanas.users.models import User
 
 

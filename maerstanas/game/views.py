@@ -1,7 +1,10 @@
+from django.db import models
 from django.shortcuts import render, redirect
 from .game_logic.game import Game
 from .game_logic.game_logic import valid_move, assign_move
 from .game_logic.ai_player import get_best_move
+from game.models import SessionGame
+from users.models import User
 
 
 # Create your views here.
@@ -70,3 +73,18 @@ def process(request, row, col):
 def reset(request):
     request.session.pop("data")
     return redirect("/game")
+
+
+def new_session(request):
+    # create the session and save it to the db
+    user = User.objects.get(id=request.session["userid"])
+    session_game = SessionGame.create(
+        # game_name=models.CharField(max_length=45),
+        game_name="test",
+        player_one=user,
+        player_two=None,
+        password="",
+        status=0,
+    )
+    session_game.save()
+    return redirect("/users/dashboard/")
