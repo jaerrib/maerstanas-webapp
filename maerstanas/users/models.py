@@ -52,7 +52,9 @@ class User(models.Model):
     username = models.CharField(max_length=45)
     email = models.CharField(max_length=45)
     password = models.CharField(max_length=255)
-    record = {}
+    wins = models.IntegerField(default=0)
+    losses = models.IntegerField(default=0)
+    ties = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()

@@ -53,9 +53,10 @@ def registration_process(request):
             username=request.POST["username"],
             email=request.POST["email"],
             password=pw_hash,
-            record={"w": 0,
-                    "l": 0,
-                    "t": 0})
+            # wins=0,
+            # losses=0,
+            # ties=0
+        )
         user.save()
         request.session['userid'] = user.id
         return redirect("/users/dashboard/")
@@ -66,7 +67,7 @@ def dashboard(request):
         return redirect("/")
     else:
         user = User.objects.get(id=request.session["userid"])
-        hosted_games = SessionGame.objects.filter(player_one=user)
+        hosted_games = SessionGame.objects.filter(player_one=user.id)
         joined_games = SessionGame.objects.filter(player_two=user)
         context = {
             "hosted_games": hosted_games,
