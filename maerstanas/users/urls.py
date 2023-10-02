@@ -9,5 +9,6 @@ urlpatterns = [
     path('registration/process/', views.registration_process),
     path('dashboard/', views.dashboard),
     path('profile/', views.profile),
+    path('host_new/', views.host_new),
     path('logout/', views.logout),
 ]

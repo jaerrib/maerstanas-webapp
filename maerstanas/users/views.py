@@ -88,6 +88,17 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 
+def host_new(request):
+    if "userid" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["userid"])
+        context = {
+            "user": user
+            }
+    return render(request, 'host_new.html', context)
+
+
 def logout(request):
     request.session.clear()
     return redirect("/")
