@@ -33,7 +33,7 @@
             <tbody class="table-group-divider">
             {% for game in hosted_games %}
                 <tr class="align-middle">
-                    <td>{{game.session_name}}</td>
+                    <td><a href="#">{{game.game_name}}</a></td>
                     <td>{{game.player_two.username}}</td>
                     <td>{{game.game.score_p1}} - {{game.game.score_p2}}</td>
                     <td>{{game.status}}</td>
@@ -65,9 +65,9 @@
                 </tr>
             </thead>
             <tbody class="table-group-divider">
-                {% for game in hosted_games %}
+                {% for game in joined_games %}
                     <tr class="align-middle">
-                        <td>{{game.session_name}}</td>
+                        <td><a href="#">{{game.game_name}}</a></td>
                         <td>{{game.player_one.username}}</td>
                         <td>{{game.game.score_p2}} - {{game.game.score_p1}}</td>
                          <td>{{game.status}}</td>

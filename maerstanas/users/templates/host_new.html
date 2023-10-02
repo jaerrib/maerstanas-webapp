@@ -17,7 +17,29 @@
     {% endblock header %}
 
     <div class="container p-4">
-        <h1>Create a New Hosted Game Placeholder</h1>
+        <div class="w-75 mx-auto p-3 bg-body-secondary text-body card rounded-4 shadow">
+            <h2 class="text-info">Create a New Hosted Game</h2>
+
+            <div>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }} text-danger" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <form action="/users/host_new/process/" method="post">
+                {% csrf_token %}
+                <label for="game_name" class="form_label">*Game Name:</label>
+                <input type="text" name="game_name" class="form-control mb-3" id="game_name">
+                <label for="password" class="form_label">Password:</label>
+                <input type="password" name="password" class="form-control mb-3" id="password">
+                <input type="submit" value="Submit" class="btn btn-primary mb-3">
+            </form>
+            <p class="text-body-secondary fst-italic">Games created with blank or empty passwords will not be protected, and anyone may join them from the invitations page.</p>
+        </div>
     </div>
 
     {% block footer %}

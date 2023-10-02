@@ -99,6 +99,31 @@ def host_new(request):
     return render(request, 'host_new.html', context)
 
 
+def host_new_process(request):
+    if "userid" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["userid"])
+        password = request.POST["password"]
+        protected = False
+        if password != "":
+            protected = True
+            pw_hash = bcrypt.hashpw(password.encode(),
+                                    bcrypt.gensalt()).decode()
+        else:
+            pw_hash = ""
+        session_game = SessionGame(
+            game_name=request.POST["game_name"],
+            player_one=user,
+            player_two=None,
+            protected=protected,
+            password=pw_hash,
+            status="open",
+        )
+        session_game.save()
+        return redirect("/users/dashboard/")
+
+
 def logout(request):
     request.session.clear()
     return redirect("/")

@@ -19,9 +19,9 @@ class SessionGame(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
-    password = models.CharField(max_length=255, blank=True)
-    # status 0 is active, status 1 or 2 indicates which player won, 3 is a tie
-    status = models.IntegerField()
+    protected = models.BooleanField(False)
+    password = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=10)
     users = models.ManyToManyField(User)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
