@@ -17,8 +17,8 @@
     {% include "header.html" %}
     {% endblock header %}
 
-  <div class="container p-4">
-            <div class="w-75 mx-auto p-3 bg-body-secondary text-body card shadow">
+    <div class="container p-4">
+        <div class="w-75 mx-auto p-3 bg-body-secondary text-body card rounded-4 shadow">
             <h2 class="text-info">Register for your free account</h2>
 
             <div>
@@ -43,10 +43,9 @@
                 <input type="password" name="confirm_password" class="form-control mb-3" id="confirm_password">
                 <input type="submit" value="Sign Up" class="btn btn-lg btn-primary mb-3">
             </form>
-            <small class="text-body-secondary fst-italic">*Required. By clicking Sign Up, you agree to our <a href="#">terms of use.</a></small>
+            <p class="text-body-secondary fst-italic">*Required. By clicking Sign Up, you agree to our <a href="#">terms of use.</a></p>
         </div>
     </div>
-  </div>
 
     {% block footer %}
     {% include "footer.html" %}
