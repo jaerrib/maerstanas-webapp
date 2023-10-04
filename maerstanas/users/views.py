@@ -124,6 +124,19 @@ def host_new_process(request):
         return redirect("/users/dashboard/")
 
 
+def open_games(request):
+    if "userid" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["userid"])
+        open_games = SessionGame.objects.filter(player_two=None)
+        context = {
+            "open_games": open_games,
+            "user": user,
+        }
+        return render(request, "open_games.html", context)
+
+
 def logout(request):
     request.session.clear()
     return redirect("/")

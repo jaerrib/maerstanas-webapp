@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+
+    <title>Mǽrstánas</title>
+</head>
+<body>
+    {% block header %}
+    {% include "header.html" %}
+    {% endblock header %}
+
+    <div class="container p-4">
+        <h2>Open Game Invitations</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Game Name</th>
+                    <th>Host Player</th>
+                    <th>Private Game?</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for game in open_games %}
+                    <tr class="align-middle">
+                        <td>{{game.game_name}}</td>
+                        <td>{{game.player_one.username}}</td>
+                        <td>{{game.protected}}</td>
+                        <td><a href="#" class="btn btn-sm btn-primary">Join</a></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <h6 class="text-warning">No open games available</h6>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% block footer %}
+    {% include "footer.html" %}
+    {% endblock footer %}
+
+</body>
+</html>
