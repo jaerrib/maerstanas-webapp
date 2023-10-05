@@ -22,21 +22,23 @@
                             <li class="nav-item" data-bs-toggle="offcanvas" href="#rules" aria-controls="rules">
                                 <a class="nav-link" href="#">Rules</a>
                             </li>
+
+                            {% if not user.username %}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    New Game (Guest)
+                                    Guest Game
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="/new_game/1">1 player</a></li>
                                     <li><a class="dropdown-item" href="/new_game/2">2 players (local)</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/reset">Restart</a>
-                            </li>
+                            {% endif %}
                             {% if user.username %}
-                            <li><p class="nav-link my-0 ms-5 text-body-emphasis">Welcome, {{user.username}}!</p></li>
+                           <li><a class="nav-link" href="/users/dashboard">Dashboard</a></li>
+                            <li><a class="nav-link" href="/users/open_games/">Open Games</a></li>
+                            <li><p class="nav-link my-0 text-body-emphasis">Welcome, {{user.username}}!</p></li>
                             <li><a class="nav-link text-body-emphasis" href="/users/logout/">Log Out</a></li>
                             {% else %}
                             <li><a class="nav-link" href="/users/login/">Log In</a></li>
