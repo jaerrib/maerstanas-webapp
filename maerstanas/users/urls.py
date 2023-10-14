@@ -12,5 +12,7 @@ urlpatterns = [
     path('host_new/', views.host_new),
     path('host_new/process/', views.host_new_process),
     path('open_games/', views.open_games),
+    path('join_game/<game_name>/', views.join_game),
+    path('private_game/process/', views.private_game_process),
     path('logout/', views.logout),
 ]

@@ -129,12 +129,55 @@ def open_games(request):
         return redirect("/")
     else:
         user = User.objects.get(id=request.session["userid"])
-        open_games = SessionGame.objects.filter(player_two=None)
+        open_games = SessionGame.objects.filter(player_two=None, status="open")
         context = {
             "open_games": open_games,
             "user": user,
         }
         return render(request, "open_games.html", context)
+
+
+def join_game(request, game_name):
+    if "userid" not in request.session:
+        return redirect("/")
+    else:
+        print("GAME NAME IS", game_name)
+        open_game = SessionGame.objects.get(game_name=game_name)
+        user = User.objects.get(id=request.session["userid"])
+        if open_game.protected and user.id != open_game.player_one.id:
+            context = {
+                "open_game": open_game,
+                "user": user,
+            }
+            return render(request, "join_game.html", context)
+        elif user.id != open_game.player_one.id:
+            open_game.player_two = user
+            open_game.status = "active"
+            open_game.save()
+            return redirect("/users/dashboard/")
+        else:
+            return redirect("/users/join_game/")
+
+
+def private_game_process(request):
+    if "userid" not in request.session:
+        return redirect("/")
+    else:
+        open_game = SessionGame.objects.get(game_name=request.POST["game_name"])
+        user = User.objects.get(id=request.session["userid"])
+        if bcrypt.checkpw(request.POST['password'].encode(),
+                          open_game.password.encode()):
+            if user.id != open_game.player_one.id:
+                open_game.player_two = user
+                open_game.status = "active"
+                open_game.save()
+                return redirect("/users/dashboard/")
+        else:
+            context = {
+                "open_game": open_game,
+                "user": user,
+            }
+            return render(request, "join_game.html", context)
 
 
 def logout(request):
