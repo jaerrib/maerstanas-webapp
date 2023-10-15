@@ -22,7 +22,6 @@ class SessionGame(models.Model):
     protected = models.BooleanField(False)
     password = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=10)
-    users = models.ManyToManyField(User)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

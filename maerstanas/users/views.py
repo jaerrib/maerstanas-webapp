@@ -84,9 +84,16 @@ def profile(request, username):
     if "userid" not in request.session:
         return redirect("/")
     else:
-        user = User.objects.filter(username=username)
+        user = User.objects.get(username=username)
+        game_history = user.wins + user.losses + user.ties
+        if game_history != 0:
+            win_percentage = round(user.wins / game_history * 100)
+        else:
+            win_percentage = 0
         context = {
-            "user": user
+            "user": user,
+            "game_history": game_history,
+            "win_percentage": win_percentage,
             }
     return render(request, 'profile.html', context)
 
