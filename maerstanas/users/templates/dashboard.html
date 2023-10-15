@@ -18,7 +18,7 @@
 
   <div class="container p-4">
     <h1>Dashboard</h1>
-      <a href="/users/profile/">Profile</a>
+      <a href="{% url 'profile' user.username %}">Profile</a>
       <h2>My hosted games</h2>
         <table class="table table-hover">
             <thead>
@@ -34,7 +34,11 @@
             {% for game in hosted_games %}
                 <tr class="align-middle">
                     <td><a href="#">{{game.game_name}}</a></td>
-                    <td>{{game.player_two.username}}</td>
+                    {% if game.player_two.username %}
+                        <td><a href="{% url 'profile' game.player_two.username %}">{{game.player_two.username}}</a></td>
+                    {% else %}
+                        <td>{{game.player_two.username}}</td>
+                    {% endif %}
                     <td>{{game.game.score_p1}} - {{game.game.score_p2}}</td>
                     <td>{{game.status}}</td>
                     <td>{{game.messages}}</td>
@@ -48,7 +52,7 @@
             {% endfor %}
                 <tr>
                     <td colspan="5">
-                        <a href="/users/host_new/" class="btn btn-primary">Host a New game</a>
+                        <a href="{% url 'host new' %}" class="btn btn-primary">Host a New game</a>
                     </td>
                 </tr>
             </tbody>
@@ -68,7 +72,7 @@
                 {% for game in joined_games %}
                     <tr class="align-middle">
                         <td><a href="#">{{game.game_name}}</a></td>
-                        <td>{{game.player_one.username}}</td>
+                        <td><a href="{% url 'profile' game.player_one.username %}">{{game.player_one.username}}</a></td>
                         <td>{{game.game.score_p2}} - {{game.game.score_p1}}</td>
                          <td>{{game.status}}</td>
                         <td>{{game.messages}}</td>

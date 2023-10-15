@@ -12,7 +12,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg bg-body-tertiary rounded-4 p-2 my-3 shadow-sm">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="/">Mǽrstánas</a>
+                    <a class="navbar-brand" href="{% url 'homepage' %}">Mǽrstánas</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -30,19 +30,19 @@
                                     Guest Game
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="/new_game/1">1 player</a></li>
-                                    <li><a class="dropdown-item" href="/new_game/2">2 players (local)</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'new guest' 1 %}">1 player</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'new guest' 2 %}">2 players (local)</a></li>
                                 </ul>
                             </li>
                             {% endif %}
                             {% if user.username %}
-                           <li><a class="nav-link" href="/users/dashboard">Dashboard</a></li>
-                            <li><a class="nav-link" href="/users/open_games/">Open Games</a></li>
+                           <li><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+                            <li><a class="nav-link" href="{% url 'open games' %}">Open Games</a></li>
                             <li><p class="nav-link my-0 text-body-emphasis">Welcome, {{user.username}}!</p></li>
-                            <li><a class="nav-link text-body-emphasis" href="/users/logout/">Log Out</a></li>
+                            <li><a class="nav-link text-body-emphasis" href="{% url 'logout' %}">Log Out</a></li>
                             {% else %}
-                            <li><a class="nav-link" href="/users/login/">Log In</a></li>
-                            <li><a class="nav-link" href="/users/registration/">Register</a></li>
+                            <li><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+                            <li><a class="nav-link" href="{% url 'registration' %}">Register</a></li>
                             {% endif %}
 
                         </ul>

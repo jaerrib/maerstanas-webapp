@@ -8,7 +8,10 @@ import bcrypt
 
 
 def index(request):
-    return HttpResponse('user route test')
+    if "userid" not in request.session:
+        return redirect("homepage")
+    else:
+        return redirect("dashboard")
 
 
 def login(request):
@@ -28,12 +31,12 @@ def login_process(request):
             if bcrypt.checkpw(request.POST['password'].encode(),
                               logged_user.password.encode()):
                 request.session['userid'] = logged_user.id
-                return redirect('/users/dashboard/')
+                return redirect('dashboard')
             else:
                 errors["password"] = "Invalid password"
             for key, value in errors.items():
                 messages.error(request, value)
-                return redirect("/users/login")
+                return redirect("login")
 
 
 def registration(request):
@@ -45,7 +48,7 @@ def registration_process(request):
     if len(errors) > 0:
         for key, value in errors.items():
             messages.error(request, value)
-            return redirect("/registration/")
+            return redirect("registration")
     else:
         password = request.POST["password"]
         pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
@@ -59,7 +62,7 @@ def registration_process(request):
         )
         user.save()
         request.session['userid'] = user.id
-        return redirect("/users/dashboard/")
+        return redirect("dashboard")
 
 
 def dashboard(request):
@@ -77,11 +80,11 @@ def dashboard(request):
         return render(request, "dashboard.html", context)
 
 
-def profile(request):
+def profile(request, username):
     if "userid" not in request.session:
         return redirect("/")
     else:
-        user = User.objects.get(id=request.session["userid"])
+        user = User.objects.filter(username=username)
         context = {
             "user": user
             }
@@ -101,7 +104,7 @@ def host_new(request):
 
 def host_new_process(request):
     if "userid" not in request.session:
-        return redirect("/")
+        return redirect("homepage")
     else:
         user = User.objects.get(id=request.session["userid"])
         password = request.POST["password"]
@@ -121,12 +124,12 @@ def host_new_process(request):
             status="open",
         )
         session_game.save()
-        return redirect("/users/dashboard/")
+        return redirect("dashboard")
 
 
 def open_games(request):
     if "userid" not in request.session:
-        return redirect("/")
+        return redirect("homepage")
     else:
         user = User.objects.get(id=request.session["userid"])
         open_games = SessionGame.objects.filter(player_two=None, status="open")
@@ -139,9 +142,8 @@ def open_games(request):
 
 def join_game(request, game_name):
     if "userid" not in request.session:
-        return redirect("/")
+        return redirect("homepage")
     else:
-        print("GAME NAME IS", game_name)
         open_game = SessionGame.objects.get(game_name=game_name)
         user = User.objects.get(id=request.session["userid"])
         if open_game.protected and user.id != open_game.player_one.id:
@@ -154,14 +156,14 @@ def join_game(request, game_name):
             open_game.player_two = user
             open_game.status = "active"
             open_game.save()
-            return redirect("/users/dashboard/")
+            return redirect("dashboard")
         else:
-            return redirect("/users/join_game/")
+            return redirect("open games")
 
 
 def private_game_process(request):
     if "userid" not in request.session:
-        return redirect("/")
+        return redirect("homepage")
     else:
         open_game = SessionGame.objects.get(game_name=request.POST["game_name"])
         user = User.objects.get(id=request.session["userid"])
@@ -171,7 +173,7 @@ def private_game_process(request):
                 open_game.player_two = user
                 open_game.status = "active"
                 open_game.save()
-                return redirect("/users/dashboard/")
+                return redirect("dashboard")
         else:
             context = {
                 "open_game": open_game,
@@ -182,4 +184,4 @@ def private_game_process(request):
 
 def logout(request):
     request.session.clear()
-    return redirect("/")
+    return redirect("homepage")

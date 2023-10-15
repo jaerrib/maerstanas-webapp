@@ -68,7 +68,7 @@
                         <div class="overflow-auto form-control overflow-y-scroll" style="height: 24.5rem">
                             <h3>Moves:</h3>
                             {% if request.session.data.game_over %}
-                            <h4 class="text-info fw-bold">GAME OVER - <a href="/reset">Click to Restart</a></h4>
+                            <h4 class="text-info fw-bold">GAME OVER - <a href="{% url 'reset' %}">Click to Restart</a></h4>
                             {% endif %}
                             {% for move in reversed_list %}
                             <p>{{move.0}}. {{move.2}} (Player {{move.1}})</p>

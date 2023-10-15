@@ -10,7 +10,10 @@ import bcrypt
 
 # Create your views here.
 def index(request):
-    return render(request, "index.html")
+    if "userid" not in request.session:
+        return render(request, "index.html")
+    else:
+        return redirect("dashboard")
 
 
 def game(request):
@@ -95,4 +98,4 @@ def new_session(request):
         status="open",
     )
     session_game.save()
-    return redirect("/users/dashboard/")
+    return redirect("dashboard")

@@ -19,7 +19,7 @@
 
     <div class="container p-4">
         <div class="w-75 mx-auto p-3 bg-body-secondary text-body card rounded-4 shadow">
-            <h2 class="text-info">Sign into your account</h2>
+            <h2 class="text-info">Sign in to your account</h2>
 
             <div>
                 {% if messages %}
@@ -41,7 +41,7 @@
                 <input type="password" name="password" class="form-control mb-3" id="password">
                 <input type="submit" value="Submit" class="btn btn-primary mb-3">
             </form>
-            <p>No account? <a href="/users/registration/">Sign up!</a></p>
+            <p>No account? <a href="{% url 'registration' %}">Sign up!</a></p>
             <p class="text-body-secondary fst-italic">Please note that this site uses cookies to keep you logged in and to temporarily store game sessions.</p>
         </div>
     </div>

@@ -32,9 +32,9 @@
                     {% if game.player_one.id is not user.id %}
                     <tr class="align-middle">
                         <td>{{game.game_name}}</td>
-                        <td>{{game.player_one.username}}</td>
+                        <td><a href="{% url 'profile' game.player_one.username %}">{{game.player_one.username}}</a></td>
                         <td>{{game.protected}}</td>
-                        <td><a href="/users/join_game/{{game.game_name}}/" class="btn btn-sm btn-primary">Join</a></td>
+                        <td><a href="{% url 'join game' game.game_name %}" class="btn btn-sm btn-primary">Join</a></td>
                     </tr>
                     {% endif %}
                 {% empty %}
