@@ -36,7 +36,7 @@
                         <div class="d-flex">
                             <div class="square">{{key}}</div>
                             {% for col_key, col_val in value.items %}
-                                <a href="/process/{{key}}/{{col_key}}">
+                            <a href="{% url 'process' key col_key %}">
                                 <div class="square bg-secondary border border-secondary-subtle">
                                 {% if col_val == 1 %}
                                     <img src="{% static 'img/dark_stone.svg' %}" class="stone"
@@ -58,17 +58,17 @@
             <div class="ms-4 w-50">
                 <!-- Score -->
                 <div class="d-flex mt-2 text-body-emphasis">
-                    <h3 class="ps-2">Player 1: {{request.session.data.score_p1}}</h3>
-                    <h3 class="ps-4">Player 2: {{request.session.data.score_p2}}</h3>
+                    <p class="ps-2 fs-3">Player 1: {{request.session.data.score_p1}}</p>
+                    <p class="ps-4 fs-3">Player 2: {{request.session.data.score_p2}}</p>
                 </div>
                 <!-- End Score -->
                 <!-- Moves -->
                 <div class="row">
                     <div class="container mt-1">
                         <div class="overflow-auto form-control overflow-y-scroll" style="height: 24.5rem">
-                            <h3>Moves:</h3>
+                            <p class="fs-4">Moves:</p>
                             {% if request.session.data.game_over %}
-                            <h4 class="text-info fw-bold">GAME OVER - <a href="{% url 'reset' %}">Click to Restart</a></h4>
+                            <p class="fs-4 text-info fw-bold">GAME OVER - <a href="{% url 'reset' %}">Click to Restart</a></p>
                             {% endif %}
                             {% for move in reversed_list %}
                             <p>{{move.0}}. {{move.2}} (Player {{move.1}})</p>

@@ -16,7 +16,7 @@ def index(request):
         return redirect("dashboard")
 
 
-def game(request):
+def guest_game(request):
     if "player2" not in request.session:
         request.session["player2"] = "computer"
     if "data" not in request.session:
@@ -53,7 +53,7 @@ def new_game(request, players):
         request.session["player2"] = "computer"
     if players == 2:
         request.session["player2"] = "human"
-    return redirect("/game")
+    return redirect("guest game")
 
 
 def process(request, row, col):
@@ -71,12 +71,12 @@ def process(request, row, col):
     request.session["data"]["game_over"] = (
             request.session["data"]["moves_left"] == []
     )
-    return redirect("/game")
+    return redirect("guest game")
 
 
 def reset(request):
     request.session.pop("data")
-    return redirect("/game")
+    return redirect("guest game")
 
 
 def new_session(request):
