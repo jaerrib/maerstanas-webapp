@@ -47,6 +47,29 @@ def guest_game(request):
     return render(request, "game.html", context=context)
 
 
+def session_game(request, game_name):
+    if "userid" not in request.session:
+        return redirect("/")
+    else:
+        user = User.objects.get(id=request.session["userid"])
+        session_game = SessionGame.objects.get(game_name=game_name)
+        reversed_list = session_game.game.move_list
+        reversed_list.reverse()
+        board_dict = {}
+        for row in range(1, 8):
+            col_dict = {}
+            for col in range(1, 8):
+                col_dict[col] = session_game.game.board.data[row][col]
+                board_dict[row] = col_dict
+        context = {
+            "board_dict": board_dict,
+            "reversed_list": reversed_list,
+            "session_game": session_game,
+            "user": user,
+            }
+    return render(request, "session_game.html", context=context)
+
+
 def new_game(request, players):
     request.session.clear()
     if players == 1:

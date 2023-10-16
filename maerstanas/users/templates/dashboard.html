@@ -20,7 +20,7 @@
     <h1>Dashboard</h1>
       <a href="{% url 'profile' user.username %}">Profile</a>
       <h2>My hosted games</h2>
-        <table class="table table-hover">
+        <table class="table table-hover" role="presentation">
             <thead>
                 <tr>
                     <th>Game Name</th>
@@ -33,7 +33,11 @@
             <tbody class="table-group-divider">
             {% for game in hosted_games %}
                 <tr class="align-middle">
-                    <td><a href="#">{{game.game_name}}</a></td>
+                     {% if game.player_two.username %}
+                        <td><a href="{% url 'session game' game.game_name %}">{{game.game_name}}</a></td>
+                    {% else %}
+                        <td>{{game.game_name}}</td>
+                    {% endif %}
                     {% if game.player_two.username %}
                         <td><a href="{% url 'profile' game.player_two.username %}">{{game.player_two.username}}</a></td>
                     {% else %}
@@ -57,8 +61,8 @@
                 </tr>
             </tbody>
         </table>
-      <h2>My joined games</h2>
-        <table class="table table-hover">
+      <h2 class="mt-4">My joined games</h2>
+        <table class="table table-hover" role="presentation">
             <thead>
                 <tr>
                     <th>Game Name</th>
@@ -71,7 +75,11 @@
             <tbody class="table-group-divider">
                 {% for game in joined_games %}
                     <tr class="align-middle">
-                        <td><a href="#">{{game.game_name}}</a></td>
+                    {% if game.player_two %}
+                        <td><a href="{% url 'session game' game.game_name %}">{{game.game_name}}</a></td>
+                    {% else %}
+                        <td>{{game.game_name}}</td>
+                    {% endif %}
                         <td><a href="{% url 'profile' game.player_one.username %}">{{game.player_one.username}}</a></td>
                         <td>{{game.game.score_p2}} - {{game.game.score_p1}}</td>
                          <td>{{game.status}}</td>
