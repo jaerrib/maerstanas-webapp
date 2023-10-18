@@ -18,6 +18,7 @@
     {% endblock header %}
 
     <div class="container">
+        <h2>{{ session_game.game_name }}</h2>
         <div class="d-flex flex-wrap">
             <!-- Left Col-->
             <div>
@@ -36,7 +37,7 @@
                         <div class="d-flex">
                             <div class="square">{{key}}</div>
                             {% for col_key, col_val in value.items %}
-                            <a href="{% url 'process' key col_key %}">
+                            <a href="{% url 'session game process' session_game.game_name key col_key %}">
                                 <div class="square bg-secondary border border-secondary-subtle">
                                 {% if col_val == 1 %}
                                     <img src="{% static 'img/dark_stone.svg' %}" class="stone"
@@ -55,24 +56,24 @@
                 <!--End Game Area-->
             </div>
 
-            <div class="ms-4 w-50">
+            <div class="ms-5 mt-md-3 mt-lg-0 w-50">
                 <!-- Score -->
-                <div class="d-flex mt-2">
+                <div class="d-flex">
                     <div class="ps-2">
-                        <p class="text-body-emphasis fs-3 mb-0">Player 1: {{session_game.game.score_p1}}</p>
-                        <p class="fs-4">({{session_game.player_one.username}})</p>
+                        <p class="text-body-emphasis fs-4 mb-0">Player 1: {{session_game.game.score_p1}}</p>
+                        <p class="fs-5">({{session_game.player_one.username}})</p>
                     </div>
                     <div class="ps-4">
-                        <p class="text-body-emphasis fs-3 mb-0">Player 2: {{session_game.game.score_p2}}</p>
-                        <p class="fs-4">({{session_game.player_two.username}})</p>
+                        <p class="text-body-emphasis fs-4 mb-0">Player 2: {{session_game.game.score_p2}}</p>
+                        <p class="fs-5">({{session_game.player_two.username}})</p>
                     </div>
                 </div>
                 <!-- End Score -->
                 <!-- Moves -->
                 <div class="row">
                     <div class="container mt-1">
-                        <div class="overflow-auto form-control overflow-y-scroll" style="height: 21.5rem">
-                            <p class="fs-4">Moves:</p>
+                        <div class="overflow-auto form-control overflow-y-scroll" style="height: 22.5rem">
+                            <p class="fs-5">Moves:</p>
                             {% if session_game.game.game_over %}
                             <p class="fs-4 text-info fw-bold">GAME OVER</p>
                             {% endif %}

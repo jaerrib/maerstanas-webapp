@@ -16,7 +16,7 @@ def find_adjacent(row_number, col_number):
     return adjacent_positions
 
 
-def check_player_hinges(board, row_number, col_number):
+def check_player_hinges(data, row_number, col_number):
     """
     Evaluates the number of hinges a player move would have
     if played at a given board position
@@ -26,7 +26,7 @@ def check_player_hinges(board, row_number, col_number):
     for position in range(0, len(adjacent_positions)):
         row_to_check = adjacent_positions[position][0]
         col_to_check = adjacent_positions[position][1]
-        position_check = board[row_to_check][col_to_check]
+        position_check = data[row_to_check][col_to_check]
         if position_check != 0:
             hinges += 1
     if hinges > 3:
@@ -35,7 +35,7 @@ def check_player_hinges(board, row_number, col_number):
         return False
 
 
-def hinge_check(board, row_number, col_number):
+def hinge_check(data, row_number, col_number):
     """
     Counts the number of hinges a stone at a given position has
     """
@@ -44,7 +44,7 @@ def hinge_check(board, row_number, col_number):
     for position in range(0, len(adjacent_positions)):
         row_to_check = adjacent_positions[position][0]
         col_to_check = adjacent_positions[position][1]
-        position_check = board[row_to_check][col_to_check]
+        position_check = data[row_to_check][col_to_check]
         if position_check == 3:
             hinges += 1
         elif position_check == 1 or position_check == 2:
@@ -52,7 +52,7 @@ def hinge_check(board, row_number, col_number):
     return hinges
 
 
-def check_adjacent_stones(board, row_number, col_number):
+def check_adjacent_stones(data, row_number, col_number):
     """
     Determines if a move made at a given board position would cause any
     adjacent stones to have more than 3 hinges. Edge and empty/vacant board
@@ -64,21 +64,21 @@ def check_adjacent_stones(board, row_number, col_number):
     for i in range(0, len(adjacent_positions)):
         row_position = int(adjacent_positions[i][0])
         col_position = int(adjacent_positions[i][1])
-        board_value = board[row_position][col_position]
+        board_value = data[row_position][col_position]
         if board_value == 3 or board_value == 0:
             pass
         elif board_value == 1 or board_value == 2:
-            if hinge_check(board, row_position, col_position) >= 3:
+            if hinge_check(data, row_position, col_position) >= 3:
                 return True
     return False
 
 
-def change_player(data):
-    if data["active_player"] == 1:
-        data["active_player"] = 2
-    elif data["active_player"] == 2:
-        data["active_player"] = 1
-    return data
+def change_player(game):
+    if game.active_player == 1:
+        game.active_player = 2
+    elif game.active_player == 2:
+        game.active_player = 1
+    return game
 
 
 def valid_move(data, row, col):
@@ -90,9 +90,9 @@ def valid_move(data, row, col):
     (4) Checking if the move would cause any adjacent stones to have more
     than 3 hinges
     """
-
+    print("Checking if valid")
     if 1 <= row < 9 and 1 <= col < 9:
-        player_move = data["board"][row][col]
+        player_move = data[row][col]
     else:
         # Invalid move - outside board confines
         return False
@@ -100,17 +100,17 @@ def valid_move(data, row, col):
         # Invalid move - space occupied
         return False
     else:
-        if check_player_hinges(data["board"], row, col):
+        if check_player_hinges(data, row, col):
             # Invalid move - move would cause 4 immediate hinges
             return False
-        elif check_adjacent_stones(data["board"], row, col):
+        elif check_adjacent_stones(data, row, col):
             # Invalid move - an adjacent stone would have 4 hinges
             return False
         else:
             return True
 
 
-def check_score(board, player):
+def check_score(data, player):
     """
     Evaluates the score of current board positions, first looping through the
     vertical hinges then the horizontal ones.
@@ -119,8 +119,8 @@ def check_score(board, player):
 
     for row_index in range(1, 9):
         for col_index in range(0, 9):
-            board_position = board[row_index][col_index]
-            comparison_position = board[row_index - 1][col_index]
+            board_position = data[row_index][col_index]
+            comparison_position = data[row_index - 1][col_index]
             if comparison_position == player \
                     and board_position == player:
                 calculated_score += 1
@@ -131,8 +131,8 @@ def check_score(board, player):
 
     for row_index in range(1, 9):
         for col_index in range(0, 9):
-            board_position = board[row_index][col_index]
-            comparison_position = board[row_index][col_index - 1]
+            board_position = data[row_index][col_index]
+            comparison_position = data[row_index][col_index - 1]
             if comparison_position == player \
                     and board_position == player:
                 calculated_score += 1
@@ -143,7 +143,7 @@ def check_score(board, player):
     return calculated_score
 
 
-def viable_moves(board):
+def viable_moves(data):
     """
     Cycles through board positions starting at A1 (1,1). If a position is
     valid, viable_moves is True and play is allowed to continue. If a
@@ -152,18 +152,18 @@ def viable_moves(board):
     """
     for row_index in range(1, 9):
         for col_index in range(1, 9):
-            if board[row_index][col_index] != 0:
+            if data[row_index][col_index] != 0:
                 pass
             else:
-                if check_player_hinges(board, row_index, col_index):
+                if check_player_hinges(data, row_index, col_index):
                     pass
-                elif check_adjacent_stones(board, row_index, col_index):
+                elif check_adjacent_stones(data, row_index, col_index):
                     pass
                 else:
                     return True
 
 
-def remaining_moves(board):
+def remaining_moves(data):
     """
     Cycles through board positions starting at A1 (1,1). If a position is
     a potentially valid move, it is appended to an array which is then used
@@ -172,22 +172,22 @@ def remaining_moves(board):
     possible_moves = []
     for row_index in range(1, 9):
         for col_index in range(1, 9):
-            if board[row_index][col_index] != 0:
+            if data[row_index][col_index] != 0:
                 pass
             else:
-                if check_player_hinges(board, row_index, col_index):
+                if check_player_hinges(data, row_index, col_index):
                     pass
-                elif check_adjacent_stones(board, row_index, col_index):
+                elif check_adjacent_stones(data, row_index, col_index):
                     pass
                 else:
                     possible_moves.append([row_index, col_index])
     return possible_moves
 
 
-def update_score(data):
-    data["score_p1"] = check_score(data["board"], player=1)
-    data["score_p2"] = check_score(data["board"], player=2)
-    return data
+def update_score(game):
+    game.score_p1 = check_score(game.board.data, player=1)
+    game.score_p2 = check_score(game.board.data, player=2)
+    return game
 
 
 def determine_winner(score_p1, score_p2):
@@ -200,14 +200,14 @@ def determine_winner(score_p1, score_p2):
     return result
 
 
-def assign_move(data, row, col):
-    data["board"][row][col] = data["active_player"]
-    data["move_list"].append(
-        (len(data["move_list"]) + 1,
-            data["active_player"],
+def assign_move(game, row, col):
+    game.board.data[row][col] = game.active_player
+    game.move_list.append(
+        (len(game.move_list) + 1,
+            game.active_player,
             convert_num_to_row(col)+str(row)
          ))
-    data = update_score(data)
-    data = change_player(data)
-    data["moves_left"] = remaining_moves(data["board"])
-    return data
+    game = update_score(game)
+    game = change_player(game)
+    game.moves_left = remaining_moves(game.board.data)
+    return game

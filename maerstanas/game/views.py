@@ -49,7 +49,7 @@ def guest_game(request):
 
 def session_game(request, game_name):
     if "userid" not in request.session:
-        return redirect("/")
+        return redirect("registration")
     else:
         user = User.objects.get(id=request.session["userid"])
         session_game = SessionGame.objects.get(game_name=game_name)
@@ -68,6 +68,24 @@ def session_game(request, game_name):
             "user": user,
             }
     return render(request, "session_game.html", context=context)
+
+
+def session_game_process(request, game_name, row, col):
+    if "userid" not in request.session:
+        return redirect("registration")
+    else:
+        user = User.objects.get(id=request.session["userid"])
+        session_game = SessionGame.objects.get(game_name=game_name)
+        if ((user.username == session_game.player_one.username
+            and session_game.game.active_player == 1)
+                or (user.username == session_game.player_two.username
+                    and session_game.game.active_player == 2)):
+            if valid_move(data=session_game.game.board.data, row=row, col=col):
+                session_game.game = (
+                    assign_move(game=session_game.game, row=row, col=col))
+                session_game.game.game_over = (session_game.game.moves_left == [])
+                session_game.save()
+        return redirect("session game", game_name)
 
 
 def new_game(request, players):

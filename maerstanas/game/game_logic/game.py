@@ -12,4 +12,4 @@ class Game:
         self.score_p2 = 0
         self.result = ""
         self.active_player = 1
-        # self.game_over = False
+        self.game_over = False
