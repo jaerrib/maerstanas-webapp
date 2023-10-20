@@ -1,7 +1,7 @@
 from django.db import models
 from django.shortcuts import render, redirect
 from .game_logic.game import Game
-from .game_logic.game_logic import valid_move, assign_move
+from .game_logic.game_logic import valid_move, assign_move, assign_guest_move
 from .game_logic.ai_player import get_best_move
 from game.models import SessionGame
 from users.models import User
@@ -17,29 +17,31 @@ def index(request):
 
 
 def guest_game(request):
-    if "player2" not in request.session:
-        request.session["player2"] = "computer"
-    if "data" not in request.session:
-        my_game = Game()
-        request.session["data"] = {
-            "move_list": my_game.move_list,
-            "moves_left": my_game.moves_left,
-            "score_p1": my_game.score_p1,
-            "score_p2": my_game.score_p2,
-            "result": my_game.result,
-            "active_player": my_game.active_player,
-            "board": my_game.board.data,
+    if "player_two" not in request.session:
+        request.session["player_two"] = "computer"
+    if "guest_game" not in request.session:
+        game = Game()
+        request.session["guest_game"] = {
+            "move_list": game.move_list,
+            "moves_left": game.moves_left,
+            "score_p1": game.score_p1,
+            "score_p2": game.score_p2,
+            "result": game.result,
+            "active_player": game.active_player,
+            "board": game.board.data,
+            "player_one": "guest",
+            "player_two": request.session["player_two"],
             "game_over": False,
-            "player2": request.session["player2"],
         }
-    reversed_list = request.session["data"]["move_list"]
+
+    reversed_list = request.session["guest_game"]["move_list"]
     reversed_list.reverse()
     board_dict = {}
     for row in range(1, 8):
         col_dict = {}
         for col in range(1, 8):
-            col_dict[col] = request.session["data"]["board"][row][col]
-            board_dict[row] = col_dict
+            col_dict[col] = request.session["guest_game"]["board"][row][col]
+        board_dict[row] = col_dict
     context = {
         "reversed_list": reversed_list,
         "board_dict": board_dict
@@ -98,19 +100,19 @@ def new_game(request, players):
 
 
 def process(request, row, col):
-    if valid_move(request.session["data"], row, col):
-        request.session["data"] = assign_move(request.session["data"], row, col)
-    if (request.session["data"]["active_player"] == 2) and (
-            request.session["data"]["player2"] == "computer"):
-        if len(request.session["data"]["moves_left"]):
-            best_row, best_col = get_best_move(request.session["data"],
+    if valid_move(request.session["guest_game"]["board"], row, col):
+        request.session["guest_game"] = assign_guest_move(request.session["guest_game"], row, col)
+    if (request.session["guest_game"]["active_player"] == 2) and (
+            request.session["guest_game"]["player_two"] == "computer"):
+        if len(request.session["guest_game"]["moves_left"]):
+            best_row, best_col = get_best_move(request.session["guest_game"],
                                                sim_num=100,
                                                depth=49)
-            request.session["data"] = assign_move(request.session["data"],
+            request.session["guest_game"] = assign_guest_move(request.session["guest_game"],
                                                   best_row,
                                                   best_col)
-    request.session["data"]["game_over"] = (
-            request.session["data"]["moves_left"] == []
+    request.session["guest_game"]["game_over"] = (
+            request.session["guest_game"]["moves_left"] == []
     )
     return redirect("guest game")
 

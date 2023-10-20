@@ -81,6 +81,14 @@ def change_player(game):
     return game
 
 
+def change_guest_player(guest_game):
+    if guest_game["active_player"] == 1:
+        guest_game["active_player"] = 2
+    elif guest_game["active_player"] == 2:
+        guest_game["active_player"] = 1
+    return guest_game
+
+
 def valid_move(data, row, col):
     """
     Determines if a potential move would be valid by doing the following:
@@ -90,7 +98,6 @@ def valid_move(data, row, col):
     (4) Checking if the move would cause any adjacent stones to have more
     than 3 hinges
     """
-    print("Checking if valid")
     if 1 <= row < 9 and 1 <= col < 9:
         player_move = data[row][col]
     else:
@@ -190,6 +197,12 @@ def update_score(game):
     return game
 
 
+def update_guest_score(guest_game):
+    guest_game["score_p1"] = check_score(guest_game["board"], player=1)
+    guest_game["score_p2"] = check_score(guest_game["board"], player=2)
+    return guest_game
+
+
 def determine_winner(score_p1, score_p2):
     if score_p1 == score_p2:
         result = "tie"
@@ -211,3 +224,16 @@ def assign_move(game, row, col):
     game = change_player(game)
     game.moves_left = remaining_moves(game.board.data)
     return game
+
+
+def assign_guest_move(guest_game, row, col):
+    guest_game["board"][row][col] = guest_game["active_player"]
+    guest_game["move_list"].append(
+        (len(guest_game["move_list"]) + 1,
+            guest_game["active_player"],
+            convert_num_to_row(col)+str(row)
+         ))
+    guest_game = update_guest_score(guest_game)
+    guest_game = change_guest_player(guest_game)
+    guest_game["moves_left"] = remaining_moves(guest_game["board"])
+    return guest_game

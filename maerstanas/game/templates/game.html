@@ -58,8 +58,8 @@
             <div class="ms-4 w-50">
                 <!-- Score -->
                 <div class="d-flex mt-2 text-body-emphasis">
-                    <p class="ps-2 fs-3">Player 1: {{request.session.data.score_p1}}</p>
-                    <p class="ps-4 fs-3">Player 2: {{request.session.data.score_p2}}</p>
+                    <p class="ps-2 fs-3">Player 1: {{request.session.game.score_p1}}</p>
+                    <p class="ps-4 fs-3">Player 2: {{request.session.game.score_p2}}</p>
                 </div>
                 <!-- End Score -->
                 <!-- Moves -->
@@ -67,7 +67,7 @@
                     <div class="container mt-1">
                         <div class="overflow-auto form-control overflow-y-scroll" style="height: 24.5rem">
                             <p class="fs-4">Moves:</p>
-                            {% if request.session.data.game_over %}
+                            {% if request.session.game.game_over %}
                             <p class="fs-4 text-info fw-bold">GAME OVER - <a href="{% url 'reset' %}">Click to Restart</a></p>
                             {% endif %}
                             {% for move in reversed_list %}

@@ -1,5 +1,8 @@
 from copy import deepcopy
-from .game_logic import remaining_moves,assign_move, determine_winner, check_score
+from .game_logic import (remaining_moves,
+                         assign_guest_move,
+                         determine_winner,
+                         check_score)
 import secrets
 
 
@@ -43,10 +46,11 @@ def sim_game_loop(data, players, depth):
                     first_row = ai_row
                     first_col = ai_col
                     first_move = False
-        temp_game = assign_move(temp_game, ai_row, ai_col)
+        temp_game = assign_guest_move(temp_game, ai_row, ai_col)
         depth_counter -= 1
 
-    temp_game["result"] = determine_winner(temp_game["score_p1"], temp_game["score_p2"])
+    temp_game["result"] = determine_winner(temp_game["score_p1"],
+                                           temp_game["score_p2"])
     if comparison_player == 1:
         weighted_score = assign_result_value(temp_game)
     else:
@@ -69,5 +73,4 @@ def get_best_move(data, sim_num, depth):
             best_score = returned_score
             best_row = first_row
             best_col = first_col
-    print(best_score)
     return best_row, best_col
