@@ -118,7 +118,7 @@ def process(request, row, col):
 
 
 def reset(request):
-    request.session.pop("guest game")
+    request.session.pop("guest_game")
     return redirect("guest game")
 
 
