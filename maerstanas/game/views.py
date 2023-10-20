@@ -18,7 +18,7 @@ def index(request):
 
 def guest_game(request):
     if "player_two" not in request.session:
-        request.session["player_two"] = "computer"
+        request.session["player_two"] = "Computer"
     if "guest_game" not in request.session:
         game = Game()
         request.session["guest_game"] = {
@@ -29,7 +29,7 @@ def guest_game(request):
             "result": game.result,
             "active_player": game.active_player,
             "board": game.board.data,
-            "player_one": "guest",
+            "player_one": "Guest",
             "player_two": request.session["player_two"],
             "game_over": False,
         }
@@ -93,9 +93,9 @@ def session_game_process(request, game_name, row, col):
 def new_game(request, players):
     request.session.clear()
     if players == 1:
-        request.session["player2"] = "computer"
+        request.session["player_two"] = "Computer"
     if players == 2:
-        request.session["player2"] = "human"
+        request.session["player_two"] = "Local Opponent"
     return redirect("guest game")
 
 
@@ -103,7 +103,7 @@ def process(request, row, col):
     if valid_move(request.session["guest_game"]["board"], row, col):
         request.session["guest_game"] = assign_guest_move(request.session["guest_game"], row, col)
     if (request.session["guest_game"]["active_player"] == 2) and (
-            request.session["guest_game"]["player_two"] == "computer"):
+            request.session["guest_game"]["player_two"] == "Computer"):
         if len(request.session["guest_game"]["moves_left"]):
             best_row, best_col = get_best_move(request.session["guest_game"],
                                                sim_num=100,
