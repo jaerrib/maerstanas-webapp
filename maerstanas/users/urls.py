@@ -14,5 +14,6 @@ urlpatterns = [
     path('open_games/', views.open_games, name="open games"),
     path('join_game/<str:game_name>/', views.join_game, name="join game"),
     path('private_game/process/', views.private_game_process),
+    path('delete_game/<str:game_name>/', views.delete_game, name="delete game"),
     path('logout/', views.logout, name="logout"),
 ]

@@ -168,6 +168,17 @@ def join_game(request, game_name):
             return redirect("open games")
 
 
+def delete_game(request, game_name):
+    if "userid" not in request.session:
+        return redirect("homepage")
+    else:
+        session_game = SessionGame.objects.get(game_name=game_name)
+        user = User.objects.get(id=request.session["userid"])
+        if user.id == session_game.player_one.id:
+            session_game.delete()
+        return redirect("dashboard")
+
+
 def private_game_process(request):
     if "userid" not in request.session:
         return redirect("homepage")
