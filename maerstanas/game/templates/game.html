@@ -73,7 +73,7 @@
                     <div class="container mt-1">
                         <div class="overflow-auto form-control overflow-y-scroll" style="height: 22.5rem">
                             <p class="fs-4">Moves:</p>
-                            {% if request.session.game.game_over %}
+                            {% if request.session.guest_game.game_over %}
                             <p class="fs-4 text-info fw-bold">GAME OVER - <a href="{% url 'reset' %}">Click to Restart</a></p>
                             {% endif %}
                             {% for move in reversed_list %}
