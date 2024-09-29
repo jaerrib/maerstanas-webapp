@@ -65,11 +65,7 @@ class Game(models.Model):
     score_p1 = models.IntegerField(default=0)
     score_p2 = models.IntegerField(default=0)
 
-    active_player = models.ForeignKey(
-        get_user_model(),
-        related_name="active_player_games",
-        on_delete=models.CASCADE,
-    )
+    active_player = models.IntegerField(default=1)
 
     using_special_stones = models.BooleanField(default=True)
     using_standard_scoring = models.BooleanField(default=True)
