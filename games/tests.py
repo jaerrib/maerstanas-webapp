@@ -31,9 +31,25 @@ class GamesTestCase(TestCase):
             played_moves_list=cls.played_moves_list,
             moves_left_list=cls.moves_left_list,
         )
+        cls.game = game_rules.initialize_game(cls.game)
 
     def test_game_setup(self):
-        self.game = game_rules.initialize_game(self.game)
+        # Test correct assignment of values when initializing with game_rules
         self.assertEqual(self.game.gameboard.data[0][0], [3, 3])
+        self.assertEqual(self.game.gameboard.data[1][1], [0, 0])
         self.assertIn([1, 1], self.game.moves_left_list.data)
         self.assertNotIn([0, 1], self.game.moves_left_list.data)
+        # Test basic game fields
+        self.assertEqual(self.game.name, "Test Game")
+        self.assertEqual(self.game.player1.username, "player1")
+        self.assertEqual(self.game.score_p1, 0)
+        self.assertEqual(self.game.score_p2, 0)
+        self.assertEqual(self.game.active_player, 1)
+        self.assertTrue(self.game.using_special_stones, True)
+        self.assertTrue(self.game.using_standard_scoring, True)
+        self.assertFalse(self.game.game_over, False)
+        self.assertIsNone(self.game.result)
+        self.assertTrue(self.game.p1_has_thunder_stone, True)
+        self.assertTrue(self.game.p2_has_thunder_stone, True)
+        self.assertTrue(self.game.p1_has_woden_stone, True)
+        self.assertTrue(self.game.p2_has_woden_stone, True)
