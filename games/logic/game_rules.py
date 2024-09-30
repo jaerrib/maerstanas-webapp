@@ -43,7 +43,7 @@ def find_adjacent(row_number, col_number):
     ]
 
 
-def check_player_hinges(board, row_number, col_number):
+def check_player_hinges(gameboard, row_number, col_number):
     """
     Evaluates the number of hinges a player move would have
     if played at a given board position
@@ -53,7 +53,7 @@ def check_player_hinges(board, row_number, col_number):
     for position in range(0, len(adjacent_positions)):
         row_to_check = adjacent_positions[position][0]
         col_to_check = adjacent_positions[position][1]
-        position_check = board[row_to_check][col_to_check]
+        position_check = gameboard[row_to_check][col_to_check]
         if position_check[0] != 0:
             hinges += 1
     if hinges > 3:
@@ -62,7 +62,7 @@ def check_player_hinges(board, row_number, col_number):
         return False
 
 
-def hinge_check(board, row_number, col_number):
+def hinge_check(gameboard, row_number, col_number):
     """
     Counts the number of hinges a stone at a given position has
     """
@@ -71,13 +71,13 @@ def hinge_check(board, row_number, col_number):
     for position in range(0, len(adjacent_positions)):
         row_to_check = adjacent_positions[position][0]
         col_to_check = adjacent_positions[position][1]
-        position_check = board[row_to_check][col_to_check]
+        position_check = gameboard[row_to_check][col_to_check]
         if position_check[0] in [1, 2, 3]:
             hinges += 1
     return hinges
 
 
-def check_adjacent_stones(board, row_number, col_number):
+def check_adjacent_stones(gameboard, row_number, col_number):
     """
     Determines if a move made at a given board position would cause any
     adjacent stones to have more than 3 hinges. Edge and empty/vacant board
@@ -89,22 +89,21 @@ def check_adjacent_stones(board, row_number, col_number):
     for i in range(0, len(adjacent_positions)):
         row_position = int(adjacent_positions[i][0])
         col_position = int(adjacent_positions[i][1])
-        board_value = board[row_position][col_position]
+        board_value = gameboard[row_position][col_position]
         if (
             board_value[0] in [1, 2]
-            and hinge_check(board, row_position, col_position) >= 3
+            and hinge_check(gameboard, row_position, col_position) >= 3
         ):
             return True
     return False
 
 
-def change_player(data):
-    data["active_player"] = 3 - data["active_player"]
-    data["active_stone"] = 1
-    return data
+def change_player(game_state):
+    game_state.active_player = 3 - game_state.active_player
+    return game_state
 
 
-def check_default_stone(board, row, col):
+def check_default_stone(gameboard, row, col):
     """
     Determines if a potential move would be valid by doing the following:
     (1) Checking if the coordinates are within the confines of the board
@@ -117,26 +116,28 @@ def check_default_stone(board, row, col):
         # Invalid move - outside board confines
         return False
 
-    player_move = board[row][col]
+    player_move = gameboard[row][col]
     if player_move[0] != 0:
         # Invalid move - space occupied
         return False
 
-    if check_player_hinges(board, row, col) or check_adjacent_stones(board, row, col):
+    if check_player_hinges(gameboard, row, col) or check_adjacent_stones(
+        gameboard, row, col
+    ):
         # Invalid move - either 4 immediate hinges or adjacent stone with 4 hinges
         return False
 
     return True
 
 
-def check_thunder_stone(board, row, col):
+def check_thunder_stone(gameboard, row, col):
     """
     Determines if a potential move would be valid by doing the following:
     (1) Checking if the coordinates are within the confines of the board
     (2) Checking if the position is occupied
     """
     if 1 <= row < 9 and 1 <= col < 9:
-        player_move = board[row][col]
+        player_move = gameboard[row][col]
     else:
         # Invalid move - outside board confines
         return False
@@ -144,14 +145,14 @@ def check_thunder_stone(board, row, col):
     return player_move[0] == 0
 
 
-def check_woden_stone(board, active_player, row, col):
+def check_woden_stone(gameboard, active_player, row, col):
     """
     Determines if a potential move would be valid by doing the following:
     (1) Checking if the coordinates are within the confines of the board
     (2) Checking if the position is occupied by an opponent's stone
     """
     if 1 <= row < 8 and 1 <= col < 8:
-        player_move = board[row][col]
+        player_move = gameboard[row][col]
     else:
         # Invalid move - outside board confines
         return False
@@ -169,7 +170,7 @@ def is_valid_move(data, row, col):
             return check_woden_stone(data["board"], data["active_player"], row, col)
 
 
-def check_score(board, score_type, player):
+def check_score(gameboard, score_type, player):
     """
     Evaluates the score of current board positions, first looping through the
     vertical hinges then the horizontal ones.
@@ -178,9 +179,9 @@ def check_score(board, score_type, player):
 
     for row_index in range(1, 9):
         for col_index in range(0, 9):
-            board_position = board[row_index][col_index]
+            board_position = gameboard[row_index][col_index]
             # Check vertical hinges
-            position_above = board[row_index - 1][col_index]
+            position_above = gameboard[row_index - 1][col_index]
             if position_above[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_above[0] == 3 and board_position[0] == player:
@@ -188,7 +189,7 @@ def check_score(board, score_type, player):
             elif position_above[0] == player and board_position[0] == 3:
                 calculated_score += score_type
             # Check horizontal hinges
-            position_to_left = board[row_index][col_index - 1]
+            position_to_left = gameboard[row_index][col_index - 1]
             if position_to_left[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_to_left[0] == 3 and board_position[0] == player:
@@ -198,25 +199,25 @@ def check_score(board, score_type, player):
     return calculated_score
 
 
-def possible_thunder_stone_moves(board):
+def possible_thunder_stone_moves(gameboard):
     possible_moves = []
     for row in range(1, 9):
         for col in range(1, 9):
-            if check_thunder_stone(board, row, col):
+            if check_thunder_stone(gameboard, row, col):
                 possible_moves.append([row, col])
     return possible_moves
 
 
-def possible_woden_stone_moves(board, active_player):
+def possible_woden_stone_moves(gameboard, active_player):
     possible_moves = []
     for row in range(1, 9):
         for col in range(1, 9):
-            if check_woden_stone(board, active_player, row, col):
+            if check_woden_stone(gameboard, active_player, row, col):
                 possible_moves.append([row, col])
     return possible_moves
 
 
-def remaining_moves(board):
+def remaining_moves(gameboard):
     """
     Cycles through board positions starting at A1 (1,1). If a position is
     a potentially valid move, it is appended to an array which is then used
@@ -225,12 +226,12 @@ def remaining_moves(board):
     possible_moves = []
     for row_index in range(1, 9):
         for col_index in range(1, 9):
-            if board[row_index][col_index][0] != 0:
+            if gameboard[row_index][col_index][0] != 0:
                 pass
             else:
-                if check_player_hinges(board, row_index, col_index):
+                if check_player_hinges(gameboard, row_index, col_index):
                     pass
-                elif check_adjacent_stones(board, row_index, col_index):
+                elif check_adjacent_stones(gameboard, row_index, col_index):
                     pass
                 else:
                     possible_moves.append([row_index, col_index])
@@ -257,12 +258,12 @@ def determine_winner(score_p1, score_p2):
     return result
 
 
-def thunder_attack(board, row, col):
+def thunder_attack(gameboard, row, col):
     adjacent_positions = find_adjacent(row, col)
     for position in adjacent_positions:
-        if board[position[0]][position[1]] != [3, 3]:
-            board[position[0]][position[1]] = [0, 0]
-    return board
+        if gameboard[position[0]][position[1]] != [3, 3]:
+            gameboard[position[0]][position[1]] = [0, 0]
+    return gameboard
 
 
 def assign_move(data, row, col):
