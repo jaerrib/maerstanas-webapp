@@ -150,28 +150,30 @@ def check_woden_stone(gameboard, active_player, row, col):
     return player_move[1] != 0 and player_move[0] != active_player
 
 
-def is_valid_move(data, row, col):
-    match data["active_stone"]:
+def is_valid_move(game_state, played_stone, row, col):
+    match played_stone:
         case 1:
-            return check_default_stone(data["board"], row, col)
+            return check_default_stone(game_state.gameboard.data, row, col)
         case 2:
-            return check_thunder_stone(data["board"], row, col)
+            return check_thunder_stone(game_state.gameboard.data, row, col)
         case 3:
-            return check_woden_stone(data["board"], data["active_player"], row, col)
+            return check_woden_stone(
+                game_state.gameboard.data, game_state.active_player, row, col
+            )
 
 
-def check_score(gameboard, score_type, player):
+def check_score(game_state, player):
     """
     Evaluates the score of current board positions, first looping through the
     vertical hinges then the horizontal ones.
     """
+    score_type = 1 if game_state.using_standard_scoring else 0
     calculated_score: int = 0
-
     for row_index in range(1, 9):
         for col_index in range(0, 9):
-            board_position = gameboard[row_index][col_index]
+            board_position = game_state.gameboard.data[row_index][col_index]
             # Check vertical hinges
-            position_above = gameboard[row_index - 1][col_index]
+            position_above = game_state.gameboard.data[row_index - 1][col_index]
             if position_above[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_above[0] == 3 and board_position[0] == player:
@@ -179,7 +181,7 @@ def check_score(gameboard, score_type, player):
             elif position_above[0] == player and board_position[0] == 3:
                 calculated_score += score_type
             # Check horizontal hinges
-            position_to_left = gameboard[row_index][col_index - 1]
+            position_to_left = game_state.gameboard.data[row_index][col_index - 1]
             if position_to_left[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_to_left[0] == 3 and board_position[0] == player:

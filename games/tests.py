@@ -194,10 +194,43 @@ class GamesTestCase(TestCase):
         )
 
     def test_is_valid_move(self):
-        pass
+        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
+        # Test standard stones
+        self.assertTrue(
+            game_rules.is_valid_move(self.game, played_stone=1, row=3, col=1), True
+        )
+        self.assertFalse(
+            game_rules.is_valid_move(self.game, played_stone=1, row=1, col=6), False
+        )
+        # Test thunder stones
+        self.assertTrue(
+            game_rules.is_valid_move(self.game, played_stone=2, row=4, col=4), True
+        )
+        self.assertFalse(
+            game_rules.is_valid_move(self.game, played_stone=2, row=2, col=5), False
+        )
+        # Test Woden stones
+        self.assertTrue(
+            game_rules.is_valid_move(self.game, played_stone=3, row=7, col=1), True
+        )
+        self.assertFalse(
+            game_rules.is_valid_move(self.game, played_stone=3, row=7, col=3), False
+        )
 
     def test_check_score(self):
-        pass
+        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
+        # test with default / standard scoring
+        self.game.using_standard_scoring = True
+        score_p1 = game_rules.check_score(self.game, 1)
+        score_p2 = game_rules.check_score(self.game, 2)
+        self.assertEqual(score_p1, 19)
+        self.assertEqual(score_p2, 16)
+        # test with simple scoring
+        self.game.using_standard_scoring = False
+        score_p1 = game_rules.check_score(self.game, 1)
+        score_p2 = game_rules.check_score(self.game, 2)
+        self.assertEqual(score_p1, 11)
+        self.assertEqual(score_p2, 8)
 
     def test_possible_thunder_stone_moves(self):
         pass
