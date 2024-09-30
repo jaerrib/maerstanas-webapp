@@ -193,12 +193,27 @@ class GamesTestCase(TestCase):
             True,
         )
 
+    def test_is_valid_move(self):
+        pass
+
+    def test_check_score(self):
+        pass
+
+    def test_possible_thunder_stone_moves(self):
+        pass
+
+    def test_possible_woden_stone_moves(self):
+        pass
+
     def test_remaining_moves(self):
         self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         self.assertEqual(
             game_rules.remaining_moves(self.game.gameboard.data),
             [[3, 1], [4, 4], [5, 1], [5, 5], [5, 7], [6, 6], [6, 7], [7, 7]],
         )
+
+    def test_update_score(self):
+        pass
 
     def test_determine_winner(self):
         self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
@@ -334,3 +349,12 @@ class GamesTestCase(TestCase):
                 ],
             ],
         )
+
+    def test_assign_move(self):
+        pass
+
+    def is_game_over(self):
+        pass
+
+    def test_player_must_pass(self):
+        pass
