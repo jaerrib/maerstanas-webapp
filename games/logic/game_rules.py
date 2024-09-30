@@ -17,16 +17,6 @@ def initialize_game(game_state):
     return game_state
 
 
-def check_win_condition(game_state):
-    # Determine if a player has won the game
-    pass
-
-
-def apply_special_rules(game_state, move):
-    # Apply any special rules based on the current game state and move
-    pass
-
-
 def convert_num_to_col(num):
     return chr(ord("A") + num - 1)
 
