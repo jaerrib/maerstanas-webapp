@@ -167,7 +167,7 @@ def check_score(game_state, player):
     Evaluates the score of current board positions, first looping through the
     vertical hinges then the horizontal ones.
     """
-    score_type = 1 if game_state.using_standard_scoring else 0
+    score_modifier = 1 if game_state.using_standard_scoring else 0
     calculated_score: int = 0
     for row_index in range(1, 9):
         for col_index in range(0, 9):
@@ -177,34 +177,36 @@ def check_score(game_state, player):
             if position_above[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_above[0] == 3 and board_position[0] == player:
-                calculated_score += score_type
+                calculated_score += score_modifier
             elif position_above[0] == player and board_position[0] == 3:
-                calculated_score += score_type
+                calculated_score += score_modifier
             # Check horizontal hinges
             position_to_left = game_state.gameboard.data[row_index][col_index - 1]
             if position_to_left[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_to_left[0] == 3 and board_position[0] == player:
-                calculated_score += score_type
+                calculated_score += score_modifier
             elif position_to_left[0] == player and board_position[0] == 3:
-                calculated_score += score_type
+                calculated_score += score_modifier
     return calculated_score
 
 
-def possible_thunder_stone_moves(gameboard):
+def possible_thunder_stone_moves(game_state):
     possible_moves = []
     for row in range(1, 9):
         for col in range(1, 9):
-            if check_thunder_stone(gameboard, row, col):
+            if check_thunder_stone(game_state.gameboard.data, row, col):
                 possible_moves.append([row, col])
     return possible_moves
 
 
-def possible_woden_stone_moves(gameboard, active_player):
+def possible_woden_stone_moves(game_state):
     possible_moves = []
     for row in range(1, 9):
         for col in range(1, 9):
-            if check_woden_stone(gameboard, active_player, row, col):
+            if check_woden_stone(
+                game_state.gameboard.data, game_state.active_player, row, col
+            ):
                 possible_moves.append([row, col])
     return possible_moves
 
@@ -230,14 +232,10 @@ def remaining_moves(gameboard):
     return possible_moves
 
 
-def update_score(data):
-    data["score_p1"] = check_score(
-        board=data["board"], score_type=data["scoring_type"], player=1
-    )
-    data["score_p2"] = check_score(
-        board=data["board"], score_type=data["scoring_type"], player=2
-    )
-    return data
+def update_score(game_state):
+    game_state.score_p1 = check_score(game_state, player=1)
+    game_state.score_p2 = check_score(game_state, player=2)
+    return game_state
 
 
 def determine_winner(score_p1, score_p2):
@@ -258,26 +256,27 @@ def thunder_attack(gameboard, row, col):
     return gameboard
 
 
-def assign_move(data, row, col):
-    if data["active_stone"] == 2:
-        thunder_attack(data["board"], row, col)
-    if data["active_stone"] == 2 or data["active_stone"] == 3:
-        data["special_stones"][f"player{data['active_player']}"].remove(
-            data["active_stone"]
-        )
-    data["board"][row][col] = (data["active_player"], data["active_stone"])
+def assign_move(game_state, active_stone, row, col):
+    if active_stone == 2:
+        thunder_attack(game_state.gameboard.data, row, col)
+    if active_stone == 2:
+        field_name = f"p{game_state.active_player}_has_thunder_stone"
+        setattr(game_state, field_name, False)
+    elif active_stone == 3:
+        field_name = f"p{game_state.active_player}_has_woden_stone"
+        setattr(game_state, field_name, False)
+    game_state.gameboard.data[row][col] = [game_state.active_player, active_stone]
     stones = ["standard stone", "thunder-stone", "Woden-stone"]
-    played_stone = stones[data["active_stone"] - 1]
-    data["move_list"].append(
+    played_stone = stones[active_stone - 1]
+    game_state.played_moves_list.data.append(
         (
-            data["active_player"],
+            game_state.active_player,
             convert_num_to_col(col) + str(row) + " - " + played_stone,
         )
     )
-    data = update_score(data)
-    data = change_player(data)
-    data["moves_left"] = remaining_moves(data["board"])
-    return data
+    # game_state = update_score(game_state)
+    # game_state = change_player(game_state)
+    return game_state
 
 
 def change_stone(data, stone):
@@ -285,10 +284,14 @@ def change_stone(data, stone):
     return data
 
 
-def is_game_over(data):
-    player1_has_special_stones = len(data["special_stones"]["player1"]) > 1
-    player2_has_special_stones = len(data["special_stones"]["player2"]) > 1
-    default_moves_are_left = remaining_moves(data["board"]) != []
+def is_game_over(game_state):
+    player1_has_special_stones = (
+        game_state.p1_has_thunder_stone or game_state.p1_has_woden_stone
+    )
+    player2_has_special_stones = (
+        game_state.p2_has_thunder_stone or game_state.p2_has_woden_stone
+    )
+    default_moves_are_left = game_state.moves_left_list != []
     return (
         not player1_has_special_stones
         and not player2_has_special_stones
