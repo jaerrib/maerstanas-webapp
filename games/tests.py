@@ -389,11 +389,19 @@ class GamesTestCase(TestCase):
             ],
         )
 
-    # def test_assign_move(self):
-    #     self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
-    #     self.game = game_rules.assign_move(self.game, active_stone=1, row=5, col=7)
-    #     # self.assertEqual(self.game.gameboard.data[5][7], [1, 1])
-    #     print(self.game.gameboard.data)
+    def test_assign_move(self):
+        # test standard stone assignment
+        self.game = game_rules.assign_move(self.game, active_stone=1, row=5, col=7)
+        self.assertEqual(self.game.gameboard.data[5][7], [1, 1])
+        self.assertIn((1, "E7 - standard stone"), self.game.played_moves_list.data)
+        # test thunder stone assignment
+        self.game = game_rules.assign_move(self.game, active_stone=2, row=4, col=4)
+        self.assertEqual(self.game.gameboard.data[4][4], [1, 2])
+        self.assertIn((1, "D4 - thunder-stone"), self.game.played_moves_list.data)
+        # test Woden stone assignment
+        self.game = game_rules.assign_move(self.game, active_stone=3, row=1, col=5)
+        self.assertEqual(self.game.gameboard.data[1][5], [1, 3])
+        self.assertIn((1, "A5 - Woden-stone"), self.game.played_moves_list.data)
 
     def is_game_over(self):
         self.game.moves_left_list = MovesLeftList(
