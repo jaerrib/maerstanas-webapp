@@ -7,20 +7,8 @@ from .models import Game, GameBoard, PlayedMovesList, MovesLeftList
 
 class GamesTestCase(TestCase):
 
-    GAMEBOARD_TEST_STATE = [
-        [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
-        [[3, 3], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [2, 1], [3, 3]],
-        [[3, 3], [0, 0], [1, 1], [1, 1], [1, 1], [2, 1], [2, 1], [2, 1], [3, 3]],
-        [[3, 3], [0, 0], [1, 1], [1, 1], [0, 0], [0, 0], [2, 1], [0, 0], [3, 3]],
-        [[3, 3], [1, 1], [0, 0], [2, 2], [0, 0], [2, 1], [1, 1], [1, 1], [3, 3]],
-        [[3, 3], [0, 0], [1, 1], [2, 1], [2, 1], [0, 0], [0, 0], [0, 0], [3, 3]],
-        [[3, 3], [0, 0], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0], [0, 0], [3, 3]],
-        [[3, 3], [2, 1], [2, 1], [0, 0], [1, 1], [2, 1], [1, 1], [0, 0], [3, 3]],
-        [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
-    ]
-
     @classmethod
-    def setUpTestData(cls):
+    def setUpClass(cls):
         cls.player1 = get_user_model().objects.create_user(
             username="player1",
             email="player1@email.com",
@@ -33,23 +21,41 @@ class GamesTestCase(TestCase):
             password="testpass123",
         )
 
-        cls.gameboard = GameBoard.objects.create()
-        cls.played_moves_list = PlayedMovesList.objects.create()
-        cls.moves_left_list = MovesLeftList.objects.create()
+    @classmethod
+    def tearDownClass(cls):
+        cls.player1.delete()
+        cls.player2.delete()
 
-        cls.game = Game.objects.create(
+    def setUp(self):
+        self.gameboard = GameBoard.objects.create()
+        self.played_moves_list = PlayedMovesList.objects.create()
+        self.moves_left_list = MovesLeftList.objects.create()
+
+        self.game = Game.objects.create(
             name="Test Game",
-            player1=cls.player1,
-            gameboard=cls.gameboard,
-            played_moves_list=cls.played_moves_list,
-            moves_left_list=cls.moves_left_list,
+            player1=self.player1,
+            gameboard=self.gameboard,
+            played_moves_list=self.played_moves_list,
+            moves_left_list=self.moves_left_list,
         )
-        cls.game = game_rules.initialize_game(cls.game)
+        self.game = game_rules.initialize_game(self.game)
+
+        self.game.gameboard.data = [
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
+            [[3, 3], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [2, 1], [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [1, 1], [1, 1], [2, 1], [2, 1], [2, 1], [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [1, 1], [0, 0], [0, 0], [2, 1], [0, 0], [3, 3]],
+            [[3, 3], [1, 1], [0, 0], [2, 2], [0, 0], [2, 1], [1, 1], [1, 1], [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [2, 1], [2, 1], [0, 0], [0, 0], [0, 0], [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0], [0, 0], [3, 3]],
+            [[3, 3], [2, 1], [2, 1], [0, 0], [1, 1], [2, 1], [1, 1], [0, 0], [3, 3]],
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
+        ]
 
     def test_game_setup(self):
         # Test correct assignment of values when initializing with game_rules
         self.assertEqual(self.game.gameboard.data[0][0], [3, 3])
-        self.assertEqual(self.game.gameboard.data[1][1], [0, 0])
+        self.assertEqual(self.game.gameboard.data[1][6], [0, 0])
         self.assertIn([1, 1], self.game.moves_left_list.data)
         self.assertNotIn([0, 1], self.game.moves_left_list.data)
         # Test basic game fields
@@ -68,12 +74,10 @@ class GamesTestCase(TestCase):
         self.assertTrue(self.game.p2_has_woden_stone, True)
 
     def test_find_adjacent(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         adjacent_positions = game_rules.find_adjacent(1, 1)
         self.assertEqual(adjacent_positions, [[0, 1], [1, 0], [1, 2], [2, 1]])
 
     def test_check_player_hinges(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         hinges = game_rules.check_player_hinges(
             gameboard=self.game.gameboard.data, row_number=1, col_number=3
         )
@@ -92,7 +96,6 @@ class GamesTestCase(TestCase):
         self.assertEqual(hinges, False)
 
     def test_hinge_check(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         hinges = game_rules.hinge_check(
             self.game.gameboard.data, row_number=1, col_number=1
         )
@@ -107,7 +110,6 @@ class GamesTestCase(TestCase):
         self.assertEqual(hinges, 1)
 
     def test_check_adjacent_stones(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         position = game_rules.check_adjacent_stones(
             self.game.gameboard.data, row_number=5, col_number=6
         )
@@ -128,7 +130,6 @@ class GamesTestCase(TestCase):
         self.assertEqual(self.game.active_player, 1)
 
     def test_check_default_stone(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         self.assertEqual(
             game_rules.check_default_stone(self.game.gameboard.data, row=10, col=6),
             False,
@@ -150,7 +151,6 @@ class GamesTestCase(TestCase):
         )
 
     def test_check_thunder_stone(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         self.assertEqual(
             game_rules.check_thunder_stone(self.game.gameboard.data, row=10, col=10),
             False,
@@ -167,7 +167,6 @@ class GamesTestCase(TestCase):
         )
 
     def test_check_woden_stone(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         self.assertEqual(
             game_rules.check_woden_stone(
                 self.game.gameboard.data, active_player=1, row=10, col=10
@@ -194,7 +193,6 @@ class GamesTestCase(TestCase):
         )
 
     def test_is_valid_move(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         # Test standard stones
         self.assertTrue(
             game_rules.is_valid_move(self.game, played_stone=1, row=3, col=1), True
@@ -218,7 +216,6 @@ class GamesTestCase(TestCase):
         )
 
     def test_check_score(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         # test with default / standard scoring
         self.game.using_standard_scoring = True
         score_p1 = game_rules.check_score(self.game, 1)
@@ -233,26 +230,22 @@ class GamesTestCase(TestCase):
         self.assertEqual(score_p2, 8)
 
     def test_possible_thunder_stone_moves(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         thunder_stone_moves = game_rules.possible_thunder_stone_moves(self.game)
         self.assertIn([1, 3], thunder_stone_moves)
         self.assertNotIn([4, 3], thunder_stone_moves)
 
     def test_possible_woden_stone_moves(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         woden_stone_moves = game_rules.possible_woden_stone_moves(self.game)
         self.assertIn([1, 5], woden_stone_moves)
         self.assertNotIn([4, 6], woden_stone_moves)
 
     def test_remaining_moves(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         self.assertEqual(
             game_rules.remaining_moves(self.game.gameboard.data),
             [[3, 1], [4, 4], [5, 1], [5, 5], [5, 7], [6, 6], [6, 7], [7, 7]],
         )
 
     def test_update_score(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         self.game.using_standard_scoring = True
         self.assertEqual(self.game.score_p1, 0)
         self.assertEqual(self.game.score_p2, 0)
@@ -261,7 +254,6 @@ class GamesTestCase(TestCase):
         self.assertEqual(self.game.score_p2, 16)
 
     def test_determine_winner(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
         self.assertEqual(
             game_rules.determine_winner(score_p1=20, score_p2=15), "player 1"
         )
@@ -288,115 +280,114 @@ class GamesTestCase(TestCase):
             game_rules.determine_winner(score_p1=20, score_p2=20), "player 2"
         )
 
-    # def test_thunder_attack(self):
-    #     self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
-    #     self.game.gameboard.data = (
-    #         game_rules.thunder_attack(self.game.gameboard.data, row=1, col=6),
-    #     )
-    #     self.assertEqual(
-    #         self.game.gameboard.data,
-    #         [
-    #             [
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [1, 1],
-    #                 [1, 1],
-    #                 [0, 0],
-    #                 [1, 1],
-    #                 [0, 0],
-    #                 [0, 0],
-    #                 [0, 0],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [0, 0],
-    #                 [1, 1],
-    #                 [1, 1],
-    #                 [1, 1],
-    #                 [2, 2],
-    #                 [0, 0],
-    #                 [2, 2],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [0, 0],
-    #                 [1, 1],
-    #                 [1, 1],
-    #                 [0, 0],
-    #                 [0, 0],
-    #                 [2, 2],
-    #                 [0, 0],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [1, 1],
-    #                 [0, 0],
-    #                 [2, 2],
-    #                 [0, 0],
-    #                 [2, 1],
-    #                 [1, 1],
-    #                 [1, 3],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [0, 0],
-    #                 [1, 1],
-    #                 [2, 1],
-    #                 [2, 1],
-    #                 [0, 0],
-    #                 [0, 0],
-    #                 [0, 0],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [0, 0],
-    #                 [1, 1],
-    #                 [0, 0],
-    #                 [1, 1],
-    #                 [0, 0],
-    #                 [0, 0],
-    #                 [0, 0],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [2, 1],
-    #                 [2, 1],
-    #                 [0, 0],
-    #                 [1, 1],
-    #                 [2, 1],
-    #                 [1, 1],
-    #                 [0, 0],
-    #                 [3, 3],
-    #             ],
-    #             [
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #                 [3, 3],
-    #             ],
-    #         ],
-    #     )
+    def test_thunder_attack(self):
+        self.game.gameboard.data = game_rules.thunder_attack(
+            self.game.gameboard.data, row=1, col=6
+        )
+        self.assertEqual(
+            self.game.gameboard.data,
+            [
+                [
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [1, 1],
+                    [1, 1],
+                    [0, 0],
+                    [1, 1],
+                    [0, 0],
+                    [0, 0],
+                    [0, 0],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [0, 0],
+                    [1, 1],
+                    [1, 1],
+                    [1, 1],
+                    [2, 1],
+                    [0, 0],
+                    [2, 1],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [0, 0],
+                    [1, 1],
+                    [1, 1],
+                    [0, 0],
+                    [0, 0],
+                    [2, 1],
+                    [0, 0],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [1, 1],
+                    [0, 0],
+                    [2, 2],
+                    [0, 0],
+                    [2, 1],
+                    [1, 1],
+                    [1, 1],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [0, 0],
+                    [1, 1],
+                    [2, 1],
+                    [2, 1],
+                    [0, 0],
+                    [0, 0],
+                    [0, 0],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [0, 0],
+                    [1, 1],
+                    [0, 0],
+                    [1, 1],
+                    [0, 0],
+                    [0, 0],
+                    [0, 0],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [2, 1],
+                    [2, 1],
+                    [0, 0],
+                    [1, 1],
+                    [2, 1],
+                    [1, 1],
+                    [0, 0],
+                    [3, 3],
+                ],
+                [
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                    [3, 3],
+                ],
+            ],
+        )
 
     # def test_assign_move(self):
     #     self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
@@ -405,8 +396,6 @@ class GamesTestCase(TestCase):
     #     print(self.game.gameboard.data)
 
     def is_game_over(self):
-        self.game.gameboard.data = self.GAMEBOARD_TEST_STATE
-
         self.game.moves_left_list = MovesLeftList(
             game_rules.remaining_moves(self.game.gameboard.data)
         )
