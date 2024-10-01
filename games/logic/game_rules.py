@@ -17,7 +17,7 @@ def initialize_game(game_state):
     return game_state
 
 
-def convert_num_to_col(num):
+def convert_num_to_row(num):
     return chr(ord("A") + num - 1)
 
 
@@ -271,11 +271,9 @@ def assign_move(game_state, active_stone, row, col):
     game_state.played_moves_list.data.append(
         (
             game_state.active_player,
-            convert_num_to_col(col) + str(row) + " - " + played_stone,
+            convert_num_to_row(row) + str(col) + " - " + played_stone,
         )
     )
-    # game_state = update_score(game_state)
-    # game_state = change_player(game_state)
     return game_state
 
 
