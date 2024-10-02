@@ -15,16 +15,9 @@ class GamesTestCase(TestCase):
             password="testpass123",
         )
 
-        cls.player2 = get_user_model().objects.create_user(
-            username="player2",
-            email="player2@email.com",
-            password="testpass123",
-        )
-
     @classmethod
     def tearDownClass(cls):
         cls.player1.delete()
-        cls.player2.delete()
 
     def setUp(self):
         self.gameboard = GameBoard.objects.create()
@@ -61,6 +54,7 @@ class GamesTestCase(TestCase):
         # Test basic game fields
         self.assertEqual(self.game.name, "Test Game")
         self.assertEqual(self.game.player1.username, "player1")
+        self.assertIsNone(self.game.player2)
         self.assertEqual(self.game.score_p1, 0)
         self.assertEqual(self.game.score_p2, 0)
         self.assertEqual(self.game.active_player, 1)
@@ -72,6 +66,15 @@ class GamesTestCase(TestCase):
         self.assertTrue(self.game.p2_has_thunder_stone, True)
         self.assertTrue(self.game.p1_has_woden_stone, True)
         self.assertTrue(self.game.p2_has_woden_stone, True)
+
+    def test_player2_join_game(self):
+        player2 = get_user_model().objects.create_user(
+            username="player2",
+            email="player2@email.com",
+            password="testpass123",
+        )
+        self.game.player2 = player2
+        self.assertEqual(self.game.player2.username, "player2")
 
     def test_find_adjacent(self):
         adjacent_positions = game_rules.find_adjacent(1, 1)
@@ -241,7 +244,7 @@ class GamesTestCase(TestCase):
 
     def test_remaining_moves(self):
         self.assertEqual(
-            game_rules.remaining_moves(self.game.gameboard.data),
+            game_rules.remaining_standard_moves(self.game.gameboard.data),
             [[3, 1], [4, 4], [5, 1], [5, 5], [5, 7], [6, 6], [6, 7], [7, 7]],
         )
 
@@ -404,10 +407,26 @@ class GamesTestCase(TestCase):
         self.assertIn((1, "A5 - Woden-stone"), self.game.played_moves_list.data)
 
     def is_game_over(self):
-        self.game.moves_left_list = MovesLeftList(
-            game_rules.remaining_moves(self.game.gameboard.data)
+        self.game.moves_left_list.data = game_rules.remaining_standard_moves(
+            self.game.gameboard.data
         )
-        game_rules.is_game_over(self.game)
+        self.assertEqual(game_rules.is_game_over(self.game), False)
 
     def test_player_must_pass(self):
-        pass
+        self.game.gameboard.data = [
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
+            [[3, 3], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [2, 1], [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [1, 1], [1, 1], [2, 1], [2, 1], [2, 1], [3, 3]],
+            [[3, 3], [2, 1], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [3, 3]],
+            [[3, 3], [1, 1], [0, 0], [2, 1], [1, 1], [2, 1], [1, 1], [1, 1], [3, 3]],
+            [[3, 3], [2, 2], [1, 1], [2, 1], [2, 1], [0, 0], [0, 0], [1, 1], [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [0, 0], [1, 1], [0, 0], [1, 1], [1, 1], [3, 3]],
+            [[3, 3], [2, 1], [2, 1], [0, 0], [1, 1], [2, 1], [1, 1], [0, 0], [3, 3]],
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
+        ]
+        self.game.moves_left_list.data = game_rules.remaining_standard_moves(
+            self.game.gameboard.data
+        )
+        self.game.p1_has_woden_stone = False
+        self.game.p1_has_thunder_stone = False
+        game_rules.player_must_pass(self.game)
