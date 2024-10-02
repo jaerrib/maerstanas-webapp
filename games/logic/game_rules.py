@@ -12,7 +12,9 @@ def initialize_game(game_state):
         game_state.gameboard.data[row_num][8] = EDGE
 
     game_state.played_moves_list.data = []
-    game_state.moves_left_list.data = remaining_moves(game_state.gameboard.data)
+    game_state.moves_left_list.data = remaining_standard_moves(
+        game_state.gameboard.data
+    )
 
     return game_state
 
@@ -211,7 +213,7 @@ def possible_woden_stone_moves(game_state):
     return possible_moves
 
 
-def remaining_moves(gameboard):
+def remaining_standard_moves(gameboard):
     """
     Cycles through board positions starting at A1 (1,1). If a position is
     a potentially valid move, it is appended to an array which is then used
@@ -297,7 +299,13 @@ def is_game_over(game_state):
     )
 
 
-def player_must_pass(data):
-    player_num = str(data["active_player"])
-    no_special_stones = len(data["special_stones"]["player" + player_num]) == 1
-    return no_special_stones and data["moves_left"] == []
+def player_must_pass(game_state):
+    thunder_field = f"p{game_state.active_player}_has_thunder_stone"
+    has_thunder_stone = getattr(game_state, thunder_field)
+    woden_field = f"p{game_state.active_player}_has_woden_stone"
+    has_woden_stone = getattr(game_state, woden_field)
+    must_pass = (
+        not (has_thunder_stone and has_woden_stone)
+        and game_state.moves_left_list.data == []
+    )
+    return must_pass
