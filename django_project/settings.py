@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    # Third party
+    "allauth",
+    "allauth.account",
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
@@ -55,6 +59,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # Third party
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "django_project.urls"
@@ -135,3 +141,14 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+# django-allauth config
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+ACCOUNT_SESSION_REMEMBER = True
