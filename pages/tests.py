@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 
-from pages.views import HomePageView, AboutPageView, DashboardPageView
+from .views import HomePageView, AboutPageView, DashboardPageView
 
 
 class HomePageTests(SimpleTestCase):
@@ -34,13 +34,13 @@ class AboutPageTests(SimpleTestCase):
     def test_url_exists_at_desired_location(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_homepage_template(self):
+    def test_about_page_template(self):
         self.assertTemplateUsed(self.response, "about.html")
 
-    def test_homepage_contains_correct_html(self):
+    def test_about_page_contains_correct_html(self):
         self.assertContains(self.response, "About")
 
-    def test_homepage_does_not_contain_incorrect_html(self):
+    def test_about_page_does_not_contain_incorrect_html(self):
         self.assertNotContains(self.response, "Hello")
 
     def test_url_resolves_about_page_view(self):
@@ -56,13 +56,13 @@ class DashboardPageTests(SimpleTestCase):
     def test_url_exists_at_desired_location(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_homepage_template(self):
+    def test_dashboard_page_template(self):
         self.assertTemplateUsed(self.response, "dashboard.html")
 
-    def test_homepage_contains_correct_html(self):
+    def test_dashboard_page_contains_correct_html(self):
         self.assertContains(self.response, "Dashboard")
 
-    def test_homepage_does_not_contain_incorrect_html(self):
+    def test_dashboard_page_does_not_contain_incorrect_html(self):
         self.assertNotContains(self.response, "Hello")
 
     def test_url_resolves_dashboard_page_view(self):
