@@ -9,7 +9,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path("", GameListView.as_view(), name="game_list"),
+    path("game_list/", GameListView.as_view(), name="game_list"),
     path("create/", GameCreateView.as_view(), name="game_create"),
     path("<uuid:pk>/", GameDetailView.as_view(), name="game_detail"),
     path("<uuid:pk>/update/", GameUpdateView.as_view(), name="game_update"),

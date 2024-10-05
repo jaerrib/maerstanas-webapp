@@ -23,6 +23,6 @@ urlpatterns = [
     # User management
     path("accounts/", include("allauth.urls")),
     # Local apps
-    path("", include("games.urls")),
-    path("games/", include("pages.urls")),
+    path("", include("pages.urls")),
+    path("games/", include("games.urls")),
 ]
