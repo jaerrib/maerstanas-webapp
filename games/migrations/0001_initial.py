@@ -19,26 +19,68 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Game',
+            name="Game",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('gameboard', models.JSONField(default=games.models.default_array)),
-                ('played_moves_list', models.JSONField(default=games.models.default_array)),
-                ('moves_left_list', models.JSONField(default=games.models.default_array)),
-                ('score_p1', models.IntegerField(default=0)),
-                ('score_p2', models.IntegerField(default=0)),
-                ('active_player', models.IntegerField(default=1)),
-                ('using_special_stones', models.BooleanField(default=True)),
-                ('using_standard_scoring', models.BooleanField(default=True)),
-                ('game_over', models.BooleanField(default=False)),
-                ('result', models.CharField(blank=True, choices=[('Player 1', 'Player 1'), ('Player 2', 'Player 2'), ('Tie', 'Tie')], max_length=10, null=True)),
-                ('p1_has_thunder_stone', models.BooleanField(default=True)),
-                ('p1_has_woden_stone', models.BooleanField(default=True)),
-                ('p2_has_thunder_stone', models.BooleanField(default=True)),
-                ('p2_has_woden_stone', models.BooleanField(default=True)),
-                ('player1', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='hosted_games', to=settings.AUTH_USER_MODEL)),
-                ('player2', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='joined_games', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("gameboard", models.JSONField(default=games.models.default_array)),
+                (
+                    "played_moves_list",
+                    models.JSONField(default=games.models.default_array),
+                ),
+                (
+                    "moves_left_list",
+                    models.JSONField(default=games.models.default_array),
+                ),
+                ("score_p1", models.IntegerField(default=0)),
+                ("score_p2", models.IntegerField(default=0)),
+                ("active_player", models.IntegerField(default=1)),
+                ("using_special_stones", models.BooleanField(default=True)),
+                ("using_standard_scoring", models.BooleanField(default=True)),
+                ("game_over", models.BooleanField(default=False)),
+                (
+                    "result",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("Player 1", "Player 1"),
+                            ("Player 2", "Player 2"),
+                            ("Tie", "Tie"),
+                        ],
+                        max_length=10,
+                        null=True,
+                    ),
+                ),
+                ("p1_has_thunder_stone", models.BooleanField(default=True)),
+                ("p1_has_woden_stone", models.BooleanField(default=True)),
+                ("p2_has_thunder_stone", models.BooleanField(default=True)),
+                ("p2_has_woden_stone", models.BooleanField(default=True)),
+                (
+                    "player1",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="hosted_games",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "player2",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="joined_games",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
