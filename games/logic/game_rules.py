@@ -3,17 +3,17 @@ def initialize_game(game_state):
     EMPTY = [0, 0]
     EDGE = [3, 3]
 
-    game_state.gameboard.data = [[EMPTY] * SIZE for _ in range(SIZE)]
+    game_state.gameboard["data"] = [[EMPTY] * SIZE for _ in range(SIZE)]
     for col_num in range(SIZE):
-        game_state.gameboard.data[0][col_num] = EDGE
-        game_state.gameboard.data[8][col_num] = EDGE
+        game_state.gameboard["data"][0][col_num] = EDGE
+        game_state.gameboard["data"][8][col_num] = EDGE
     for row_num in range(1, SIZE - 1):
-        game_state.gameboard.data[row_num][0] = EDGE
-        game_state.gameboard.data[row_num][8] = EDGE
+        game_state.gameboard["data"][row_num][0] = EDGE
+        game_state.gameboard["data"][row_num][8] = EDGE
 
-    game_state.played_moves_list.data = []
-    game_state.moves_left_list.data = remaining_standard_moves(
-        game_state.gameboard.data
+    game_state.played_moves_list["data"] = []
+    game_state.moves_left_list["data"] = remaining_standard_moves(
+        game_state.gameboard["data"]
     )
 
     return game_state
@@ -155,12 +155,12 @@ def check_woden_stone(gameboard, active_player, row, col):
 def is_valid_move(game_state, played_stone, row, col):
     match played_stone:
         case 1:
-            return check_default_stone(game_state.gameboard.data, row, col)
+            return check_default_stone(game_state.gameboard["data"], row, col)
         case 2:
-            return check_thunder_stone(game_state.gameboard.data, row, col)
+            return check_thunder_stone(game_state.gameboard["data"], row, col)
         case 3:
             return check_woden_stone(
-                game_state.gameboard.data, game_state.active_player, row, col
+                game_state.gameboard["data"], game_state.active_player, row, col
             )
 
 
@@ -173,9 +173,9 @@ def check_score(game_state, player):
     calculated_score: int = 0
     for row_index in range(1, 9):
         for col_index in range(0, 9):
-            board_position = game_state.gameboard.data[row_index][col_index]
+            board_position = game_state.gameboard["data"][row_index][col_index]
             # Check vertical hinges
-            position_above = game_state.gameboard.data[row_index - 1][col_index]
+            position_above = game_state.gameboard["data"][row_index - 1][col_index]
             if position_above[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_above[0] == 3 and board_position[0] == player:
@@ -183,7 +183,7 @@ def check_score(game_state, player):
             elif position_above[0] == player and board_position[0] == 3:
                 calculated_score += score_modifier
             # Check horizontal hinges
-            position_to_left = game_state.gameboard.data[row_index][col_index - 1]
+            position_to_left = game_state.gameboard["data"][row_index][col_index - 1]
             if position_to_left[0] == player and board_position[0] == player:
                 calculated_score += 1
             elif position_to_left[0] == 3 and board_position[0] == player:
@@ -197,7 +197,7 @@ def possible_thunder_stone_moves(game_state):
     possible_moves = []
     for row in range(1, 9):
         for col in range(1, 9):
-            if check_thunder_stone(game_state.gameboard.data, row, col):
+            if check_thunder_stone(game_state.gameboard["data"], row, col):
                 possible_moves.append([row, col])
     return possible_moves
 
@@ -207,7 +207,7 @@ def possible_woden_stone_moves(game_state):
     for row in range(1, 9):
         for col in range(1, 9):
             if check_woden_stone(
-                game_state.gameboard.data, game_state.active_player, row, col
+                game_state.gameboard["data"], game_state.active_player, row, col
             ):
                 possible_moves.append([row, col])
     return possible_moves
@@ -260,17 +260,17 @@ def thunder_attack(gameboard, row, col):
 
 def assign_move(game_state, active_stone, row, col):
     if active_stone == 2:
-        thunder_attack(game_state.gameboard.data, row, col)
+        thunder_attack(game_state.gameboard["data"], row, col)
     if active_stone == 2:
         field_name = f"p{game_state.active_player}_has_thunder_stone"
         setattr(game_state, field_name, False)
     elif active_stone == 3:
         field_name = f"p{game_state.active_player}_has_woden_stone"
         setattr(game_state, field_name, False)
-    game_state.gameboard.data[row][col] = [game_state.active_player, active_stone]
+    game_state.gameboard["data"][row][col] = [game_state.active_player, active_stone]
     stones = ["standard stone", "thunder-stone", "Woden-stone"]
     played_stone = stones[active_stone - 1]
-    game_state.played_moves_list.data.append(
+    game_state.played_moves_list["data"].append(
         (
             game_state.active_player,
             convert_num_to_row(row) + str(col) + " - " + played_stone,
@@ -291,7 +291,7 @@ def is_game_over(game_state):
     player2_has_special_stones = (
         game_state.p2_has_thunder_stone or game_state.p2_has_woden_stone
     )
-    default_moves_are_left = game_state.moves_left_list != []
+    default_moves_are_left = game_state.moves_left_list["data"] != []
     return (
         not player1_has_special_stones
         and not player2_has_special_stones
@@ -306,6 +306,6 @@ def player_must_pass(game_state):
     has_woden_stone = getattr(game_state, woden_field)
     must_pass = (
         not (has_thunder_stone and has_woden_stone)
-        and game_state.moves_left_list.data == []
+        and game_state.moves_left_list["data"] == []
     )
     return must_pass

@@ -1,18 +1,6 @@
 from django.contrib import admin
 
-from .models import Game, GameBoard, MovesLeftList, PlayedMovesList
-
-
-class GameBoardAdmin(admin.ModelAdmin):
-    list_display = ["id"]
-
-
-class PlayedMovesListAdmin(admin.ModelAdmin):
-    list_display = ["id"]
-
-
-class MovesLeftListAdmin(admin.ModelAdmin):
-    list_display = ["id"]
+from .models import Game
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -29,6 +17,3 @@ class GameAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Game, GameAdmin)
-admin.site.register(GameBoard, GameBoardAdmin)
-admin.site.register(MovesLeftList, MovesLeftListAdmin)
-admin.site.register(PlayedMovesList, PlayedMovesListAdmin)

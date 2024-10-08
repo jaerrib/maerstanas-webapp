@@ -2,32 +2,11 @@ import uuid
 
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.forms import JSONField
 from django.urls import reverse
 
 
-class GameBoard(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    data = JSONField()
-
-    def __str__(self):
-        return f"Gameboard {self.id}"
-
-
-class PlayedMovesList(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    data = JSONField()
-
-    def __str__(self):
-        return f"Played moves List {self.id}"
-
-
-class MovesLeftList(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    data = JSONField()
-
-    def __str__(self):
-        return f"Moves Left List {self.id}"
+def default_array():
+    return {"data": []}
 
 
 class Game(models.Model):
@@ -40,17 +19,9 @@ class Game(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, null=False, blank=False, unique=True)
 
-    gameboard = models.OneToOneField(
-        GameBoard, related_name="game_boards", on_delete=models.CASCADE
-    )
-
-    played_moves_list = models.OneToOneField(
-        PlayedMovesList, related_name="move_lists", on_delete=models.CASCADE
-    )
-
-    moves_left_list = models.OneToOneField(
-        MovesLeftList, related_name="moves_left", on_delete=models.CASCADE
-    )
+    gameboard = models.JSONField(default=default_array)
+    played_moves_list = models.JSONField(default=default_array)
+    moves_left_list = models.JSONField(default=default_array)
 
     player1 = models.ForeignKey(
         get_user_model(), related_name="hosted_games", on_delete=models.CASCADE
@@ -61,6 +32,7 @@ class Game(models.Model):
         related_name="joined_games",
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
 
     score_p1 = models.IntegerField(default=0)
