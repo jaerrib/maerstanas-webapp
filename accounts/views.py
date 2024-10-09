@@ -1,5 +1,16 @@
-from django.views.generic import TemplateView
+from django.contrib.auth import get_user_model
+from django.views.generic import DetailView, ListView
 
 
-class PlayerProfilePageView(TemplateView):
-    template_name = "account/player_profile.html"
+class UserProfileListView(ListView):
+    User = get_user_model()
+    context_object_name = "profiles_list"
+    template_name = "account/userprofile_list.html"
+
+    def get_queryset(self):
+        return get_user_model().objects.filter(is_active=True)
+
+
+class UserProfileDetailView(DetailView):
+    User = get_user_model()
+    template_name = "account/userprofile_detail.html"

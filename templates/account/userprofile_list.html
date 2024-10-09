@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block title %}Player List{% endblock title %}
+
+{% block content %}
+<h1>Player List</h1>
+{% for profile in profiles_list %}
+<ul>
+    <li>
+        USER: <a href="">{{ profile.username }}</a>
+    </li>
+</ul>
+{% endfor %}
+{% endblock content %}

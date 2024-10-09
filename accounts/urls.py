@@ -1,7 +1,12 @@
 from django.urls import path
 
-from .views import PlayerProfilePageView
+from .views import UserProfileDetailView, UserProfileListView
 
 urlpatterns = [
-    path("player_profile/", PlayerProfilePageView.as_view(), name="player_profile"),
+    path("profiles/", UserProfileListView.as_view(), name="userprofile_list"),
+    path(
+        "profiles/<uuid:pk>/",
+        UserProfileDetailView.as_view(),
+        name="userprofile_detail",
+    ),
 ]
