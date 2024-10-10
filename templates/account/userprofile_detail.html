@@ -7,5 +7,9 @@
 <ul>
     <li>{{ player.username }}</li>
     <li>{{ player.email }}</li>
+    <li>Record (W-L-T):
+        {{ player.games_won }}-{{player.games_lost}}-{{player.games_tied}}
+    </li>
+    <li>Games abandoned: {{ player.games_abandoned }}</li>
 </ul>
 {% endblock content %}

@@ -12,5 +12,6 @@ class UserProfileListView(ListView):
 
 
 class UserProfileDetailView(DetailView):
-    User = get_user_model()
+    model = get_user_model()
+    context_object_name = "player"
     template_name = "account/userprofile_detail.html"
