@@ -14,6 +14,9 @@ class GameListView(ListView):
     context_object_name = "game_list"
     template_name = "game/game_list.html"
 
+    def get_queryset(self):
+        return Game.objects.filter(player2=None)
+
 
 class GameDetailView(DetailView):
     model = Game
