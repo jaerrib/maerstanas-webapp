@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import (
     ListView,
     DetailView,
@@ -37,3 +38,13 @@ class GameUpdateView(UpdateView):
 class GameDeleteView(DeleteView):
     model = Game
     template_name = "game/game_delete.html"
+
+
+def join_open_game(request, pk):
+    game = get_object_or_404(Game, pk=pk)
+    if game.player2 is None and game.player1 != request.user:
+        game.player2 = request.user
+        game.save()
+        return redirect("game_detail", pk=game.pk)
+    else:
+        return redirect("home")

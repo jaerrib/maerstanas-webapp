@@ -4,12 +4,16 @@
 
 {% block content %}
 <h1>Game List</h1>
-{% for game in game_list %}
-<div>
-    <h2><a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
+<ul>
+    {% for game in game_list %}
+    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
         created by <a
                 href="{{ game.player1.get_absolute_url }}">
-            {{ game.player1.username }}</a></h2>
-</div>
-{% endfor %}
+            {{ game.player1.username }}</a>
+        {% if game.player1 != user %}
+        - <a href="{% url 'game_join' pk=game.id %}">JOIN</a>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 {% endblock content %}

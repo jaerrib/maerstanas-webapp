@@ -6,6 +6,7 @@ from .views import (
     GameCreateView,
     GameUpdateView,
     GameDeleteView,
+    join_open_game,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("<uuid:pk>/", GameDetailView.as_view(), name="game_detail"),
     path("<uuid:pk>/update/", GameUpdateView.as_view(), name="game_update"),
     path("<uuid:pk>/delete/", GameDeleteView.as_view(), name="game_delete"),
+    path("<uuid:pk>/join/", join_open_game, name="game_join"),
 ]
