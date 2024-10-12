@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import (
     ListView,
@@ -7,6 +8,7 @@ from django.views.generic import (
     DeleteView,
 )
 
+from .forms import GameCreateForm, GameUpdateForm
 from .models import Game
 
 
@@ -25,13 +27,19 @@ class GameDetailView(DetailView):
     template_name = "game/game_detail.html"
 
 
-class GameCreateView(CreateView):
+class GameCreateView(LoginRequiredMixin, CreateView):
     model = Game
+    form_class = GameCreateForm
     template_name = "game/game_create.html"
+
+    def form_valid(self, form):
+        form.instance.player1 = self.request.user
+        return super().form_valid(form)
 
 
 class GameUpdateView(UpdateView):
     model = Game
+    form_class = GameUpdateForm
     template_name = "game/game_update.html"
 
 
