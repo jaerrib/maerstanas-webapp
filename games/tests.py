@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
+from django.urls import reverse
 
 from .logic import game_rules
 from .models import Game
@@ -427,3 +428,42 @@ class GamesTestCase(TestCase):
         self.game.p1_has_woden_stone = False
         self.game.p1_has_thunder_stone = False
         game_rules.player_must_pass(self.game)
+
+
+class GameViewsTestCase(SimpleTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.player1 = get_user_model().objects.create_user(
+            username="testuser",
+            email="testuser@email.com",
+            password="testpass123",
+        )
+
+        cls.game = Game.objects.create(
+            name="Test Game 2",
+            player1=cls.player1,
+        )
+        cls.game = game_rules.initialize_game(cls.game)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.player1.delete()
+        cls.game.delete()
+
+    def test_game_list_view(self):
+        url = reverse("game_list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Game List")
+        self.assertContains(response, "Test Game 2")
+        self.assertTemplateUsed(response, "game/game_list.html")
+
+    def test_game_detail_view(self):
+        response = self.client.get(self.game.get_absolute_url())
+        no_response = self.client.get("/games/12345")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(no_response.status_code, 404)
+        self.assertContains(response, "Game Detail Placeholder")
+        self.assertContains(response, "testuser")
+        self.assertTemplateUsed(response, "game/game_detail.html")
