@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
@@ -43,9 +44,17 @@ class GameUpdateView(UpdateView):
     template_name = "game/game_update.html"
 
 
-class GameDeleteView(DeleteView):
+class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Game
     template_name = "game/game_delete.html"
+
+    def get_success_url(self):
+        player_id = self.object.player1.id
+        return reverse_lazy("userprofile_detail", kwargs={"pk": player_id})
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.player1 == self.request.user
 
 
 def join_open_game(request, pk):
