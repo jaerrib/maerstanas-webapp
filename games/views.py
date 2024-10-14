@@ -38,10 +38,14 @@ class GameCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class GameUpdateView(UpdateView):
+class GameUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Game
     form_class = GameUpdateForm
     template_name = "game/game_update.html"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.player1 == self.request.user
 
 
 class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
