@@ -18,3 +18,5 @@ class CustomUserChangeForm(UserChangeForm):
             "email",
             "username",
         )
+
+    password = None
