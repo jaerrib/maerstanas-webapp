@@ -1,0 +1,13 @@
+{% extends "_base.html" %}
+
+{% block title %}Delete Account{% endblock title %}
+
+{% block content %}
+<h2>Delete Account</h2>
+<form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete your account associated with
+        {{ account.email }}? This cannot be undone.</p>
+    <button type="submit">Confirm</button>
+</form>
+{% endblock content %}
