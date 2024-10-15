@@ -1,4 +1,5 @@
-from django.test import SimpleTestCase
+from django.contrib.auth import get_user_model
+from django.test import SimpleTestCase, TestCase
 from django.urls import reverse, resolve
 
 from .views import HomePageView, AboutPageView, DashboardPageView
@@ -48,9 +49,14 @@ class AboutPageTests(SimpleTestCase):
         self.assertEqual(view.func.__name__, AboutPageView.as_view().__name__)
 
 
-class DashboardPageTests(SimpleTestCase):
+class DashboardPageTests(TestCase):
     def setUp(self):
+        User = get_user_model()
+        user = User.objects.create_user(
+            username="testuser", email="testuser@email.com", password="testpass123"
+        )
         url = reverse("dashboard")
+        self.client.login(email="testuser@email.com", password="testpass123")
         self.response = self.client.get(url)
 
     def test_url_exists_at_desired_location(self):

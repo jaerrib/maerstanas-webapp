@@ -4,4 +4,30 @@
 
 {% block content %}
 <h1>Dashboard Placeholder</h1>
+<h2>{{ user_profile.username }}'s Profile</h2>
+<a href="{% url 'userprofile_update'  pk=user_profile.pk %}">
+    Update Profile</a> |
+<a href="{% url 'userprofile_delete'  pk=user_profile.pk %}">
+    Delete Profile</a>
+<p>
+    Record (W-L-T):
+    {{ user_profile.games_won }} -
+    {{user_profile.games_lost}} -
+    {{user_profile.games_tied}}
+</p>
+<p>Games Abandoned: {{ user_profile.games_abandoned }}</p>
+<hr>
+<h3>Hosted Games</h3>
+<ul>
+    {% for game in hosted_games %}
+    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h3>Joined Games</h3>
+<ul>
+    {% for game in joined_games %}
+    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a></li>
+    {% endfor %}
+</ul>
 {% endblock content %}
