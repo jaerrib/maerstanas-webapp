@@ -15,12 +15,12 @@ urlpatterns = [
         name="userprofile_detail",
     ),
     path(
-        "profiles/<uuid:pk>/update/",
+        "profiles/update/",
         UserProfileUpdateView.as_view(),
         name="userprofile_update",
     ),
     path(
-        "profiles/<uuid:pk>/delete/",
+        "profiles/delete/",
         UserProfileDeleteView.as_view(),
         name="userprofile_delete",
     ),

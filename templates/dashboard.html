@@ -5,10 +5,8 @@
 {% block content %}
 <h1>Dashboard Placeholder</h1>
 <h2>{{ user_profile.username }}'s Profile</h2>
-<a href="{% url 'userprofile_update'  pk=user_profile.pk %}">
-    Update Profile</a> |
-<a href="{% url 'userprofile_delete'  pk=user_profile.pk %}">
-    Delete Profile</a>
+<a href="{% url 'userprofile_update' %}">Update Profile</a> |
+<a href="{% url 'userprofile_delete' %}">Delete Profile</a>
 <p>
     Record (W-L-T):
     {{ user_profile.games_won }} -
