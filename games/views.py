@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -9,7 +9,7 @@ from django.views.generic import (
     DeleteView,
 )
 
-from .forms import GameCreateForm, GameUpdateForm
+from .forms import GameCreateForm, GameUpdateForm, PasswordForm
 from .models import Game
 
 
@@ -51,6 +51,12 @@ class GameUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        session = self.object
+        context["show_password_change"] = session.player2 is None
+        return context
+
 
 class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Game
@@ -67,9 +73,23 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def join_open_game(request, pk):
     game = get_object_or_404(Game, pk=pk)
-    if game.player2 is None and game.player1 != request.user:
+    if game.player1 == request.user or game.player2 == request.user:
+        return redirect("game_detail", pk=pk)
+
+    if game.password:
+        if request.method == "POST":
+            form = PasswordForm(request.POST)
+            if form.is_valid():
+                if game.check_password(form.cleaned_data["password"]):
+                    game.player2 = request.user
+                    game.save()
+                    return redirect("game_detail", pk=pk)
+                else:
+                    form.add_error("password", "Incorrect password")
+        else:
+            form = PasswordForm()
+        return render(request, "game/join_game.html", {"form": form, "game": game})
+    else:
         game.player2 = request.user
         game.save()
-        return redirect("game_detail", pk=game.pk)
-    else:
-        return redirect("home")
+        return redirect("game_detail", pk=pk)

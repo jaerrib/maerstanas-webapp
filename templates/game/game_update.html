@@ -6,7 +6,13 @@
 <h2>Update Game</h2>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% for field in form.visible_fields %}
+    {% if field.name != "password" or show_password_change %}
+    <p>{{ field.label_tag }} {{field}}</p>
+    {% else %}
+    <p><em>Password not allowed to be changed after player 2 joins.</em></p>
+    {% endif %}
+    {% endfor %}
     <button type="submit">Update</button>
 </form>
 {% endblock content %}
