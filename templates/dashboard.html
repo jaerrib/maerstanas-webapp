@@ -18,14 +18,18 @@
 <h3>Hosted Games</h3>
 <ul>
     {% for game in hosted_games %}
-    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a></li>
+    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
+        {{ game.player2 }}
+    </li>
     {% endfor %}
 </ul>
 
 <h3>Joined Games</h3>
 <ul>
     {% for game in joined_games %}
-    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a></li>
+    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
+        {{ game.player1 }}
+    </li>
     {% endfor %}
 </ul>
 {% endblock content %}
