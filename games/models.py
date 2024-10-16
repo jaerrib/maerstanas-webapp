@@ -1,6 +1,7 @@
 import uuid
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.urls import reverse
 
@@ -52,6 +53,14 @@ class Game(models.Model):
     p1_has_woden_stone = models.BooleanField(default=True)
     p2_has_thunder_stone = models.BooleanField(default=True)
     p2_has_woden_stone = models.BooleanField(default=True)
+
+    password = models.CharField(max_length=128, blank=True, null=True)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     def __str__(self):
         return self.name

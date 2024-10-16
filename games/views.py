@@ -47,6 +47,10 @@ class GameUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         obj = self.get_object()
         return obj.player1 == self.request.user
 
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
 
 class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Game

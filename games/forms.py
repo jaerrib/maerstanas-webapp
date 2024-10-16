@@ -15,11 +15,19 @@ class GameCreateForm(ModelForm):
             "name",
             "using_special_stones",
             "using_standard_scoring",
+            "password",
         ]
         widgets = {
             "using_special_stones": CheckBoxInput(),
             "using_standard_scoring": CheckBoxInput(),
         }
+
+    def save(self, commit=True):
+        game = super().save(commit=False)
+        game.set_password(self.cleaned_data["password"])
+        if commit:
+            game.save()
+        return game
 
 
 class GameUpdateForm(ModelForm):
@@ -29,6 +37,7 @@ class GameUpdateForm(ModelForm):
             "name",
             "using_special_stones",
             "using_standard_scoring",
+            "password",
         ]
         widgets = {
             "using_special_stones": CheckBoxInput(),
