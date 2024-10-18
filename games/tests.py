@@ -474,7 +474,8 @@ class GameViewsTestCase(SimpleTestCase):
         )
         self.assertContains(response, "Log In")
 
-    def test_game_detail_view(self):
+    def test_game_detail_view_for_logged_in_user(self):
+        self.client.login(email="testuser@email.com", password="testpass123")
         response = self.client.get(self.game.get_absolute_url())
         no_response = self.client.get("/games/12345")
         self.assertEqual(response.status_code, 200)
@@ -482,3 +483,26 @@ class GameViewsTestCase(SimpleTestCase):
         self.assertContains(response, "Game Detail Placeholder")
         self.assertContains(response, "testuser")
         self.assertTemplateUsed(response, "game/game_detail.html")
+
+    def test_game_detail_view_for_logged_out_user(self):
+        self.client.logout()
+        response = self.client.get(self.game.get_absolute_url())
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"%s?next=/games/{self.game.id}/" % (reverse("account_login")),
+        )
+        response = self.client.get(
+            f"%s?next=/games/{self.game.id}/" % (reverse("account_login")),
+        )
+        self.assertContains(response, "Log In")
+
+    def test_game_detail_for_non_participating_user(self):
+        other_user = get_user_model().objects.create_user(
+            username="other user",
+            email="other_user@email.com",
+            password="testpass123",
+        )
+        self.client.login(email="other_user@email.com", password="testpass123")
+        response = self.client.get(self.game.get_absolute_url())
+        self.assertEqual(response.status_code, 403)

@@ -22,10 +22,14 @@ class GameListView(LoginRequiredMixin, ListView):
         return Game.objects.filter(player2=None)
 
 
-class GameDetailView(DetailView):
+class GameDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Game
     context_object_name = "game"
     template_name = "game/game_detail.html"
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.player1 == self.request.user or obj.player2 == self.request.user
 
 
 class GameCreateView(LoginRequiredMixin, CreateView):
