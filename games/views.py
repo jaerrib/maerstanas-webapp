@@ -13,7 +13,7 @@ from .forms import GameCreateForm, GameUpdateForm, PasswordForm
 from .models import Game
 
 
-class GameListView(ListView):
+class GameListView(LoginRequiredMixin, ListView):
     model = Game
     context_object_name = "game_list"
     template_name = "game/game_list.html"

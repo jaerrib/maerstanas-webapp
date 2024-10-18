@@ -451,13 +451,28 @@ class GameViewsTestCase(SimpleTestCase):
         cls.player1.delete()
         cls.game.delete()
 
-    def test_game_list_view(self):
+    def test_game_list_view_for_logged_in_user(self):
+        self.client.login(email="testuser@email.com", password="testpass123")
         url = reverse("game_list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Game List")
         self.assertContains(response, "Test Game 2")
         self.assertTemplateUsed(response, "game/game_list.html")
+
+    def test_game_list_view_for_logged_out_user(self):
+        self.client.logout()
+        url = reverse("game_list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"%s?next=/games/game_list/" % (reverse("account_login")),
+        )
+        response = self.client.get(
+            f"%s?next=/games/game_list/" % (reverse("account_login")),
+        )
+        self.assertContains(response, "Log In")
 
     def test_game_detail_view(self):
         response = self.client.get(self.game.get_absolute_url())
