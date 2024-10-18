@@ -1,0 +1,50 @@
+{% block header %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary p-2 mb-3 sticky-top ">
+    <div class="container-fluid">
+        <h1><a class="navbar-brand fw-bold"
+               href="{% url 'home' %}">Mǽrstánas</a></h1>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end"
+             id="navbarNav">
+            <ul class="navbar-nav nav-underline">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard' %}">
+                        My Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'game_list' %}">
+                        Open Games
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'account_logout' %}">
+                        Log Out
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'account_login' %}">
+                        Log In
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'account_signup' %}">
+                        Sign Up
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+{% endblock header %}
