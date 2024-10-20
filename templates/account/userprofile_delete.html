@@ -8,6 +8,6 @@
     {% csrf_token %}
     <p>Are you sure you want to delete your account associated with
         {{ account.email }}? This cannot be undone.</p>
-    <button type="submit">Confirm</button>
+    <button class="btn btn-danger" type="submit">Confirm</button>
 </form>
 {% endblock content %}
