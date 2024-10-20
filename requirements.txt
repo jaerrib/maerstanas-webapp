@@ -27,6 +27,8 @@ django-crispy-forms==2.3
     # via
     #   -r requirements.in
     #   crispy-bootstrap5
+django-gravatar2==1.4.5
+    # via -r requirements.in
 environs[django]==11.0.0
     # via -r requirements.in
 marshmallow==3.22.0

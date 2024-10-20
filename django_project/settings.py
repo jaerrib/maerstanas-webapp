@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "allauth",
     "allauth.account",
+    "django_gravatar",
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
