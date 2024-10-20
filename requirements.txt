@@ -6,6 +6,8 @@
 #
 asgiref==3.8.1
     # via django
+crispy-bootstrap5==2024.10
+    # via -r requirements.in
 dj-database-url==2.2.0
     # via environs
 dj-email-url==1.0.6
@@ -13,12 +15,18 @@ dj-email-url==1.0.6
 django==5.1.1
     # via
     #   -r requirements.in
+    #   crispy-bootstrap5
     #   dj-database-url
     #   django-allauth
+    #   django-crispy-forms
 django-allauth==65.0.2
     # via -r requirements.in
 django-cache-url==3.4.5
     # via environs
+django-crispy-forms==2.3
+    # via
+    #   -r requirements.in
+    #   crispy-bootstrap5
 environs[django]==11.0.0
     # via -r requirements.in
 marshmallow==3.22.0
