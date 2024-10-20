@@ -5,8 +5,10 @@
 {% block content %}
 <h1>Dashboard Placeholder</h1>
 <h2>{{ user_profile.username }}'s Profile</h2>
-<a href="{% url 'userprofile_update' %}">Update Profile</a> |
-<a href="{% url 'userprofile_delete' %}">Delete Profile</a>
+<p>
+    <a href="{% url 'userprofile_update' %}">Update Profile</a> |
+    <a href="{% url 'userprofile_delete' %}">Delete Profile</a>
+</p>
 <p>
     Record (W-L-T):
     {{ user_profile.games_won }} -
@@ -15,6 +17,7 @@
 </p>
 <p>Games Abandoned: {{ user_profile.games_abandoned }}</p>
 <hr>
+<a href="{% url 'game_create' %}" class="btn btn-primary">Create a Game</a>
 <h3>Hosted Games</h3>
 <ul>
     {% for game in hosted_games %}
