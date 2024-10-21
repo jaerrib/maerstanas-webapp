@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* For mobile phones: */
+.square {
+    aspect-ratio: 1 / 1;
+    vertical-align: middle;
+    font-size: 1.5em;
+    height: 1.75em;
+    padding: 0 0 8px 0;
+    text-align: center;
+}
+
+.score {
+    font-size: 1em;
+}
+
+@media only screen and (min-width: 768px) {
+    .square {
+        font-size: 1.75em;
+        height: 2em;
+        padding: 2px 0 2px 0;
+    }
+
+    .score {
+        font-size: 1.5em;
+    }
+}
+
+.stone {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.stone-selected {
+    outline: 2px solid var(--bs-primary);
+}
+
+.stone-disabled {
+    opacity: 0.1;
+}
+
+#suggestion.htmx-added {
+    opacity: 0;
+}
+
+#suggestion {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1
+}
+
+.htmx-request.htmx-indicator {
+    opacity: 1
+}
