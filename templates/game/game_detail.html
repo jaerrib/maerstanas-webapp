@@ -1,4 +1,6 @@
 {% extends "_base.html" %}
+{% load static %}
+{% load custom_filters %}
 
 {% block title %}Game Detail{% endblock title %}
 
@@ -9,6 +11,68 @@
     <li>Player 1: {{ game.player1 }}</li>
     <li>Player 2: {{ game.player2 }}</li>
     <li>Special stones active? {{ game.using_special_stones }}</li>
-    <li>Standard scoring (edge count)? {{ game.using_standard_scoring }}</li>
+    <li>Standard scoring (edges count)? {{ game.using_standard_scoring }}</li>
+    <li>Score - Player 1: {{ game.score_p1 }}, Player 2: {{ game.score_p2 }}
+    </li>
 </ul>
+<hr>
+<div id="messageArea"></div>
+<form id="moveForm">
+    {% csrf_token %}
+    <div id="stoneSelection">
+        <label>
+            <input type="radio" name="stone" value="stone1" checked>
+            <img src="{% static 'images/dark_stone.svg' %}" class="stone-img"
+                 id="stone1" alt="standard stone">
+        </label>
+        <label>
+            <input type="radio" name="stone" value="stone2">
+            <img src="{% static 'images/dark_thunder_stone.svg' %}"
+                 class="stone-img" id="stone2" alt="thunder stone">
+        </label>
+        <label>
+            <input type="radio" name="stone" value="stone3">
+            <img src="{% static 'images/dark_woden_stone.svg' %}"
+                 class="stone-img" id="stone3" alt="Woden stone">
+        </label>
+    </div>
+</form>
+
+<div class="d-flex">
+    <div class="square"></div>
+    {% for letter in "ABCDEFG" %}
+    <div class="square">{{letter}}</div>
+    {% endfor %}
+</div>
+{% for row in 1|range_filter:8 %}
+<div class="d-flex">
+    <div class="square">{{row}}</div>
+    {% for col in 1|range_filter:8 %}
+    <div class="square bg-secondary border border-secondary-subtle"
+         id="cell-{{ row }}-{{ col }}"
+         hx-post="{% url 'validate_move' game_id=game.id %}"
+         hx-include="#stoneSelection"
+         hx-vals='{"row": "{{ row }}", "col": "{{ col }}"}'
+         hx-swap="outerHTML innerHTML:swap"
+         hx-target="this">
+        {% with row_cells=game.gameboard.data|index:row %}
+        {% with cell=row_cells|index:col %}
+        {{ cell.0 }} {{ cell.1 }}
+        {% endwith %}
+        {% endwith %}
+
+
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+<hr>
+<div id="moveList" class="overflow-auto form-control overflow-y-scroll"
+     style="height: 24.5rem">
+    <p>Played Moves:</p>
+    {% for move in game.played_moves_list %}
+    <div>{{ move.data }}</div>
+    {% endfor %}
+</div>
 {% endblock content %}
