@@ -8,6 +8,7 @@
 <h1>Game Detail Placeholder</h1>
 <h2>Players</h2>
 <ul>
+    <li>Game name: {{ game.name }}</li>
     <li>Player 1: {{ game.player1 }}</li>
     <li>Player 2: {{ game.player2 }}</li>
     <li>Special stones active? {{ game.using_special_stones }}</li>
@@ -57,7 +58,7 @@
          hx-target="this">
         {% with row_cells=game.gameboard.data|index:row %}
         {% with cell=row_cells|index:col %}
-        <!--        {{ cell.0 }} {{ cell.1 }}-->
+        <!-- cell.0 is the player number and cell.1 is the stone type -->
         {% if cell.0 == 1 and cell.1 == 1%}
         <img src="{% static 'images/dark_stone.svg' %}" class="stone"
              alt="dark stone">
