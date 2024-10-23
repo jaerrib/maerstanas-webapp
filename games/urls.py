@@ -8,6 +8,7 @@ from .views import (
     GameDeleteView,
     join_open_game,
     MoveValidationView,
+    process_move,
 )
 
 urlpatterns = [
@@ -21,5 +22,10 @@ urlpatterns = [
         "validate_move/<uuid:game_id>/",
         MoveValidationView.as_view(),
         name="validate_move",
+    ),
+    path(
+        "process_move/<uuid:pk>/<int:stone>/<int:row>/<int:col>/",
+        process_move,
+        name="process_move",
     ),
 ]

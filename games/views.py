@@ -115,7 +115,7 @@ class MoveValidationView(View):
         game = Game.objects.get(pk=kwargs["game_id"])
         valid_move = game_rules.is_valid_move(game, stone, row, col)
         if valid_move:
-            # Update game state logic here
+            game = game_rules.assign_move(game, stone, row, col)
             game.save()
             # Update move list and cell
             move_list_html = render_to_string(
@@ -139,6 +139,11 @@ class MoveValidationView(View):
             )
             return JsonResponse({"valid": False, "message": message})
 
-    def validate_move(self, game, stone, row, col):
-        # Custom validation logic
-        return True
+
+def process_move(request, pk, stone, row, col):
+    game = Game.objects.get(pk=pk)
+    valid_move = game_rules.is_valid_move(game, stone, row, col)
+    if valid_move:
+        game = game_rules.assign_move(game, stone, row, col)
+        game.save()
+    return redirect("game_detail", pk=pk)
