@@ -58,22 +58,31 @@
         {% with row_cells=game.gameboard.data|index:row %}
         {% with cell=row_cells|index:col %}
         <!--        {{ cell.0 }} {{ cell.1 }}-->
-        {% if cell.0 == 1 %}
+        {% if cell.0 == 1 and cell.1 == 1%}
         <img src="{% static 'images/dark_stone.svg' %}" class="stone"
              alt="dark stone">
-        {% elif cell.0 == 2 %}
+        {% elif cell.0 == 1 and cell.1 == 2 %}
+        <img src="{% static 'images/dark_thunder_stone.svg' %}" class="stone"
+             alt="dark thunder stone">
+        {% elif cell.0 == 1 and cell.1 == 3 %}
+        <img src="{% static 'images/dark_woden_stone.svg' %}" class="stone"
+             alt="dark woden stone">
+        {% elif cell.0 == 2 and cell.1 == 1 %}
         <img src="{% static 'images/light_stone.svg' %}" class="stone"
              alt="light stone">
+        {% elif cell.0 == 2 and cell.1 == 2 %}
+        <img src="{% static 'images/light_thunder_stone.svg' %}" class="stone"
+             alt="light thunder stone">
+        {% elif cell.0 == 2 and cell.1 == 3 %}
+        <img src="{% static 'images/light_woden_stone.svg' %}" class="stone"
+             alt="light woden stone">
         {% endif %}
         {% endwith %}
         {% endwith %}
-
-
     </div>
     {% endfor %}
 </div>
 {% endfor %}
-
 <hr>
 <div id="moveList" class="overflow-auto form-control overflow-y-scroll"
      style="height: 24.5rem">
