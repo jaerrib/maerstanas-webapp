@@ -22,18 +22,18 @@
     <div id="stoneSelection">
         <label>
             <input type="radio" name="stone" value="stone1" checked>
-            <img src="{% static 'images/dark_stone.svg' %}" class="stone-img"
+            <img src="{% static 'images/dark_stone.svg' %}" class="stone"
                  id="stone1" alt="standard stone">
         </label>
         <label>
             <input type="radio" name="stone" value="stone2">
             <img src="{% static 'images/dark_thunder_stone.svg' %}"
-                 class="stone-img" id="stone2" alt="thunder stone">
+                 class="stone" id="stone2" alt="thunder stone">
         </label>
         <label>
             <input type="radio" name="stone" value="stone3">
             <img src="{% static 'images/dark_woden_stone.svg' %}"
-                 class="stone-img" id="stone3" alt="Woden stone">
+                 class="stone" id="stone3" alt="Woden stone">
         </label>
     </div>
 </form>
@@ -57,7 +57,14 @@
          hx-target="this">
         {% with row_cells=game.gameboard.data|index:row %}
         {% with cell=row_cells|index:col %}
-        {{ cell.0 }} {{ cell.1 }}
+        <!--        {{ cell.0 }} {{ cell.1 }}-->
+        {% if cell.0 == 1 %}
+        <img src="{% static 'images/dark_stone.svg' %}" class="stone"
+             alt="dark stone">
+        {% elif cell.0 == 2 %}
+        <img src="{% static 'images/light_stone.svg' %}" class="stone"
+             alt="light stone">
+        {% endif %}
         {% endwith %}
         {% endwith %}
 
