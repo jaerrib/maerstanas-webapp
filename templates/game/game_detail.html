@@ -18,26 +18,7 @@
 </ul>
 <hr>
 <div id="messageArea"></div>
-<form id="moveForm">
-    {% csrf_token %}
-    <div id="stoneSelection">
-        <label>
-            <input type="radio" name="stone" value="stone1" checked>
-            <img src="{% static 'images/dark_stone.svg' %}" class="stone"
-                 id="stone1" alt="standard stone">
-        </label>
-        <label>
-            <input type="radio" name="stone" value="stone2">
-            <img src="{% static 'images/dark_thunder_stone.svg' %}"
-                 class="stone" id="stone2" alt="thunder stone">
-        </label>
-        <label>
-            <input type="radio" name="stone" value="stone3">
-            <img src="{% static 'images/dark_woden_stone.svg' %}"
-                 class="stone" id="stone3" alt="Woden stone">
-        </label>
-    </div>
-</form>
+{% block stone_selection %} {% include "stone_selection.html" %} {% endblock stone_selection %}
 
 <div class="d-flex">
     <div class="square"></div>
@@ -49,16 +30,8 @@
 <div class="d-flex">
     <div class="square">{{row}}</div>
     {% for col in 1|range_filter:8 %}
-    <a href="{% url 'process_move' pk=game.id stone=1 row=row col=col %}">
-        <div class="square bg-secondary border border-secondary-subtle"
-             id="cell-{{ row }}-{{ col }}"
-             hx-post="{% url 'validate_move' game_id=game.id %}"
-             hx-include="#stoneSelection"
-             hx-vals='{"row": "{{ row }}", "col": "{{ col }}"}'
-             hx-swap="outerHTML innerHTML:swap"
-             hx-target="this">
-
-
+    <a href="{% url 'process_move' pk=game.id stone=request.session.active_stone row=row col=col %}">
+        <div class="square bg-secondary border border-secondary-subtle">
             {% with row_cells=game.gameboard.data|index:row %}
             {% with cell=row_cells|index:col %}
             <!-- cell.0 is the player number and cell.1 is the stone type -->

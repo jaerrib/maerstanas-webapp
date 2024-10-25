@@ -1,9 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import (
     ListView,
     DetailView,
@@ -107,43 +104,18 @@ def join_open_game(request, pk):
         return redirect("game_detail", pk=pk)
 
 
-class MoveValidationView(View):
-    def post(self, request, *args, **kwargs):
-        stone = request.POST.get("stone")
-        row = request.POST.get("row")
-        col = request.POST.get("col")
-        game = Game.objects.get(pk=kwargs["game_id"])
-        valid_move = game_rules.is_valid_move(game, stone, row, col)
-        if valid_move:
-            game = game_rules.assign_move(game, stone, row, col)
-            game.save()
-            # Update move list and cell
-            move_list_html = render_to_string(
-                "move_list.html", {"moves": game.moves.all()}
-            )
-            cell_html = render_to_string(
-                "cell_template.html", {"game": game, "row": row, "col": col}
-            )
-            return JsonResponse(
-                {
-                    "valid": True,
-                    "cell_html": cell_html,
-                    "move_list_html": move_list_html,
-                    "row": row,
-                    "col": col,
-                }
-            )
-        else:
-            message = render_to_string(
-                "message_template.html", {"message": "Invalid move"}
-            )
-            return JsonResponse({"valid": False, "message": message})
-
-
 def process_move(request, pk, stone, row, col):
     game = Game.objects.get(pk=pk)
     valid_move = game_rules.is_valid_move(game, stone, row, col)
     if valid_move:
         game = game_rules.assign_move(game, stone, row, col)
         game.save()
+    return redirect("game_detail", pk=pk)
+
+
+def stone_selector(request, pk, stone):
+    if "active_stone" not in request.session:
+        request.session["active_stone"] = 1
+    else:
+        request.session["active_stone"] = stone
     return redirect("game_detail", pk=pk)
