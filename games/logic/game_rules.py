@@ -279,11 +279,6 @@ def assign_move(game_state, active_stone, row, col):
     return game_state
 
 
-def change_stone(data, stone):
-    data["active_stone"] = stone
-    return data
-
-
 def is_game_over(game_state):
     player1_has_special_stones = (
         game_state.p1_has_thunder_stone or game_state.p1_has_woden_stone
