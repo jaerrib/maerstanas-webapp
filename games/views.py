@@ -28,6 +28,13 @@ class GameDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     context_object_name = "game"
     template_name = "game/game_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if "active_stone" not in self.request.session:
+            self.request.session["active_stone"] = 1
+        context["active_stone"] = self.request.session["active_stone"]
+        return context
+
     def test_func(self):
         obj = self.get_object()
         return obj.player1 == self.request.user or obj.player2 == self.request.user
