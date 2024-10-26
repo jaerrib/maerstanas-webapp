@@ -16,6 +16,7 @@
     <li>Score - Player 1: {{ game.score_p1 }}, Player 2: {{ game.score_p2 }}
     </li>
     <li>Active Player: {{ game.active_player }}</li>
+    <li>Result: {{ game.result }}</li>
 </ul>
 <hr>
 <div id="messageArea"></div>
@@ -66,7 +67,10 @@
 <hr>
 <div id="moveList" class="overflow-auto form-control overflow-y-scroll"
      style="height: 24.5rem">
-    <p>Played Moves:</p>
+    {% if game.game_over %}
+    <p class="fs-4 text-info fw-bold">GAME OVER</p>
+    {% endif %}
+    <p class="fs-4 my-1">Played Moves:</p>
     {% for move in game.played_moves_list.data reversed %}
     <p class="my-1"><span
             class="text-secondary">{{ forloop.revcounter }}.</span> {{ move }}
