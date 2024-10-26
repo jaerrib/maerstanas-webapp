@@ -57,7 +57,10 @@ class Game(models.Model):
     password = models.CharField(max_length=128, blank=True, null=True)
 
     def set_password(self, raw_password):
-        self.password = make_password(raw_password)
+        if raw_password:
+            self.password = make_password(raw_password)
+        else:
+            self.password = ""
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
