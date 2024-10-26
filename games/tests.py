@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase, SimpleTestCase
+from django.test import TestCase
 from django.urls import reverse
 
 from .logic import game_rules
@@ -394,15 +394,21 @@ class GamesTestCase(TestCase):
         # test standard stone assignment
         self.game = game_rules.assign_move(self.game, active_stone=1, row=5, col=7)
         self.assertEqual(self.game.gameboard["data"][5][7], [1, 1])
-        self.assertIn((1, "E7 - standard stone"), self.game.played_moves_list["data"])
+        self.assertIn(
+            "G5 - standard stone (Player 1)", self.game.played_moves_list["data"]
+        )
         # test thunder stone assignment
         self.game = game_rules.assign_move(self.game, active_stone=2, row=4, col=4)
         self.assertEqual(self.game.gameboard["data"][4][4], [1, 2])
-        self.assertIn((1, "D4 - thunder-stone"), self.game.played_moves_list["data"])
+        self.assertIn(
+            "D4 - thunder-stone (Player 1)", self.game.played_moves_list["data"]
+        )
         # test Woden stone assignment
         self.game = game_rules.assign_move(self.game, active_stone=3, row=1, col=5)
         self.assertEqual(self.game.gameboard["data"][1][5], [1, 3])
-        self.assertIn((1, "A5 - Woden-stone"), self.game.played_moves_list["data"])
+        self.assertIn(
+            "E1 - Woden-stone (Player 1)", self.game.played_moves_list["data"]
+        )
 
     def is_game_over(self):
         self.game.moves_left_list["data"] = game_rules.remaining_standard_moves(
@@ -430,7 +436,7 @@ class GamesTestCase(TestCase):
         game_rules.player_must_pass(self.game)
 
 
-class GameViewsTestCase(SimpleTestCase):
+class GameViewsTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
