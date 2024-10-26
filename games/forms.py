@@ -25,6 +25,11 @@ class GameCreateForm(ModelForm):
     def save(self, commit=True):
         game = super().save(commit=False)
         game.set_password(self.cleaned_data["password"])
+        if not self.cleaned_data["using_special_stones"]:
+            game.p1_has_thunder_stone = False
+            game.p1_has_woden_stone = False
+            game.p2_has_thunder_stone = False
+            game.p2_has_woden_stone = False
         if commit:
             game.save()
         return game
@@ -49,6 +54,11 @@ class GameUpdateForm(ModelForm):
     def save(self, commit=True):
         game = super().save(commit=False)
         game.set_password(self.cleaned_data["password"])
+        if not self.cleaned_data["using_special_stones"]:
+            game.p1_has_thunder_stone = False
+            game.p1_has_woden_stone = False
+            game.p2_has_thunder_stone = False
+            game.p2_has_woden_stone = False
         if commit:
             game.save()
         return game
