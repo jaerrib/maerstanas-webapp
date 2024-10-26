@@ -124,8 +124,14 @@ def process_move(request, pk, stone, row, col):
         )
     ):
         game = game_rules.assign_move(game, stone, row, col)
+        game.moves_left_list = game_rules.remaining_standard_moves(
+            game.gameboard["data"]
+        )
         game = game_rules.update_score(game)
         game = game_rules.change_player(game)
+        game.game_over = game_rules.is_game_over(game)
+        if game.game_over:
+            game.result = game_rules.determine_winner(game.score_p1, game.score_p2)
         game.save()
     return redirect("game_detail", pk=pk)
 
