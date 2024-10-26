@@ -67,8 +67,10 @@
 <div id="moveList" class="overflow-auto form-control overflow-y-scroll"
      style="height: 24.5rem">
     <p>Played Moves:</p>
-    {% for move in game.played_moves_list %}
-    <div>{{ move.data }}</div>
+    {% for move in game.played_moves_list.data reversed %}
+    <p class="my-1"><span
+            class="text-secondary">{{ forloop.revcounter }}.</span> {{ move }}
+    </p>
     {% endfor %}
 </div>
 {% endblock content %}
