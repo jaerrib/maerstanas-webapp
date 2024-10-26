@@ -242,11 +242,11 @@ def update_score(game_state):
 
 def determine_winner(score_p1, score_p2):
     if score_p1 == score_p2:
-        result = "tie"
+        result = "Tie"
     elif score_p1 > score_p2:
-        result = "player 1"
+        result = "Player 1"
     else:
-        result = "player 2"
+        result = "Player 2"
     return result
 
 
@@ -273,7 +273,6 @@ def assign_move(game_state, active_stone, row, col):
     game_state.played_moves_list["data"].append(
         f"{convert_num_to_col(col)}{row} - {played_stone} (Player {game_state.active_player})",
     )
-
     return game_state
 
 
@@ -284,7 +283,7 @@ def is_game_over(game_state):
     player2_has_special_stones = (
         game_state.p2_has_thunder_stone or game_state.p2_has_woden_stone
     )
-    default_moves_are_left = game_state.moves_left_list["data"] != []
+    default_moves_are_left = game_state.moves_left_list != []
     return (
         not player1_has_special_stones
         and not player2_has_special_stones
