@@ -51,9 +51,15 @@ class GameUpdateForm(ModelForm):
             "using_standard_scoring": CheckBoxInput(),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["password"].required = False
+
     def save(self, commit=True):
         game = super().save(commit=False)
-        game.set_password(self.cleaned_data["password"])
+        password = self.cleaned_data.get("password", None)
+        if password:
+            game.set_password(password)
         if not self.cleaned_data["using_special_stones"]:
             game.p1_has_thunder_stone = False
             game.p1_has_woden_stone = False
