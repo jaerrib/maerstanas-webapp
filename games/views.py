@@ -114,8 +114,13 @@ def join_open_game(request, pk):
 def process_move(request, pk, stone, row, col):
     game = Game.objects.get(pk=pk)
     valid_move = game_rules.is_valid_move(game, stone, row, col)
-    if valid_move:
+    if valid_move and (
+        (game.active_player == 1 and game.player1 == request.user)
+        or (game.active_player == 2 and game.player2 == request.user)
+    ):
         game = game_rules.assign_move(game, stone, row, col)
+        game = game_rules.update_score(game)
+        game = game_rules.change_player(game)
         game.save()
     return redirect("game_detail", pk=pk)
 
