@@ -79,8 +79,7 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = "game/game_delete.html"
 
     def get_success_url(self):
-        player_id = self.object.player1.id
-        return reverse_lazy("userprofile_detail", kwargs={"pk": player_id})
+        return reverse_lazy("dashboard")
 
     def test_func(self):
         obj = self.get_object()
