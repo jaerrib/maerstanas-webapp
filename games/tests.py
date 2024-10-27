@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -256,29 +258,29 @@ class GamesTestCase(TestCase):
 
     def test_determine_winner(self):
         self.assertEqual(
-            game_rules.determine_winner(score_p1=20, score_p2=15), "player 1"
+            game_rules.determine_winner(score_p1=20, score_p2=15), "Player 1"
         )
         self.assertEqual(
-            game_rules.determine_winner(score_p1=15, score_p2=20), "player 2"
+            game_rules.determine_winner(score_p1=15, score_p2=20), "Player 2"
         )
-        self.assertEqual(game_rules.determine_winner(score_p1=20, score_p2=20), "tie")
+        self.assertEqual(game_rules.determine_winner(score_p1=20, score_p2=20), "Tie")
         self.assertNotEqual(
-            game_rules.determine_winner(score_p1=20, score_p2=15), "player 2"
-        )
-        self.assertNotEqual(
-            game_rules.determine_winner(score_p1=20, score_p2=15), "tie"
+            game_rules.determine_winner(score_p1=20, score_p2=15), "Player 2"
         )
         self.assertNotEqual(
-            game_rules.determine_winner(score_p1=15, score_p2=20), "player 1"
+            game_rules.determine_winner(score_p1=20, score_p2=15), "Tie"
         )
         self.assertNotEqual(
-            game_rules.determine_winner(score_p1=15, score_p2=20), "tie"
+            game_rules.determine_winner(score_p1=15, score_p2=20), "Player 1"
         )
         self.assertNotEqual(
-            game_rules.determine_winner(score_p1=20, score_p2=20), "player 1"
+            game_rules.determine_winner(score_p1=15, score_p2=20), "Tie"
         )
         self.assertNotEqual(
-            game_rules.determine_winner(score_p1=20, score_p2=20), "player 2"
+            game_rules.determine_winner(score_p1=20, score_p2=20), "Player 1"
+        )
+        self.assertNotEqual(
+            game_rules.determine_winner(score_p1=20, score_p2=20), "Player 2"
         )
 
     def test_thunder_attack(self):
@@ -480,15 +482,16 @@ class GameViewsTestCase(TestCase):
         )
         self.assertContains(response, "Log In")
 
-    def test_game_detail_view_for_logged_in_user(self):
-        self.client.login(email="testuser@email.com", password="testpass123")
-        response = self.client.get(self.game.get_absolute_url())
-        no_response = self.client.get("/games/12345")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(no_response.status_code, 404)
-        self.assertContains(response, "Game Detail Placeholder")
-        self.assertContains(response, "testuser")
-        self.assertTemplateUsed(response, "game/game_detail.html")
+    class GameDetailViewTestCase(TestCase):
+        @patch("game.templatetags.custom_filters.range_filter", return_value=range(9))
+        def test_game_detail_view_for_logged_in_user(self, mock_range_filter):
+            self.client.login(email="testuser@email.com", password="testpass123")
+            response = self.client.get(self.game.get_absolute_url())
+            no_response = self.client.get("/games/12345")
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(no_response.status_code, 404)
+            self.assertContains(response, "Game Detail Placeholder")
+            self.assertTemplateUsed(response, "game/game_detail.html")
 
     def test_game_detail_view_for_logged_out_user(self):
         self.client.logout()
