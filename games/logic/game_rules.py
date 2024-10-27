@@ -297,7 +297,16 @@ def player_must_pass(game_state):
     woden_field = f"p{game_state.active_player}_has_woden_stone"
     has_woden_stone = getattr(game_state, woden_field)
     must_pass = (
-        not (has_thunder_stone and has_woden_stone)
-        and game_state.moves_left_list["data"] == []
+        not has_thunder_stone
+        and not has_woden_stone
+        and game_state.moves_left_list == []
     )
     return must_pass
+
+
+def pass_player_turn(game_state):
+    game_state.played_moves_list["data"].append(
+        f"Pass (Player {game_state.active_player})",
+    )
+    game_state = change_player(game_state)
+    return game_state

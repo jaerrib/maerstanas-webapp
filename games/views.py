@@ -115,7 +115,10 @@ def process_move(request, pk, stone, row, col):
     game = Game.objects.get(pk=pk)
     active_game = game.player2 is not None
     valid_move = game_rules.is_valid_move(game, stone, row, col)
-    if (
+    if not game.game_over and game_rules.player_must_pass(game):
+        game = game_rules.pass_player_turn(game)
+        game.save()
+    elif (
         active_game
         and valid_move
         and (
