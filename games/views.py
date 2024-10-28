@@ -144,7 +144,7 @@ def process_move(request, pk, stone, row, col):
         game = game_rules.change_player(game)
         game.game_over = game_rules.is_game_over(game)
         if game.game_over:
-            game.result = game_rules.determine_winner(game.score_p1, game.score_p2)
+            game = complete_game(game)
         game.save()
     return redirect("game_detail", pk=pk)
 
@@ -155,3 +155,23 @@ def stone_selector(request, pk, stone):
     else:
         request.session["active_stone"] = stone
     return redirect("game_detail", pk=pk)
+
+
+def complete_game(game):
+    game.result = game_rules.determine_winner(game.score_p1, game.score_p2)
+    if game.result == "Player 1":
+        game.player1.games_won += 1
+        game.player1.save()
+        game.player2.games_lost += 1
+        game.player2.save()
+    if game.result == "Player 2":
+        game.player1.games_lost += 1
+        game.player1.save()
+        game.player2.games_won += 1
+        game.player2.save()
+    if game.result == "Tie":
+        game.player1.games_tied += 1
+        game.player1.save()
+        game.player2.games_tied += 1
+        game.player2.save()
+    return game
