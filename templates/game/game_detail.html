@@ -20,6 +20,18 @@
 </ul>
 <hr>
 <div id="messageArea"></div>
+{% if game.game_over %}
+<a href="" role="button" class="btn btn-warning">Archive</a>
+{% elif game.player2 is None %}
+<a href="{% url 'game_delete' pk=game.id %}" role="button"
+   class="btn btn-danger">Delete</a>
+<a href="{% url 'game_update' pk=game.id %}" role="button"
+   class="btn btn-warning">Edit</a>
+{% else %}
+<a href="{% url 'game_delete' pk=game.id %}" role="button"
+   class="btn btn-danger">Abandon</a>
+{% endif %}
+
 {% block stone_selection %} {% include "stone_selection.html" %} {% endblock stone_selection %}
 
 <div class="d-flex">

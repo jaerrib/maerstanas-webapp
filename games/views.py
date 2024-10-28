@@ -83,7 +83,18 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         obj = self.get_object()
-        return obj.player1 == self.request.user
+        return obj.player1 == self.request.user or obj.player2 == self.request.user
+
+    def form_valid(self, form):
+        game = self.get_object()
+        if game.player2 is not None and not game.game_over:
+            if game.player1 == self.request.user:
+                game.player1.games_abandoned += 1
+                game.player1.save()
+            if game.player2 == self.request.user:
+                game.player2.games_abandoned += 1
+                game.player2.save()
+        return super().form_valid(form)
 
 
 def join_open_game(request, pk):
