@@ -14,4 +14,5 @@
     </li>
     <li>Games abandoned: {{ player.games_abandoned }}</li>
 </ul>
+<a href="{% url 'invite' receiver_pk=player.id %}">Invite</a>
 {% endblock content %}

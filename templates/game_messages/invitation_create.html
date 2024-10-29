@@ -1,4 +1,5 @@
 {% extends "_base.html" %}
+{% load crispy_forms_tags %}
 
 {% block title %}Home{% endblock title %}
 
@@ -6,9 +7,8 @@
 <h1>Invitation Placeholder</h1>
 <form method="post">
     {% csrf_token %}
-    {{ form.sender.as_hidden }}
-    {{ form.game_name.label_tag }} {{ form.game_name }}
-    <button type="submit">Send Invitation</button>
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Send Invitation</button>
 </form>
 
 {% endblock content %}
