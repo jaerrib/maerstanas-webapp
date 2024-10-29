@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<h1>Invitation Placeholder</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.sender.as_hidden }}
+    {{ form.game_name.label_tag }} {{ form.game_name }}
+    <button type="submit">Send Invitation</button>
+</form>
+
+{% endblock content %}
