@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Invitation{% endblock title %}
+
+{% block content %}
+<h1>Create a game invitation for {{ receiver.username }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Send Invitation</button>
+</form>
+
+{% endblock content %}
