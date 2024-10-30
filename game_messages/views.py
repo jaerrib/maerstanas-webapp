@@ -1,11 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import (
-    ListView,
-    DetailView,
-)
-from django.views.generic import TemplateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, \
+    View
 
 from games.logic.game_rules import initialize_game
 from games.models import Game
@@ -16,18 +16,17 @@ User = get_user_model()
 
 
 class InviteView(TemplateView):
-    template_name = "messages/invite.html"
+    template_name = "game_messages/invite.html"
 
 
 class InvitationListView(LoginRequiredMixin, ListView):
     model = Invitation
     context_object_name = "invitation_list"
-    template_name = "messages/invitation_list.html"
-    success_url = reverse_lazy("dashboard")
+    template_name = "game_messages/invitation_list.html"
 
     def get_queryset(self):
         return Invitation.objects.filter(
-            creator=self.request.user, receiver=self.request.user
+            Q(sender=self.request.user) | Q(receiver=self.request.user)
         )
 
 
@@ -38,12 +37,7 @@ class InvitationDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def test_func(self):
         obj = self.get_object()
-        return obj.creator == self.request.user or obj.receiver == self.request.user
-
-
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-from .models import Invitation
+        return obj.sender == self.request.user or obj.receiver == self.request.user
 
 
 class InvitationCreateView(LoginRequiredMixin, CreateView):
@@ -51,6 +45,11 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
     form_class = InvitationCreateForm
     template_name = "game_messages/invitation_create.html"
     success_url = reverse_lazy("dashboard")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["receiver"] = User.objects.get(pk=self.kwargs["receiver_pk"])
+        return context
 
     def form_valid(self, form):
         form.instance.sender = self.request.user
@@ -64,3 +63,24 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
         new_game.save()
         form.instance.game = new_game
         return super().form_valid(form)
+
+
+class AcceptInvitationView(View):
+    def post(self, request, invitation_id):
+        invitation = get_object_or_404(Invitation, id=invitation_id)
+        invitation.approved = True
+        invitation.save()
+        return redirect(invitation.game.get_absolute_url())
+
+
+class DeclineInvitationView(View):
+    def post(self, request, invitation_id):
+        invitation = get_object_or_404(Invitation, id=invitation_id)
+        game = invitation.game
+        sender = invitation.sender
+        invitation.delete()
+        game.delete()
+        messages.add_message(
+            request, messages.INFO, f"{sender.username}, your invitation was declined."
+        )
+        return redirect("invitations")

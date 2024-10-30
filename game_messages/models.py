@@ -15,3 +15,4 @@ class Invitation(models.Model):
         get_user_model(), related_name="received_invitations", on_delete=models.CASCADE
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
