@@ -1,10 +1,10 @@
 {% extends "_base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Home{% endblock title %}
+{% block title %}Create Invitation{% endblock title %}
 
 {% block content %}
-<h1>Invitation Placeholder</h1>
+<h1>Create a game invitation for {{ receiver.username }}</h1>
 <form method="post">
     {% csrf_token %}
     {{ form|crispy }}
