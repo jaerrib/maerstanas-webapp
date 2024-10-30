@@ -56,9 +56,20 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
         receiver = User.objects.get(pk=self.kwargs["receiver_pk"])
         form.instance.receiver = receiver
         game_name = form.cleaned_data.get("game_name")
+        using_special_stones = form.cleaned_data.get("using_special_stones")
+        using_standard_scoring = form.cleaned_data.get("using_standard_scoring")
         new_game = Game.objects.create(
-            name=game_name, player1=self.request.user, player2=receiver
+            name=game_name,
+            player1=self.request.user,
+            player2=receiver,
+            using_special_stones=using_special_stones,
+            using_standard_scoring=using_standard_scoring,
         )
+        if not using_special_stones:
+            new_game.p1_has_thunder_stone = False
+            new_game.p1_has_woden_stone = False
+            new_game.p2_has_thunder_stone = False
+            new_game.p2_has_woden_stone = False
         new_game = initialize_game(new_game)
         new_game.save()
         form.instance.game = new_game
