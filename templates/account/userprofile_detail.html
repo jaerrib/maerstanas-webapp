@@ -5,7 +5,8 @@
 
 {% block content %}
 <h1>Player Profile Placeholder</h1>
-<img src="{% gravatar_url player.email 200 %}" alt="User's Gravatar">
+<img src="{% gravatar_url player.email 200 %}"
+     alt="{{profile.username}}'s Gravatar">
 <ul>
     <li>{{ player.username }}</li>
     <li>{{ player.email }}</li>

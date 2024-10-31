@@ -8,7 +8,7 @@
 <div class="d-flex">
     <div>
         <img src="{% gravatar_url user_profile.email 150 %}"
-             alt="User's Gravatar">
+             alt="{{user_profile.username}}'s Gravatar">
     </div>
     <div class="ms-4">
         <h2>{{ user_profile.username }}'s Profile</h2>

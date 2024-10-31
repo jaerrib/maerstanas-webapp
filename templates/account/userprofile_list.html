@@ -1,4 +1,5 @@
 {% extends "_base.html" %}
+{% load gravatar %}
 
 {% block title %}Player List{% endblock title %}
 
@@ -7,6 +8,8 @@
 {% for profile in profiles_list %}
 <ul>
     <li>
+        <img src="{% gravatar_url profile.email 50 %}"
+             alt="{{profile.username}}'s Gravatar">
         USER: <a href="{{ profile.get_absolute_url }}">
         {{ profile.username }}</a>
     </li>
