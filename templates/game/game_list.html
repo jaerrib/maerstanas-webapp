@@ -4,6 +4,25 @@
 
 {% block content %}
 <h1>Game List</h1>
+<form role="search" action="{% url 'search' %}"
+      class="form-inline my-2 my-lg-0">
+    <div class="form-group mx-sm-3 mb-2">
+        <input type="search" name="search" class="form-control"
+               placeholder="Search" aria-label="Search">
+    </div>
+    <div class="form-group mx-sm-3 mb-2 form-check">
+        <input type="checkbox" name="special_stones" value="1"
+               class="form-check-input">
+        <label class="form-check-label">Special Stones</label>
+    </div>
+    <div class="form-group mx-sm-3 mb-2 form-check">
+        <input type="checkbox" name="standard_scoring" value="1"
+               class="form-check-input">
+        <label class="form-check-label">Standard Scoring</label>
+    </div>
+    <button type="submit" class="btn btn-primary ms-3 mb-2">Search</button>
+</form>
+
 <ul>
     {% for game in game_list %}
     <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a>

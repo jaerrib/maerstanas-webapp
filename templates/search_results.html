@@ -1,0 +1,17 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<h2>Search Results</h2>
+{% if game_list %}
+{% for game in game_list %}
+<ul>
+    <li>
+        <a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
+    </li>
+</ul>
+{% endfor %}
+{% else %}
+<p>No search results</p>
+{% endif %}
+
+{% endblock content %}

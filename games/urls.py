@@ -9,6 +9,7 @@ from .views import (
     join_open_game,
     process_move,
     stone_selector,
+    GameSearchResultsView,
 )
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
         stone_selector,
         name="select_stone",
     ),
+    path("search/", GameSearchResultsView.as_view(), name="search"),
 ]

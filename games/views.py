@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -175,3 +176,23 @@ def complete_game(game):
         game.player2.games_tied += 1
         game.player2.save()
     return game
+
+
+class GameSearchResultsView(LoginRequiredMixin, ListView):
+    model = Game
+    template_name = "search_results.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("search")
+        special_stones = self.request.GET.get("special_stones")
+        standard_scoring = self.request.GET.get("standard_scoring")
+        game_list = Game.objects.filter(
+            Q(name__icontains=query) | Q(player1__username__icontains=query),
+            game_over=False,
+            player2=None,
+        )
+        if special_stones:
+            game_list = game_list.filter(using_special_stones=True)
+        if standard_scoring:
+            game_list = game_list.filter(using_standard_scoring=True)
+        return game_list
