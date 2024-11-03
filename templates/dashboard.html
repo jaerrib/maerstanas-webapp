@@ -54,12 +54,14 @@
         <strong>Sent:</strong> Invitation to
         <a href="{{ invitation.receiver.get_absolute_url }}">
             {{ invitation.receiver.username }}</a>
+        ({{ invitation.receiver.rating }})
         for {{ invitation.game.name }}<br>
         {% elif invitation.receiver == request.user %}
         <strong>Received:</strong> Invitation from
         <a href="{{ invitation.sender.get_absolute_url }}">
-            {{ invitation.sender.username }}</a> for
-        {{ invitation.game.name }}<br>
+            {{ invitation.sender.username }}</a>
+        ({{ invitation.sender.rating }})
+        for {{ invitation.game.name }}<br>
         <form method="post"
               action="{% url 'accept_invitation' invitation.id %}">
             {% csrf_token %}
