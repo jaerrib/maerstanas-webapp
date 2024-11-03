@@ -19,6 +19,7 @@ class CustomUserAdmin(UserAdmin):
         "games_lost",
         "games_tied",
         "games_abandoned",
+        "rating",
     ]
 
 

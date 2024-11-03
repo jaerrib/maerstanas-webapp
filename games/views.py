@@ -1,3 +1,5 @@
+from math import pow
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
@@ -160,22 +162,45 @@ def stone_selector(request, pk, stone):
 
 def complete_game(game):
     game.result = game_rules.determine_winner(game.score_p1, game.score_p2)
-    if game.result == "Player 1":
-        game.player1.games_won += 1
-        game.player1.save()
-        game.player2.games_lost += 1
-        game.player2.save()
-    if game.result == "Player 2":
-        game.player1.games_lost += 1
-        game.player1.save()
-        game.player2.games_won += 1
-        game.player2.save()
-    if game.result == "Tie":
-        game.player1.games_tied += 1
-        game.player1.save()
-        game.player2.games_tied += 1
-        game.player2.save()
+    update_stats_and_ratings(game)
+    game.save()
     return game
+
+
+def update_stats_and_ratings(game):
+    player1 = game.player1
+    player2 = game.player2
+
+    if game.result == "Player 1":
+        player1.games_won += 1
+        player2.games_lost += 1
+        update_ratings(winner=player1, loser=player2, tie=False)
+    elif game.result == "Player 2":
+        player1.games_lost += 1
+        player2.games_won += 1
+        update_ratings(winner=player2, loser=player1, tie=False)
+    elif game.result == "Tie":
+        player1.games_tied += 1
+        player2.games_tied += 1
+        update_ratings(winner=player1, loser=player2, tie=True)
+    player1.save()
+    player2.save()
+
+
+def update_ratings(winner, loser=None, tie=False):
+    k = 32
+    if tie:
+        rating_diff = abs(winner.rating - loser.rating)
+        expected_score_winner = 1 / (1 + pow(10, rating_diff / 400))
+        expected_score_loser = 1 - expected_score_winner
+        winner.rating += k * (0.5 - expected_score_winner)
+        loser.rating += k * (0.5 - expected_score_loser)
+    else:
+        rating_diff = loser.rating - winner.rating
+        expected_score_winner = 1 / (1 + pow(10, rating_diff / 400))
+        expected_score_loser = 1 - expected_score_winner
+        winner.rating += k * (1 - expected_score_winner)
+        loser.rating += k * (0 - expected_score_loser)
 
 
 class GameSearchResultsView(LoginRequiredMixin, ListView):
