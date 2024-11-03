@@ -4,11 +4,14 @@
 <h2>Search Results</h2>
 {% if game_list %}
 {% for game in game_list %}
-<ul>
-    <li>
-        <a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
-    </li>
-</ul>
+<li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
+    created by <a
+            href="{{ game.player1.get_absolute_url }}">
+        {{ game.player1.username }}</a> ({{ game.player1.rating }})
+    {% if game.player1 != user %}
+    - <a href="{% url 'game_join' pk=game.id %}">JOIN</a>
+    {% endif %}
+</li>
 {% endfor %}
 {% else %}
 <p>No search results</p>
