@@ -5,6 +5,7 @@ from .views import (
     UserProfileListView,
     UserProfileUpdateView,
     UserProfileDeleteView,
+    PlayerSearchResultsView,
 )
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
         UserProfileDeleteView.as_view(),
         name="userprofile_delete",
     ),
+    path("search/", PlayerSearchResultsView.as_view(), name="player_search"),
 ]

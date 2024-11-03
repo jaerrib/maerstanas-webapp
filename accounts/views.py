@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.views.generic import DetailView, ListView, UpdateView, DeleteView
 
 from .forms import CustomUserChangeForm
@@ -37,3 +38,19 @@ class UserProfileDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class PlayerSearchResultsView(LoginRequiredMixin, ListView):
+    User = get_user_model()
+    context_object_name = "player_list"
+    template_name = "account/player_search_results.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("search")
+        if query:
+            player_list = get_user_model().objects.filter(
+                Q(username__icontains=query), is_active=True
+            )
+        else:
+            player_list = get_user_model().objects.none()
+        return player_list

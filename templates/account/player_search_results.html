@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% load gravatar %}
+
+{% block content %}
+<h2>Player Search Results</h2>
+{% if player_list %}
+<ul>
+    {% for player in object_list %}
+    <li>
+        <img src="{% gravatar_url player.email 50 %}"
+             alt="{{ player.username }}'s Gravatar">
+        USER: <a href="{{ player.get_absolute_url }}">{{ player.username }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No search results</p>
+{% endif %}
+
+
+{% endblock content %}

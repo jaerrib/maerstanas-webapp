@@ -5,6 +5,14 @@
 
 {% block content %}
 <h1>Player List</h1>
+<form role="search" action="{% url 'player_search' %}" class="form-inline my-4">
+    <div class="form-group mx-sm-3 mb-2">
+        <input type="search" name="search" class="form-control"
+               placeholder="Search by username" aria-label="Search">
+    </div>
+    <button type="submit" class="btn btn-primary ms-3 mb-2">Search</button>
+</form>
+<hr>
 {% for profile in profiles_list %}
 <ul>
     <li>
