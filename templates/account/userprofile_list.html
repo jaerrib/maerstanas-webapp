@@ -20,6 +20,7 @@
              alt="{{profile.username}}'s Gravatar">
         USER: <a href="{{ profile.get_absolute_url }}">
         {{ profile.username }}</a>
+        - Rating ({{ profile.rating }})
     </li>
 </ul>
 {% endfor %}

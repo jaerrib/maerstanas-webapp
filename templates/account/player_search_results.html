@@ -10,6 +10,7 @@
         <img src="{% gravatar_url player.email 50 %}"
              alt="{{ player.username }}'s Gravatar">
         USER: <a href="{{ player.get_absolute_url }}">{{ player.username }}</a>
+        - Rating ({{ player.rating }})
     </li>
     {% endfor %}
 </ul>
