@@ -21,6 +21,7 @@
         USER: <a href="{{ profile.get_absolute_url }}">
         {{ profile.username }}</a>
         - Rating ({{ profile.rating }})
+        - Last seen ({{ profile.last_login}})
     </li>
 </ul>
 {% endfor %}
