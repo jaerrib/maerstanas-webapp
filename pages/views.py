@@ -16,6 +16,18 @@ class AboutPageView(TemplateView):
     template_name = "about.html"
 
 
+class PrivacyPolicyPageView(TemplateView):
+    template_name = "privacy_policy.html"
+
+
+class TermsOfServicePageView(TemplateView):
+    template_name = "terms_of_service.html"
+
+
+class SupportPageView(TemplateView):
+    template_name = "support.html"
+
+
 class DashboardPageView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     template_name = "dashboard.html"
