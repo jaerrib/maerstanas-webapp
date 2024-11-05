@@ -4,4 +4,19 @@
 
 {% block content %}
 <h1>Home Page Placeholder</h1>
+<hr>
+<div>
+    <h2>Top 10 Players (by Rating)</h2>
+    <ol>
+        {% for player in top_10_list reversed %}
+        <li>
+            <a href="{{ player.get_absolute_url }}">
+                {{ player.username }}</a> ({{ player.rating }})
+        </li>
+        {% endfor %}
+    </ol>
+    {% if player_list|length < 10 %}
+    (Currently fewer than 10 active players)
+    {% endif %}
+</div>
 {% endblock content %}

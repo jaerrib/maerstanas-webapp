@@ -5,7 +5,7 @@ from django.urls import reverse, resolve
 from .views import HomePageView, AboutPageView, DashboardPageView
 
 
-class HomePageTests(SimpleTestCase):
+class HomePageTests(TestCase):
     def setUp(self):
         url = reverse("home")
         self.response = self.client.get(url)

@@ -1,15 +1,20 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic import TemplateView
 
 from game_messages.models import Invitation
 from games.models import Game
 
 
-class HomePageView(TemplateView):
+class HomePageView(ListView):
+    model = get_user_model()
     template_name = "home.html"
+    context_object_name = "top_10_list"
+
+    def get_queryset(self):
+        return get_user_model().objects.filter(is_active=True).order_by("rating")[:10]
 
 
 class AboutPageView(TemplateView):
