@@ -11,10 +11,13 @@ from games.models import Game
 class HomePageView(ListView):
     model = get_user_model()
     template_name = "home.html"
-    context_object_name = "top_10_list"
 
-    def get_queryset(self):
-        return get_user_model().objects.filter(is_active=True).order_by("rating")[:10]
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        User = get_user_model()
+        active_players = User.objects.filter(is_active=True)
+        context["top_10_by_rating"] = active_players.order_by("rating")[:10]
+        return context
 
 
 class AboutPageView(TemplateView):
