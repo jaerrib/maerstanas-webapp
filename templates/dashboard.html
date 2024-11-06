@@ -4,47 +4,44 @@
 {% block title %}Dashboard{% endblock title %}
 
 {% block content %}
-<h1>Dashboard Placeholder</h1>
-<div class="d-flex">
-    <div>
-        <img src="{% gravatar_url user_profile.email 150 %}"
-             alt="{{user_profile.username}}'s Gravatar">
+<div class="row row-cols-1 row-cols-md-2 justify-content-between">
+    <div class="col">
+        <p class="fs-2">My Dashboard</p>
+        {% include "profile_partial.html" %}
+        <div>
+            <a href="{% url 'userprofile_update' %}"
+               class="m-1 btn btn-secondary" role="link">Update Profile</a>
+            <a href="{% url 'userprofile_delete' %}"
+               class="m-1 btn btn-secondary" role="link">Delete Profile</a>
+            <a href="{% url 'game_create' %}" class="m-1 btn btn-primary"
+               role="link">Create a Game</a>
+        </div>
     </div>
-    <div class="ms-4">
-        <h2>{{ user_profile.username }}'s Profile</h2>
-        <p>
-            <a href="{% url 'userprofile_update' %}">Update Profile</a> |
-            <a href="{% url 'userprofile_delete' %}">Delete Profile</a>
-        </p>
-        <p>
-            Record (W-L-T):
-            {{ user_profile.games_won }} -
-            {{user_profile.games_lost}} -
-            {{user_profile.games_tied}}
-        </p>
-        <p>Games Abandoned: {{ user_profile.games_abandoned }}</p>
-        <p>Rating: {{ user_profile.rating }}</p>
+    <div class="col">
+        <p class="fs-3 mb-1">Hosted Games</p>
+        <div class="overflow-auto form-control overflow-y-scroll"
+             style="height: 10rem">
+            <ul>
+                {% for game in hosted_games %}
+                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
+                    {{ game.player2 }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <p class="fs-3 mb-1 mt-3">Joined Games</p>
+        <div class="overflow-auto form-control overflow-y-scroll"
+             style="height: 10rem">
+            <ul>
+                {% for game in joined_games %}
+                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
+                    {{ game.player1 }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
-<hr>
-<a href="{% url 'game_create' %}" class="btn btn-primary">Create a Game</a>
-<h3>Hosted Games</h3>
-<ul>
-    {% for game in hosted_games %}
-    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
-        {{ game.player2 }}
-    </li>
-    {% endfor %}
-</ul>
-
-<h3>Joined Games</h3>
-<ul>
-    {% for game in joined_games %}
-    <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
-        {{ game.player1 }}
-    </li>
-    {% endfor %}
-</ul>
 <hr>
 <h2>Your Invitations</h2>
 <ul>
