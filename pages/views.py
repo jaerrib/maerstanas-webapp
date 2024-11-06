@@ -39,7 +39,7 @@ class SupportPageView(TemplateView):
 class DashboardPageView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     template_name = "dashboard.html"
-    context_object_name = "user_profile"
+    context_object_name = "player"
 
     def get_object(self, queryset=None):
         return self.request.user
