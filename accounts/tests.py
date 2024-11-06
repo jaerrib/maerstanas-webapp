@@ -51,29 +51,41 @@ class SignUpPageTests(TestCase):
 
 
 class PlayerProfilePageTests(TestCase):
-    def setUp(self):
+
+    @classmethod
+    def setUpClass(cls):
         User = get_user_model()
-        self.user = User.objects.create_user(
+        cls.user = User.objects.create_user(
             username="testuser", email="testuser@email.com", password="testpass123"
         )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+
+    def test_player_profile_page_for_logged_in_user(self):
+        self.client.login(email="testuser@email.com", password="testpass123")
         self.response = self.client.get(self.user.get_absolute_url())
-
-    def test_url_exists_at_desired_location(self):
         self.assertEqual(self.response.status_code, 200)
-
-    def test_homepage_template(self):
         self.assertTemplateUsed(self.response, "account/userprofile_detail.html")
-
-    def test_player_profile_page_contains_correct_html(self):
         self.assertContains(self.response, "Player Profile")
         self.assertContains(self.response, "Record (W-L-T):")
-
-    def test_player_profile_page_does_not_contain_incorrect_html(self):
         self.assertNotContains(self.response, "Hello! I should not be here.")
-
-    def test_url_resolves_player_profile_page_view(self):
         view = resolve(f"/accounts/profiles/{self.user.pk}/")
         self.assertEqual(view.func.__name__, UserProfileDetailView.as_view().__name__)
+
+    def test_player_profile_page_for_logged_out_user(self):
+        self.client.logout()
+        response = self.client.get(self.user.get_absolute_url())
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"%s?next=/accounts/profiles/{self.user.pk}/" % (reverse("account_login")),
+        )
+        response = self.client.get(
+            f"%s?next=/accounts/profiles/{self.user.pk}/" % (reverse("account_login")),
+        )
+        self.assertContains(response, "Log In")
 
 
 class PlayerProfileListPageTests(TestCase):

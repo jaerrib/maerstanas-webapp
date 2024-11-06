@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.views.generic import DetailView, ListView, UpdateView, DeleteView
 
@@ -15,13 +15,13 @@ class UserProfileListView(ListView):
         return get_user_model().objects.filter(is_active=True)
 
 
-class UserProfileDetailView(DetailView):
+class UserProfileDetailView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     context_object_name = "player"
     template_name = "account/userprofile_detail.html"
 
 
-class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+class UserProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = get_user_model()
     form_class = CustomUserChangeForm
     template_name = "account/userprofile_update.html"
