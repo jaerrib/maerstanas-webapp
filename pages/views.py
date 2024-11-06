@@ -16,7 +16,7 @@ class HomePageView(ListView):
         context = super().get_context_data(**kwargs)
         User = get_user_model()
         active_players = User.objects.filter(is_active=True)
-        context["top_10_by_rating"] = active_players.order_by("rating")[:10]
+        context["top_10_by_rating"] = active_players.order_by("-rating")[:10]
         return context
 
 

@@ -8,7 +8,7 @@
 <div>
     <h2>Top 10 Players (by Rating)</h2>
     <ol>
-        {% for player in top_10_by_rating reversed %}
+        {% for player in top_10_by_rating %}
         <li>
             <a href="{{ player.get_absolute_url }}">
                 {{ player.username }}</a> ({{ player.rating }})
