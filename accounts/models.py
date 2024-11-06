@@ -7,7 +7,6 @@ from django.urls import reverse
 
 class CustomUser(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    games_played = models.IntegerField(default=0)
     games_won = models.IntegerField(default=0)
     games_lost = models.IntegerField(default=0)
     games_tied = models.IntegerField(default=0)
@@ -16,3 +15,18 @@ class CustomUser(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("userprofile_detail", args=[str(self.id)])
+
+    @property
+    def games_played(self):
+        games_won = self.games_won or 0
+        games_lost = self.games_lost or 0
+        games_tied = self.games_tied or 0
+        return games_won + games_lost + games_tied
+
+    @property
+    def win_percentage(self):
+        total_games = self.games_played
+        winning_games = self.games_won or 0
+        if total_games == 0:
+            return 0
+        return (winning_games / total_games) * 100
