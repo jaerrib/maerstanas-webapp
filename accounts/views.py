@@ -6,7 +6,7 @@ from django.views.generic import DetailView, ListView, UpdateView, DeleteView
 from .forms import CustomUserChangeForm
 
 
-class UserProfileListView(ListView):
+class UserProfileListView(LoginRequiredMixin, ListView):
     User = get_user_model()
     context_object_name = "profiles_list"
     template_name = "account/userprofile_list.html"

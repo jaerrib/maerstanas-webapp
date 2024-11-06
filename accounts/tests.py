@@ -89,22 +89,39 @@ class PlayerProfilePageTests(TestCase):
 
 
 class PlayerProfileListPageTests(TestCase):
-    def setUp(self):
+
+    @classmethod
+    def setUpClass(cls):
+        User = get_user_model()
+        cls.user = User.objects.create_user(
+            username="testuser", email="testuser@email.com", password="testpass123"
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.user.delete()
+
+    def test_player_profile_list_page_for_logged_in_user(self):
+        self.client.login(email="testuser@email.com", password="testpass123")
         url = reverse("userprofile_list")
-        self.response = self.client.get(url)
-
-    def test_url_exists_at_desired_location(self):
-        self.assertEqual(self.response.status_code, 200)
-
-    def test_homepage_template(self):
-        self.assertTemplateUsed(self.response, "account/userprofile_list.html")
-
-    def test_player_profile_page_contains_correct_html(self):
-        self.assertContains(self.response, "Player List")
-
-    def test_player_profile_page_does_not_contain_incorrect_html(self):
-        self.assertNotContains(self.response, "Hello! I should not be here.")
-
-    def test_url_resolves_player_profile_page_view(self):
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "account/userprofile_list.html")
+        self.assertContains(response, "Player List")
+        self.assertNotContains(response, "Hello! I should not be here.")
         view = resolve(f"/accounts/profiles/")
         self.assertEqual(view.func.__name__, UserProfileListView.as_view().__name__)
+
+    def test_player_profile_list_page_for_logged_out_user(self):
+        self.client.logout()
+        url = reverse("userprofile_list")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"%s?next=/accounts/profiles/" % (reverse("account_login")),
+        )
+        response = self.client.get(
+            f"%s?next=/accounts/profiles/" % (reverse("account_login")),
+        )
+        self.assertContains(response, "Log In")
