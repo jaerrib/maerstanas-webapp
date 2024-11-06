@@ -15,9 +15,11 @@ class CustomUserAdmin(UserAdmin):
         "email",
         "username",
         "is_superuser",
-        "games_played",
+        "games_won",
         "games_lost",
         "games_tied",
+        "games_played",
+        "win_percentage",
         "games_abandoned",
         "rating",
     ]
