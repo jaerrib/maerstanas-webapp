@@ -34,8 +34,11 @@ class UserProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
     def get_object(self, queryset=None):
         return self.request.user
 
+    def test_func(self):
+        return self.get_object() == self.request.user
 
-class UserProfileDeleteView(LoginRequiredMixin, DeleteView):
+
+class UserProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = get_user_model()
     context_object_name = "account"
     template_name = "account/userprofile_delete.html"
@@ -43,6 +46,9 @@ class UserProfileDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def test_func(self):
+        return self.get_object() == self.request.user
 
 
 class PlayerSearchResultsView(LoginRequiredMixin, ListView):
