@@ -12,7 +12,12 @@ class UserProfileListView(LoginRequiredMixin, ListView):
     template_name = "account/userprofile_list.html"
 
     def get_queryset(self):
-        return get_user_model().objects.filter(is_active=True)
+        return (
+            get_user_model()
+            .objects.filter(is_active=True)
+            .exclude(id=self.request.user.id)
+            .order_by("-last_login")
+        )
 
 
 class UserProfileDetailView(LoginRequiredMixin, DetailView):
