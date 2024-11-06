@@ -1,22 +1,18 @@
 {% extends "_base.html" %}
 {% load gravatar %}
 
+{% block title %}Player Search Results{% endblock title %}
+
 {% block content %}
-<h2>Player Search Results</h2>
+<p class="fs-2">Player Search Results</p>
+<hr>
 {% if player_list %}
-<ul>
-    {% for player in object_list %}
-    <li>
-        <img src="{% gravatar_url player.email 50 %}"
-             alt="{{ player.username }}'s Gravatar">
-        USER: <a href="{{ player.get_absolute_url }}">{{ player.username }}</a>
-        - Rating ({{ player.rating }})
-    </li>
+<div class="row row-cols-1 row-cols-md-2 rows-cols-lg-3 justify-content-between">
+    {% for player in player_list %}
+    {% include "profile_partial.html" %}
     {% endfor %}
-</ul>
+</div>
 {% else %}
 <p>No search results</p>
 {% endif %}
-
-
 {% endblock content %}

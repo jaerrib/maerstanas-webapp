@@ -4,7 +4,7 @@
 {% block title %}Player List{% endblock title %}
 
 {% block content %}
-<h1>Player List</h1>
+<p class="fs-2">Player List</p>
 <form role="search" action="{% url 'player_search' %}" class="form-inline my-4">
     <div class="form-group mx-sm-3 mb-2">
         <input type="search" name="search" class="form-control"
@@ -13,16 +13,9 @@
     <button type="submit" class="btn btn-primary ms-3 mb-2">Search</button>
 </form>
 <hr>
-{% for profile in profiles_list %}
-<ul>
-    <li>
-        <img src="{% gravatar_url profile.email 50 %}"
-             alt="{{profile.username}}'s Gravatar">
-        USER: <a href="{{ profile.get_absolute_url }}">
-        {{ profile.username }}</a>
-        - Rating ({{ profile.rating }})
-        - Last seen ({{ profile.last_login}})
-    </li>
-</ul>
-{% endfor %}
+<div class="row row-cols-1 row-cols-md-2 rows-cols-lg-3 justify-content-between">
+    {% for player in profiles_list %}
+    {% include "profile_partial.html" %}
+    {% endfor %}
+</div>
 {% endblock content %}
