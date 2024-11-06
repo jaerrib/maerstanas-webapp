@@ -1,22 +1,6 @@
 {% extends "_base.html" %}
-{% load gravatar %}
-
 {% block title %}Player Profile{% endblock title %}
-
 {% block content %}
-<h1>Player Profile Placeholder</h1>
-<img src="{% gravatar_url player.email 200 %}"
-     alt="{{profile.username}}'s Gravatar">
-<ul>
-    <li>{{ player.username }}</li>
-    <li>{{ player.email }}</li>
-    <li>Record (W-L-T):
-        {{ player.games_won }}-{{player.games_lost}}-{{player.games_tied}}
-    </li>
-    <li>Total games played: {{ player.games_played }}</li>
-    <li>Win percentage: {{ player.win_percentage }}</li>
-    <li>Games abandoned: {{ player.games_abandoned }}</li>
-    <li>Rating: {{ player.rating }}</li>
-</ul>
-<a href="{% url 'invite' receiver_pk=player.id %}">Invite</a>
+<p class="fs-2">Player Profile</p>
+{% include "profile_partial.html" %}
 {% endblock content %}

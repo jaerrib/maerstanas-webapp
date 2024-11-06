@@ -1,0 +1,44 @@
+{% block content %}
+{% load gravatar %}
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-4 text-center pt-3">
+            <img src="{% gravatar_url player.email 150 %}"
+                 class="img-fluid bg-body-tertiary rounded-circle "
+                 alt="{{profile.username}}'s Gravatar">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <p class="fs-5 card-title">{{ player.username }}</p>
+                <ul>
+                    <li class="card-text">
+                        Record (W-L-T):
+                        {{ player.games_won }}
+                        -{{ player.games_lost }}
+                        -{{ player.games_tied }}
+                    </li>
+                    <li class="card-text">
+                        Total games played: {{ player.games_played }}
+                    </li>
+                    <li class="card-text">
+                        Win percentage: {{ player.win_percentage }}
+                    </li>
+                    <li class="card-text">
+                        Games abandoned: {{ player.games_abandoned }}
+                    </li>
+                    <li class="card-text">Rating: {{ player.rating }}</li>
+                </ul>
+                <p class="card-text"><small class="text-body-secondary">
+                    Last seen {{ player.last_login }}</small></p>
+            </div>
+        </div>
+        {% if player != request.user %}
+        <div class="d-grid gap-2">
+            <a href="{% url 'invite' receiver_pk=player.id %}"
+               class="btn btn-primary m-1" role="link">
+                Invite</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
