@@ -493,25 +493,25 @@ class GameViewsTestCase(TestCase):
             self.assertContains(response, "Game Detail Placeholder")
             self.assertTemplateUsed(response, "game/game_detail.html")
 
-    def test_game_detail_view_for_logged_out_user(self):
-        self.client.logout()
-        response = self.client.get(self.game.get_absolute_url())
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(
-            response,
-            f"%s?next=/games/{self.game.id}/" % (reverse("account_login")),
-        )
-        response = self.client.get(
-            f"%s?next=/games/{self.game.id}/" % (reverse("account_login")),
-        )
-        self.assertContains(response, "Log In")
+        def test_game_detail_view_for_logged_out_user(self):
+            self.client.logout()
+            response = self.client.get(self.game.get_absolute_url())
+            self.assertEqual(response.status_code, 302)
+            self.assertRedirects(
+                response,
+                f"%s?next=/games/{self.game.id}/" % (reverse("account_login")),
+            )
+            response = self.client.get(
+                f"%s?next=/games/{self.game.id}/" % (reverse("account_login")),
+            )
+            self.assertContains(response, "Log In")
 
-    def test_game_detail_for_non_participating_user(self):
-        other_user = get_user_model().objects.create_user(
-            username="other user",
-            email="other_user@email.com",
-            password="testpass123",
-        )
-        self.client.login(email="other_user@email.com", password="testpass123")
-        response = self.client.get(self.game.get_absolute_url())
-        self.assertEqual(response.status_code, 403)
+        def test_game_detail_for_non_participating_user(self):
+            other_user = get_user_model().objects.create_user(
+                username="other user",
+                email="other_user@email.com",
+                password="testpass123",
+            )
+            self.client.login(email="other_user@email.com", password="testpass123")
+            response = self.client.get(self.game.get_absolute_url())
+            self.assertEqual(response.status_code, 403)
