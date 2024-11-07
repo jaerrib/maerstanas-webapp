@@ -21,7 +21,7 @@
         <p class="fs-3 mb-1">Hosted Games</p>
         <div class="overflow-auto form-control overflow-y-scroll"
              style="height: 10rem">
-            <ul>
+            <ul class="list-unstyled">
                 {% for game in hosted_games %}
                 <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
                     {{ game.player2 }}
@@ -32,7 +32,7 @@
         <p class="fs-3 mb-1 mt-3">Joined Games</p>
         <div class="overflow-auto form-control overflow-y-scroll"
              style="height: 10rem">
-            <ul>
+            <ul class="list-unstyled">
                 {% for game in joined_games %}
                 <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
                     {{ game.player1 }}
@@ -40,37 +40,40 @@
                 {% endfor %}
             </ul>
         </div>
+        <p class="fs-3 mb-1 mt-3">Sent Invitations</p>
+        <div class="overflow-auto form-control overflow-y-scroll"
+             style="height: 10rem">
+            <ul class="list-unstyled">
+                {% for invitation in sent_invitations %}
+                <li>
+                    Sent to <a
+                        href="{{ invitation.receiver.get_absolute_url }}">
+                    {{ invitation.receiver.username }}</a>
+                    ({{ invitation.receiver.rating }})
+                    - <a href="{% url 'game_update' pk=invitation.game.id %}">Edit</a>
+                    | <a href="{% url 'game_delete' pk=invitation.game.id %}">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <p class="fs-3 mb-1 mt-3">Received Invitations</p>
+        <div class="overflow-auto form-control overflow-y-scroll"
+             style="height: 10rem">
+            <ul class="list-unstyled">
+                {% for invitation in received_invitations %}
+                <li>
+                    Received from <a
+                        href="{{ invitation.receiver.get_absolute_url }}">
+                    {{ invitation.sender.username }}</a>
+                    ({{ invitation.sender.rating }})
+                    - <a
+                        href="{% url 'accept_invitation' invitation.id %}">Accept</a>
+                    | <a href="{% url 'decline_invitation' invitation.id %}">Decline</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
-<hr>
-<h2>Your Invitations</h2>
-<ul>
-    {% for invitation in invitation_list %}
-    <li>
-        {% if invitation.sender == request.user %}
-        <strong>Sent:</strong> Invitation to
-        <a href="{{ invitation.receiver.get_absolute_url }}">
-            {{ invitation.receiver.username }}</a>
-        ({{ invitation.receiver.rating }})
-        for {{ invitation.game.name }}<br>
-        {% elif invitation.receiver == request.user %}
-        <strong>Received:</strong> Invitation from
-        <a href="{{ invitation.sender.get_absolute_url }}">
-            {{ invitation.sender.username }}</a>
-        ({{ invitation.sender.rating }})
-        for {{ invitation.game.name }}<br>
-        <form method="post"
-              action="{% url 'accept_invitation' invitation.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success">Accept</button>
-        </form>
-        <form method="post"
-              action="{% url 'decline_invitation' invitation.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Decline</button>
-        </form>
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+
 {% endblock content %}

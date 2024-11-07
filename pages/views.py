@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
 from django.views.generic import DetailView, ListView
 from django.views.generic import TemplateView
 
@@ -49,7 +48,6 @@ class DashboardPageView(LoginRequiredMixin, DetailView):
         user = self.get_object()
         context["hosted_games"] = Game.objects.filter(player1=user)
         context["joined_games"] = Game.objects.filter(player2=user)
-        context["invitation_list"] = Invitation.objects.filter(
-            Q(sender=self.request.user) | Q(receiver=self.request.user)
-        )
+        context["sent_invitations"] = Invitation.objects.filter(sender=self.request.user)
+        context["received_invitations"] = Invitation.objects.filter(receiver=self.request.user)
         return context
