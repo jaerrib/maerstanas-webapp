@@ -447,26 +447,41 @@ class GameViewsTestCase(TestCase):
             email="testuser@email.com",
             password="testpass123",
         )
+        cls.other_player = get_user_model().objects.create_user(
+            username="testuser2",
+            email="testuser2@email.com",
+            password="testpass123",
+        )
 
-        cls.game = Game.objects.create(
+        cls.game1 = Game.objects.create(
             name="Test Game 2",
             player1=cls.player1,
         )
-        cls.game = game_rules.initialize_game(cls.game)
+        cls.game1 = game_rules.initialize_game(cls.game1)
+        cls.game2 = Game.objects.create(
+            name="Test Game 3",
+            player1=cls.other_player,
+        )
+        cls.game2 = game_rules.initialize_game(cls.game2)
 
     @classmethod
     def tearDownClass(cls):
         cls.player1.delete()
-        cls.game.delete()
+        cls.other_player.delete()
+        cls.game1.delete()
+        cls.game2.delete()
 
     def test_game_list_view_for_logged_in_user(self):
         self.client.login(email="testuser@email.com", password="testpass123")
         url = reverse("game_list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Game List")
-        self.assertContains(response, "Test Game 2")
         self.assertTemplateUsed(response, "game/game_list.html")
+        self.assertContains(response, "Game List")
+        # Check to see if games created by the logged-in user do not appear in the list
+        self.assertNotContains(response, "Test Game 2")
+        # Check to see if games not created by the logged-in user do appear in the list
+        self.assertContains(response, "Test Game 3")
 
     def test_game_list_view_for_logged_out_user(self):
         self.client.logout()
