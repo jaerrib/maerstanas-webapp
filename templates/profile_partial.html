@@ -10,7 +10,7 @@
         <div class="col-md-8">
             <div class="card-body">
                 <p class="fs-5 card-title">{{ player.username }}</p>
-                <ul>
+                <ul class="list-unstyled">
                     <li class="card-text">
                         Record (W-L-T):
                         {{ player.games_won }}
@@ -33,9 +33,9 @@
             </div>
         </div>
         {% if player != request.user %}
-        <div class="d-grid gap-2">
+        <div class="d-grid">
             <a href="{% url 'invite' receiver_pk=player.id %}"
-               class="btn btn-primary m-1" role="link">
+               class="btn btn-primary m-1">
                 Invite</a>
         </div>
         {% endif %}
