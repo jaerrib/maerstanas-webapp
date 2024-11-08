@@ -13,6 +13,9 @@ class GameAdmin(admin.ModelAdmin):
         "score_p2",
         "using_special_stones",
         "using_standard_scoring",
+        "game_over",
+        "is_archived_for_p1",
+        "is_archived_for_p2",
     ]
 
 

@@ -21,7 +21,8 @@
 <hr>
 <div id="messageArea"></div>
 {% if game.game_over %}
-<a href="" role="button" class="btn btn-warning">Archive</a>
+<a href="{% url 'game_archive' pk=game.id %}" role="button"
+   class="btn btn-warning">Archive</a>
 {% elif game.player2 is None %}
 <a href="{% url 'game_delete' pk=game.id %}" role="button"
    class="btn btn-danger">Delete</a>

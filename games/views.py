@@ -226,3 +226,15 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
         else:
             game_list = game_list.filter(Q(password__isnull=True) | Q(password=""))
         return game_list
+
+def archive_finished_game(request, pk):
+    game = get_object_or_404(Game, pk=pk)
+    if game.player1 == request.user and game.game_over:
+        game.is_archived_for_p1 = True
+        game.save()
+    elif game.player2 == request.user and game.game_over:
+        game.is_archived_for_p2 = True
+        game.save()
+    return redirect("dashboard")
+
+

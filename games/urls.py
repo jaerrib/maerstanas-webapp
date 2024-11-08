@@ -10,6 +10,7 @@ from .views import (
     process_move,
     stone_selector,
     GameSearchResultsView,
+    archive_finished_game,
 )
 
 urlpatterns = [
@@ -19,6 +20,7 @@ urlpatterns = [
     path("<uuid:pk>/update/", GameUpdateView.as_view(), name="game_update"),
     path("<uuid:pk>/delete/", GameDeleteView.as_view(), name="game_delete"),
     path("<uuid:pk>/join/", join_open_game, name="game_join"),
+    path("<uuid:pk>/archive/", archive_finished_game, name="game_archive"),
     path(
         "process_move/<uuid:pk>/<int:stone>/<int:row>/<int:col>/",
         process_move,

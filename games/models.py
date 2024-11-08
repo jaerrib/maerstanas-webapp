@@ -53,6 +53,8 @@ class Game(models.Model):
     p1_has_woden_stone = models.BooleanField(default=True)
     p2_has_thunder_stone = models.BooleanField(default=True)
     p2_has_woden_stone = models.BooleanField(default=True)
+    is_archived_for_p1 = models.BooleanField(default=False)
+    is_archived_for_p2 = models.BooleanField(default=False)
 
     password = models.CharField(max_length=128, blank=True, null=True)
 
