@@ -46,8 +46,8 @@ class DashboardPageView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.get_object()
-        context["hosted_games"] = Game.objects.filter(player1=user)
-        context["joined_games"] = Game.objects.filter(player2=user)
+        context["hosted_games"] = Game.objects.filter(player1=user, is_archived_for_p1=False)
+        context["joined_games"] = Game.objects.filter(player2=user, is_archived_for_p2=False)
         context["sent_invitations"] = Invitation.objects.filter(sender=self.request.user)
         context["received_invitations"] = Invitation.objects.filter(receiver=self.request.user)
         return context
