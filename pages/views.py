@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, ListView
 from django.views.generic import TemplateView
 
-from game_messages.models import Invitation
+from game_messages.models import Invitation, SystemNotice
 from games.models import Game
 
 
@@ -50,4 +50,5 @@ class DashboardPageView(LoginRequiredMixin, DetailView):
         context["joined_games"] = Game.objects.filter(player2=user, is_archived_for_p2=False)
         context["sent_invitations"] = Invitation.objects.filter(sender=self.request.user)
         context["received_invitations"] = Invitation.objects.filter(receiver=self.request.user)
+        context["system_notices"] = SystemNotice.objects.filter(user=self.request.user)
         return context

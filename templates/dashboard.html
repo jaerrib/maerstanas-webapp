@@ -16,6 +16,28 @@
             <a href="{% url 'game_create' %}" class="m-1 btn btn-primary"
                role="link">Create a Game</a>
         </div>
+
+        <hr class="my-5">
+
+        <p class="fs-3 mb-1">System Notices</p>
+        <div class="overflow-auto form-control overflow-y-scroll"
+             style="height: 10rem">
+            <ul class="list-unstyled">
+                {% if system_notices %}
+                <li><a href="{% url 'delete_all_notices' %}">Delete all
+                    notices</a>
+                    {% for notice in system_notices %}
+                <li>{{ notice }} - <a
+                        href="{% url 'delete_notice' notice.id %}">Delete</a>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li>No notices</li>
+                {% endif %}
+            </ul>
+        </div>
+
+
     </div>
     <div class="col">
         <p class="fs-3 mb-1">Hosted Games</p>
