@@ -12,7 +12,9 @@ from django.views.generic import (
     DeleteView,
 )
 
+from game_messages.models import SystemNotice
 from games.logic import game_rules
+from games.logic.game_rules import convert_num_to_col
 from .forms import GameCreateForm, GameUpdateForm, PasswordForm
 from .models import Game
 
@@ -143,6 +145,16 @@ def process_move(request, pk, stone, row, col):
         game.moves_left_list = game_rules.remaining_standard_moves(
             game.gameboard["data"]
         )
+        # Add system notification for other player
+        if game.active_player == 1:
+            notification_user = game.player2
+        else:
+            notification_user = game.player1
+        stones = ["standard stone", "thunder-stone", "Woden-stone"]
+        played_stone = stones[stone - 1]
+        message_text = f"{game.name}: {request.user.username} played {played_stone} at {convert_num_to_col(col)}{row}."
+        SystemNotice.objects.create(user=notification_user,
+                                    message_text=message_text)
         game = game_rules.update_score(game)
         game = game_rules.change_player(game)
         game.game_over = game_rules.is_game_over(game)
@@ -236,5 +248,3 @@ def archive_finished_game(request, pk):
         game.is_archived_for_p2 = True
         game.save()
     return redirect("dashboard")
-
-
