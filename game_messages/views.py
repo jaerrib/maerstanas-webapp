@@ -1,11 +1,9 @@
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, \
-    View
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 
 from games.logic.game_rules import initialize_game
 from games.models import Game
@@ -76,25 +74,23 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AcceptInvitationView(View):
-    def post(self, request, invitation_id):
-        invitation = get_object_or_404(Invitation, id=invitation_id)
-        invitation.approved = True
-        invitation.save()
-        return redirect(invitation.game.get_absolute_url())
+def accept_invitation(request, invitation_id):
+    invitation = get_object_or_404(Invitation, id=invitation_id)
+    invitation.approved = True
+    invitation.save()
+    message_text = f"{invitation.receiver.username} accepted your invitation."
+    SystemNotice.objects.create(user=invitation.sender, message_text=message_text)
+    return redirect(invitation.game.get_absolute_url())
 
 
-class DeclineInvitationView(View):
-    def post(self, request, invitation_id):
-        invitation = get_object_or_404(Invitation, id=invitation_id)
-        game = invitation.game
-        sender = invitation.sender
-        invitation.delete()
-        game.delete()
-        messages.add_message(
-            request, messages.INFO, f"{sender.username}, your invitation was declined."
-        )
-        return redirect("invitations")
+def decline_invitation(request, invitation_id):
+    invitation = get_object_or_404(Invitation, id=invitation_id)
+    game = invitation.game
+    message_text = f"{invitation.receiver.username} declined your invitation."
+    SystemNotice.objects.create(user=invitation.sender, message_text=message_text)
+    invitation.delete()
+    game.delete()
+    return redirect("dashboard")
 
 
 def delete_system_notice(request, notice_id):
@@ -103,7 +99,7 @@ def delete_system_notice(request, notice_id):
         notice.delete()
     return redirect("dashboard")
 
+
 def delete_all_system_notices_for_user(request):
     SystemNotice.objects.filter(user=request.user).delete()
     return redirect("dashboard")
-
