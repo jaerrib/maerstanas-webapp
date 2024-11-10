@@ -5,6 +5,8 @@ from .views import (
     AcceptInvitationView,
     DeclineInvitationView,
     InvitationListView,
+    delete_system_notice,
+    delete_all_system_notices_for_user,
 )
 
 urlpatterns = [
@@ -20,4 +22,6 @@ urlpatterns = [
         name="decline_invitation",
     ),
     path("invitations/", InvitationListView.as_view(), name="invitations"),
+    path("delete_notice/<uuid:notice_id>/", delete_system_notice, name="delete_notice"),
+    path("delete_all_notices/", delete_all_system_notices_for_user, name="delete_all_notices"),
 ]

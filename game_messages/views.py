@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView,
 from games.logic.game_rules import initialize_game
 from games.models import Game
 from .forms import InvitationCreateForm
-from .models import Invitation
+from .models import Invitation, SystemNotice
 
 User = get_user_model()
 
@@ -95,3 +95,15 @@ class DeclineInvitationView(View):
             request, messages.INFO, f"{sender.username}, your invitation was declined."
         )
         return redirect("invitations")
+
+
+def delete_system_notice(request, notice_id):
+    notice = get_object_or_404(SystemNotice, id=notice_id)
+    if notice.user == request.user:
+        notice.delete()
+    return redirect("dashboard")
+
+def delete_all_system_notices_for_user(request):
+    SystemNotice.objects.filter(user=request.user).delete()
+    return redirect("dashboard")
+
