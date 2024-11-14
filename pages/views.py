@@ -16,6 +16,10 @@ class HomePageView(ListView):
         User = get_user_model()
         active_players = User.objects.filter(is_active=True)
         context["top_10_by_rating"] = active_players.order_by("-rating")[:10]
+        context["total_active_players"] = active_players.count()
+        game = Game
+        context["total_active_games"] = game.objects.filter(game_over=False).exclude(player2=None).count()
+        context["total_finished_games"] = game.objects.filter(game_over=True).count()
         return context
 
 
