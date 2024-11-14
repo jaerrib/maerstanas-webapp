@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
-from django.views.generic import DetailView, ListView, UpdateView, DeleteView
+from django.views.generic import DeleteView, DetailView, ListView, UpdateView
 
 from .forms import CustomUserChangeForm
 
@@ -31,7 +31,7 @@ class UserProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView)
     form_class = CustomUserChangeForm
     template_name = "account/userprofile_update.html"
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         return self.request.user
 
     def test_func(self):
@@ -44,7 +44,7 @@ class UserProfileDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
     template_name = "account/userprofile_delete.html"
     success_url = "/"
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         return self.request.user
 
     def test_func(self):
