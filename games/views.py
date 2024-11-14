@@ -231,8 +231,12 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
         )
         if special_stones:
             game_list = game_list.filter(using_special_stones=True)
+        else:
+            game_list = game_list.filter(using_special_stones=False)
         if standard_scoring:
             game_list = game_list.filter(using_standard_scoring=True)
+        else:
+            game_list = game_list.filter(using_standard_scoring=False)
         if private_games:
             game_list = game_list.filter(password__isnull=False).exclude(password="")
         else:
