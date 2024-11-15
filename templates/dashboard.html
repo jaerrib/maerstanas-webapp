@@ -62,7 +62,8 @@
                 {% endfor %}
             </ul>
         </div>
-        <p class="fs-3 mb-1 mt-3">Invitations</p>
+        <p class="fs-3 mb-1 mt-3">Invitations<span class="fs-5"> ({{ total_invitations }})</span>
+        </p>
         <div class="overflow-auto form-control overflow-y-scroll"
              style="height: 20rem">
             {% for invitation in invitations %}

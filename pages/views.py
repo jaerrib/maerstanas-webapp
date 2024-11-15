@@ -54,5 +54,6 @@ class DashboardPageView(LoginRequiredMixin, DetailView):
         context["hosted_games"] = Game.objects.filter(player1=user, is_archived_for_p1=False)
         context["joined_games"] = Game.objects.filter(player2=user, is_archived_for_p2=False)
         context["invitations"] = Invitation.objects.filter(Q(sender=self.request.user) | Q(receiver=self.request.user))
+        context["total_invitations"] = Invitation.objects.filter(Q(sender=self.request.user) | Q(receiver=self.request.user)).count()
         context["system_notices"] = SystemNotice.objects.filter(user=self.request.user)
         return context
