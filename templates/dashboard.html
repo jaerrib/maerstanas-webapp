@@ -62,39 +62,14 @@
                 {% endfor %}
             </ul>
         </div>
-        <p class="fs-3 mb-1 mt-3">Sent Invitations</p>
+        <p class="fs-3 mb-1 mt-3">Invitations</p>
         <div class="overflow-auto form-control overflow-y-scroll"
-             style="height: 10rem">
-            <ul class="list-unstyled">
-                {% for invitation in sent_invitations %}
-                <li>
-                    Sent to <a
-                        href="{{ invitation.receiver.get_absolute_url }}">
-                    {{ invitation.receiver.username }}</a>
-                    ({{ invitation.receiver.rating }})
-                    - <a href="{% url 'game_update' pk=invitation.game.id %}">Edit</a>
-                    | <a href="{% url 'game_delete' pk=invitation.game.id %}">Delete</a>
-                </li>
-                {% endfor %}
-            </ul>
+             style="height: 20rem">
+            {% for invitation in invitations %}
+            {% include "invitation_partial.html" %}
+            {% endfor %}
         </div>
-        <p class="fs-3 mb-1 mt-3">Received Invitations</p>
-        <div class="overflow-auto form-control overflow-y-scroll"
-             style="height: 10rem">
-            <ul class="list-unstyled">
-                {% for invitation in received_invitations %}
-                <li>
-                    Received from <a
-                        href="{{ invitation.receiver.get_absolute_url }}">
-                    {{ invitation.sender.username }}</a>
-                    ({{ invitation.sender.rating }})
-                    - <a
-                        href="{% url 'accept_invitation' invitation.id %}">Accept</a>
-                    | <a href="{% url 'decline_invitation' invitation.id %}">Decline</a>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+
     </div>
 </div>
 
