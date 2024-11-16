@@ -19,14 +19,14 @@
 
         <hr class="my-5">
 
-        <p class="fs-3 mb-1">System Notices</p>
+        <p class="fs-3 mb-1">System Notices<span class="fs-5"> ({{ total_system_notices }})</span>
+            <a href="" class="fs-6 link-danger">Delete all notices</a>
+        </p>
         <div class="overflow-auto form-control overflow-y-scroll"
              style="height: 10rem">
             <ul class="list-unstyled">
                 {% if system_notices %}
-                <li><a href="{% url 'delete_all_notices' %}">Delete all
-                    notices</a>
-                    {% for notice in system_notices %}
+                {% for notice in system_notices %}
                 <li>{{ notice }} - <a
                         href="{% url 'delete_notice' notice.id %}">Delete</a>
                 </li>
@@ -36,32 +36,59 @@
                 {% endif %}
             </ul>
         </div>
-
-
     </div>
+
     <div class="col">
-        <p class="fs-3 mb-1">Hosted Games</p>
+        <p class="fs-3 mb-1 mt-3">Active Games<span class="fs-5"> ({{ total_active_games }})</span>
+        </p>
         <div class="overflow-auto form-control overflow-y-scroll"
              style="height: 10rem">
             <ul class="list-unstyled">
-                {% for game in hosted_games %}
+                {% for game in active_games %}
+                {% if game.player1 == request.user %}
                 <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
                     {{ game.player2 }}
+                </li>
+                {% else %}
+                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
+                    {{ game.player1 }}
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <p class="fs-3 mb-1 mt-3">Open game sessions<span class="fs-5"> ({{ total_open_game_sessions }})</span>
+        </p>
+        <div class="overflow-auto form-control overflow-y-scroll"
+             style="height: 10rem">
+            <ul class="list-unstyled">
+                {% for game in open_game_sessions %}
+                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
+                    vs {{ game.player2 }}
                 </li>
                 {% endfor %}
             </ul>
         </div>
-        <p class="fs-3 mb-1 mt-3">Joined Games</p>
+
+        <p class="fs-3 mb-1 mt-3">Completed Games<span class="fs-5"> ({{ total_completed_games }})</span>
+            <a href="{% url 'game_archive_all' %}"
+               class="btn btn-sm btn-danger">Archive all games</a>
+            <a href="{% url 'my_archived_game_list' %}"
+               class="btn btn-sm btn-outline-secondary">
+                See archived games list</a>
+        </p>
         <div class="overflow-auto form-control overflow-y-scroll"
              style="height: 10rem">
             <ul class="list-unstyled">
-                {% for game in joined_games %}
+                {% for game in completed_games %}
                 <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
                     {{ game.player1 }}
                 </li>
                 {% endfor %}
             </ul>
         </div>
+
         <p class="fs-3 mb-1 mt-3">Invitations<span class="fs-5"> ({{ total_invitations }})</span>
         </p>
         <div class="overflow-auto form-control overflow-y-scroll"
