@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+
+{% block title %}My Archived Game List{% endblock title %}
+
+{% block content %}
+<h1>My Archived Game List<span class="fs-5"> ({{ total_archived_games }})</span>
+</h1>
+{% if archived_games_list %}
+<ul class="list-unstyled">
+    {% for game in archived_games_list %}
+    <li>
+        <a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
+        - Score {{ game.score_p1 }}-{{ game.score_p2 }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No archived games yet</p>
+{% endif %}
+{% endblock content %}

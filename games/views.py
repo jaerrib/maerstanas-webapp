@@ -1,16 +1,12 @@
 from math import pow
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
 from game_messages.models import SystemNotice
 from games.logic import game_rules
@@ -153,8 +149,7 @@ def process_move(request, pk, stone, row, col):
         stones = ["standard stone", "thunder-stone", "Woden-stone"]
         played_stone = stones[stone - 1]
         message_text = f"{game.name}: {request.user.username} played {played_stone} at {convert_num_to_col(col)}{row}."
-        SystemNotice.objects.create(user=notification_user,
-                                    message_text=message_text)
+        SystemNotice.objects.create(user=notification_user, message_text=message_text)
         game = game_rules.update_score(game)
         game = game_rules.change_player(game)
         game.game_over = game_rules.is_game_over(game)
@@ -243,6 +238,7 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
             game_list = game_list.filter(Q(password__isnull=True) | Q(password=""))
         return game_list
 
+
 def archive_finished_game(request, pk):
     game = get_object_or_404(Game, pk=pk)
     if game.player1 == request.user and game.game_over:
@@ -252,3 +248,40 @@ def archive_finished_game(request, pk):
         game.is_archived_for_p2 = True
         game.save()
     return redirect("dashboard")
+
+
+def archive_all_finished_games(request):
+    user = request.user
+    games = Game.objects.filter(
+        Q(player1=user, is_archived_for_p1=False)
+        | Q(player2=user, is_archived_for_p2=False),
+        game_over=True,
+    )
+    for game in games:
+        if game.player1 == request.user:
+            game.is_archived_for_p1 = True
+            game.save()
+        elif game.player2 == request.user:
+            game.is_archived_for_p2 = True
+            game.save()
+    return redirect("dashboard")
+
+
+class MyArchivedGameListView(LoginRequiredMixin, ListView):
+    model = get_user_model()
+    context_object_name = "archived_games_list"
+    template_name = "game/archived_games_list.html"
+
+    def get_object(self):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+        archived_games = Game.objects.filter(
+            Q(player1=user, is_archived_for_p1=True)
+            | Q(player2=user, is_archived_for_p2=True)
+        )
+        context["archived_games_list"] = archived_games.order_by("name")
+        context["total_archived_games"] = archived_games.count()
+        return context

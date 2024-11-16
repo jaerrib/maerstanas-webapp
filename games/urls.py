@@ -1,17 +1,10 @@
 from django.urls import path
 
-from .views import (
-    GameListView,
-    GameDetailView,
-    GameCreateView,
-    GameUpdateView,
-    GameDeleteView,
-    join_open_game,
-    process_move,
-    stone_selector,
-    GameSearchResultsView,
-    archive_finished_game,
-)
+from .views import (GameCreateView, GameDeleteView, GameDetailView,
+                    GameListView, GameSearchResultsView, GameUpdateView,
+                    MyArchivedGameListView, archive_all_finished_games,
+                    archive_finished_game, join_open_game, process_move,
+                    stone_selector)
 
 urlpatterns = [
     path("game_list/", GameListView.as_view(), name="game_list"),
@@ -21,6 +14,12 @@ urlpatterns = [
     path("<uuid:pk>/delete/", GameDeleteView.as_view(), name="game_delete"),
     path("<uuid:pk>/join/", join_open_game, name="game_join"),
     path("<uuid:pk>/archive/", archive_finished_game, name="game_archive"),
+    path("archive/all/", archive_all_finished_games, name="game_archive_all"),
+    path(
+        "archived_game_list/",
+        MyArchivedGameListView.as_view(),
+        name="my_archived_game_list",
+    ),
     path(
         "process_move/<uuid:pk>/<int:stone>/<int:row>/<int:col>/",
         process_move,
