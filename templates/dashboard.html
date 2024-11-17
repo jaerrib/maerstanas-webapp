@@ -45,15 +45,7 @@
              style="height: 10rem">
             <ul class="list-unstyled">
                 {% for game in active_games %}
-                {% if game.player1 == request.user %}
-                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
-                    {{ game.player2 }}
-                </li>
-                {% else %}
-                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
-                    {{ game.player1 }}
-                </li>
-                {% endif %}
+                {% include 'game/participating_games_partial.html' %}
                 {% endfor %}
             </ul>
         </div>
@@ -64,9 +56,7 @@
              style="height: 10rem">
             <ul class="list-unstyled">
                 {% for game in open_game_sessions %}
-                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a>
-                    vs {{ game.player2 }}
-                </li>
+                {% include 'game/participating_games_partial.html' %}
                 {% endfor %}
             </ul>
         </div>
@@ -82,9 +72,7 @@
              style="height: 10rem">
             <ul class="list-unstyled">
                 {% for game in completed_games %}
-                <li><a href="{{ game.get_absolute_url }}">{{ game.name }}</a> vs
-                    {{ game.player1 }}
-                </li>
+                {% include 'game/participating_games_partial.html' %}
                 {% endfor %}
             </ul>
         </div>

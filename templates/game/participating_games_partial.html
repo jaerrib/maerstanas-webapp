@@ -1,0 +1,22 @@
+{% block content %}
+<li class="my-2">
+    {% if game.game_over %}
+    <a href="{{ game.get_absolute_url }}">{{ game.name }}</a> -
+    {{ game.player1 }} ({{ game.score_p1 }})
+    vs {{ game.player2 }} ({{ game.score_p2 }})
+    <a href="{% url 'game_archive' pk=game.id %}"
+       class="btn btn-sm btn-outline-danger">
+        Archive</a>
+    {% else %}
+    <a href="{{ game.get_absolute_url }}">{{ game.name }}</a> -
+    {% if game.active_player == 1 %}
+    <span class="fw-bold">{{ game.player1 }}</span> ({{ game.score_p1 }})
+    vs {{ game.player2 }} ({{ game.score_p2 }})
+    {% else %}
+    {{ game.player1 }} ({{ game.score_p2 }})
+    vs <span class="fw-bold">{{ game.player2 }}</span>
+    ({{ game.score_p2 }})
+    {% endif %}
+    {% endif %}
+</li>
+{% endblock content %}
