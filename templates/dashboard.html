@@ -4,9 +4,9 @@
 {% block title %}Dashboard{% endblock title %}
 
 {% block content %}
-<div class="row row-cols-1 row-cols-md-2 justify-content-between">
+<p class="fs-2">My Dashboard</p>
+<div class="row row-cols-1 row-cols-lg-2 justify-content-between">
     <div class="col">
-        <p class="fs-2">My Dashboard</p>
         {% include "profile_partial.html" %}
         <div>
             <a href="{% url 'userprofile_update' %}"
@@ -16,74 +16,123 @@
             <a href="{% url 'game_create' %}" class="m-1 btn btn-primary"
                role="link">Create a Game</a>
         </div>
-
-        <hr class="my-5">
-
-        <p class="fs-3 mb-1">System Notices<span class="fs-5"> ({{ total_system_notices }})</span>
-            <a href="" class="fs-6 link-danger">Delete all notices</a>
-        </p>
-        <div class="overflow-auto form-control overflow-y-scroll"
-             style="height: 10rem">
-            <ul class="list-unstyled">
-                {% if system_notices %}
-                {% for notice in system_notices %}
-                <li>{{ notice }} - <a
-                        href="{% url 'delete_notice' notice.id %}">Delete</a>
-                </li>
-                {% endfor %}
-                {% else %}
-                <li>No notices</li>
-                {% endif %}
-            </ul>
-        </div>
     </div>
 
     <div class="col">
-        <p class="fs-3 mb-1 mt-3">Active Games<span class="fs-5"> ({{ total_active_games }})</span>
-        </p>
-        <div class="overflow-auto form-control overflow-y-scroll"
-             style="height: 10rem">
-            <ul class="list-unstyled">
-                {% for game in active_games %}
-                {% include 'game/participating_games_partial.html' %}
-                {% endfor %}
-            </ul>
-        </div>
+        <div class="accordion accordion-flush" id="DashboardActions">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="false"
+                            aria-controls="collapseOne">
+                        System Notices ({{ total_system_notices }})
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse"
+                     data-bs-parent="#DashboardActions">
+                    <div class="accordion-body">
+                        <a href="" class="btn btn-sm btn-danger">Delete all notices</a>
+                        <ul class="list-unstyled">
+                        {% if system_notices %}
+                        {% for notice in system_notices %}
+                        <li class="mt-3">{{ notice }} - <a
+                                href="{% url 'delete_notice' notice.id %}">Delete</a>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <li class="mt-3">No notices</li>
+                        {% endif %}
+                    </ul>
+                    </div>
+                </div>
+            </div>
 
-        <p class="fs-3 mb-1 mt-3">Open game sessions<span class="fs-5"> ({{ total_open_game_sessions }})</span>
-        </p>
-        <div class="overflow-auto form-control overflow-y-scroll"
-             style="height: 10rem">
-            <ul class="list-unstyled">
-                {% for game in open_game_sessions %}
-                {% include 'game/participating_games_partial.html' %}
-                {% endfor %}
-            </ul>
-        </div>
 
-        <p class="fs-3 mb-1 mt-3">Completed Games<span class="fs-5"> ({{ total_completed_games }})</span>
-            <a href="{% url 'game_archive_all' %}"
-               class="btn btn-sm btn-danger">Archive all games</a>
-            <a href="{% url 'my_archived_game_list' %}"
-               class="btn btn-sm btn-outline-secondary">
-                See archived games list</a>
-        </p>
-        <div class="overflow-auto form-control overflow-y-scroll"
-             style="height: 10rem">
-            <ul class="list-unstyled">
-                {% for game in completed_games %}
-                {% include 'game/participating_games_partial.html' %}
-                {% endfor %}
-            </ul>
-        </div>
-
-        <p class="fs-3 mb-1 mt-3">Invitations<span class="fs-5"> ({{ total_invitations }})</span>
-        </p>
-        <div class="overflow-auto form-control overflow-y-scroll"
-             style="height: 20rem">
-            {% for invitation in invitations %}
-            {% include "invitation_partial.html" %}
-            {% endfor %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false"
+                            aria-controls="collapseTwo">
+                        Active Games ({{ total_active_games }})
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse"
+                     data-bs-parent="#DashboardActions">
+                    <div class="accordion-body">
+                        <ul class="list-unstyled">
+                            {% for game in open_game_sessions %}
+                            {% include 'game/game_list_partial.html' %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false"
+                            aria-controls="collapseThree">
+                        Open game sessions ({{ total_open_game_sessions }})
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse"
+                     data-bs-parent="#DashboardActions">
+                    <div class="accordion-body">
+                        <ul class="list-unstyled">
+                            {% for game in open_game_sessions %}
+                            {% include 'game/game_list_partial.html' %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour"
+                            aria-expanded="false" aria-controls="collapseFour">
+                        Completed Games ({{ total_completed_games }})
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse"
+                     data-bs-parent="#DashboardActions">
+                    <div class="accordion-body">
+                        <a href="{% url 'game_archive_all' %}"
+                           class="btn btn-sm btn-danger">Archive all games</a>
+                        <a href="{% url 'my_archived_game_list' %}"
+                           class="btn btn-sm btn-outline-secondary">
+                            See archived games list</a>
+                        <ul class="list-unstyled">
+                            {% for game in completed_games %}
+                            {% include 'game/game_list_partial.html' %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseFive"
+                            aria-expanded="false" aria-controls="collapseFive">
+                        Invitations ({{ total_invitations }})
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse"
+                     data-bs-parent="#DashboardActions">
+                        <ul class="list-unstyled mt-3">
+                            {% for invitation in invitations %}
+                            {% include "invitation_partial.html" %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
