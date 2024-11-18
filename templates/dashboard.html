@@ -36,12 +36,12 @@
                         <ul class="list-unstyled">
                         {% if system_notices %}
                         {% for notice in system_notices %}
-                        <li class="mt-3">{{ notice }} - <a
+                        <li class="my-2">{{ notice }} - <a
                                 href="{% url 'delete_notice' notice.id %}">Delete</a>
                         </li>
                         {% endfor %}
                         {% else %}
-                        <li class="mt-3">No notices</li>
+                        <li class="my-2">No notices</li>
                         {% endif %}
                     </ul>
                     </div>
