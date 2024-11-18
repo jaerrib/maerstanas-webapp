@@ -9,7 +9,9 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <p class="fs-5 card-title">{{ player.username }}</p>
+                <p class="fs-5 card-title">
+                    <a href="{{ player.get_absolute_url }}">
+                        {{ player.username }}</a></p>
                 <ul class="list-unstyled">
                     <li class="card-text">
                         Record (W-L-T):
