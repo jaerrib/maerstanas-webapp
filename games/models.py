@@ -58,6 +58,8 @@ class Game(models.Model):
 
     password = models.CharField(max_length=128, blank=True, null=True)
 
+    updated_at = models.DateTimeField(auto_now=True)
+
     def set_password(self, raw_password):
         if raw_password:
             self.password = make_password(raw_password)
