@@ -282,6 +282,6 @@ class MyArchivedGameListView(LoginRequiredMixin, ListView):
             Q(player1=user, is_archived_for_p1=True)
             | Q(player2=user, is_archived_for_p2=True)
         )
-        context["archived_games_list"] = archived_games.order_by("name")
+        context["archived_games_list"] = archived_games.order_by("-updated_at")
         context["total_archived_games"] = archived_games.count()
         return context
