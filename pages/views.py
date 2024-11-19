@@ -59,15 +59,15 @@ class DashboardPageView(LoginRequiredMixin, DetailView):
         )
 
         active_games = participating_games.exclude(player2=None).filter(game_over=False)
-        context["active_games"] = active_games.order_by("name")
+        context["active_games"] = active_games.order_by("-updated_at")
         context["total_active_games"] = active_games.count()
 
         completed_games = participating_games.filter(game_over=True)
-        context["completed_games"] = completed_games.order_by("name")
+        context["completed_games"] = completed_games.order_by("-updated_at")
         context["total_completed_games"] = completed_games.count()
 
         open_game_sessions = participating_games.filter(Q(player1=user, player2=None))
-        context["open_game_sessions"] = open_game_sessions.order_by("name")
+        context["open_game_sessions"] = open_game_sessions.order_by("-updated_at")
         context["total_open_game_sessions"] = open_game_sessions.count()
 
         invitations = Invitation.objects.filter(
