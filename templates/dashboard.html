@@ -62,7 +62,7 @@
                      data-bs-parent="#DashboardActions">
                     <div class="accordion-body">
                         <ul class="list-unstyled">
-                            {% for game in open_game_sessions %}
+                            {% for game in active_games %}
                             {% include 'game/game_list_partial.html' %}
                             {% endfor %}
                         </ul>
