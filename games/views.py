@@ -30,10 +30,16 @@ class GameDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     template_name = "game/game_detail.html"
 
     def get_context_data(self, **kwargs):
+        game = self.get_object()
         context = super().get_context_data(**kwargs)
         if "active_stone" not in self.request.session:
             self.request.session["active_stone"] = 1
         context["active_stone"] = self.request.session["active_stone"]
+        if game.game_over and game.result != "Tie":
+            result_message = f"GAME OVER - {game.result} wins"
+        else:
+            result_message = game.result
+        context["result_message"] = result_message
         return context
 
     def test_func(self):
