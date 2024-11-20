@@ -17,9 +17,9 @@ class HomePageView(ListView):
         active_players = User.objects.filter(is_active=True)
         context["top_10_by_rating"] = active_players.order_by("-rating")[:10]
         context["total_active_players"] = active_players.count()
-        sorted_users = sorted(active_players, key=lambda user: user.win_percentage,
+        users_sorted_by_win_percentage = sorted(active_players, key=lambda user: user.win_percentage,
                               reverse=True)
-        context["top_10_by_win_percentage"] = sorted_users[:10]
+        context["top_10_by_win_percentage"] = users_sorted_by_win_percentage[:10]
         game = Game
         context["total_active_games"] = (
             game.objects.filter(game_over=False).exclude(player2=None).count()
