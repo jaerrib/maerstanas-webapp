@@ -3,7 +3,7 @@
 {% block title %}Game List{% endblock title %}
 
 {% block content %}
-<h1>Game List</h1>
+<p class="fs-2">Open Games List</p>
 <form role="search" action="{% url 'search' %}"
       class="form-inline my-2 my-lg-0">
     <div class="form-group mx-sm-3 mb-2">
@@ -24,6 +24,11 @@
         <input type="checkbox" name="private_games" value="1"
                class="form-check-input">
         <label class="form-check-label">Private Games Only</label>
+    </div>
+    <div class="form-group mx-sm-3 mb-2 form-check">
+        <input type="checkbox" name="similar_player_rating" value="1"
+               class="form-check-input">
+        <label class="form-check-label">Similar Player Rating (+/- 200)</label>
     </div>
     <button type="submit" class="btn btn-primary ms-3 mb-2">Search</button>
 </form>

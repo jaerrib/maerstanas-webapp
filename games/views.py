@@ -225,6 +225,7 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
         special_stones = self.request.GET.get("special_stones")
         standard_scoring = self.request.GET.get("standard_scoring")
         private_games = self.request.GET.get("private_games")
+        similar_player_rating = self.request.GET.get("similar_player_rating")
         game_list = Game.objects.filter(
             Q(name__icontains=query) | Q(player1__username__icontains=query),
             game_over=False,
@@ -242,6 +243,10 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
             game_list = game_list.filter(password__isnull=False).exclude(password="")
         else:
             game_list = game_list.filter(Q(password__isnull=True) | Q(password=""))
+        if similar_player_rating:
+            user_rating = self.request.user.rating
+            game_list = game_list.filter(
+                Q(player1__rating__gte=user_rating - 200) & Q(player1__rating__lte=user_rating + 200))
         return game_list
 
 
