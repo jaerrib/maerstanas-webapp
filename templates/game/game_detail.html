@@ -13,36 +13,41 @@
     </div>
     <div class="col">
         <!--Score section-->
-        <p class="fs-3">
+        <div class="row row-cols-1 row-cols-lg-2 justify-content-evenly fs-3">
             {% if game.active_player == 1 %}
-            <img src="{% gravatar_url game.player1.email 50 %}"
-                 class="img-fluid bg-body-tertiary rounded-circle "
-                 alt="{{game.player1.username}}'s Gravatar">
-            <span class="fw-bold">
-                <a href="{{ game.player1.get_absolute_url }}">
-                {{ game.player1 }}</a></span> ({{ game.score_p1 }})
-            vs
-            <img src="{% gravatar_url game.player2.email 50 %}"
-                 class="img-fluid bg-body-tertiary rounded-circle "
-                 alt="{{game.player2.username}}'s Gravatar">
-            <a href="{{ game.player2.get_absolute_url }}">
-                {{ game.player2 }}</a> ({{ game.score_p2 }})
+            <div class="col">
+                <img src="{% gravatar_url game.player1.email 50 %}"
+                     class="img-fluid bg-body-tertiary rounded-circle "
+                     alt="{{game.player1.username}}'s Gravatar">
+                <span class="fw-bold">
+                    <a href="{{ game.player1.get_absolute_url }}">
+                    {{ game.player1 }}</a></span> ({{ game.score_p1 }})
+            </div>
+            <div class="col">
+                <img src="{% gravatar_url game.player2.email 50 %}"
+                     class="img-fluid bg-body-tertiary rounded-circle "
+                     alt="{{game.player2.username}}'s Gravatar">
+                <a href="{{ game.player2.get_absolute_url }}">
+                    {{ game.player2 }}</a> ({{ game.score_p2 }})
+            </div>
             {% else %}
-            <img src="{% gravatar_url game.player1.email 50 %}"
-                 class="img-fluid bg-body-tertiary rounded-circle "
-                 alt="{{game.player1.username}}'s Gravatar">
-            <a href="{{ game.player1.get_absolute_url }}">
-                {{ game.player1 }}</a> ({{ game.score_p1 }})
-            vs
-            <img src="{% gravatar_url game.player2.email 50 %}"
-                 class="img-fluid bg-body-tertiary rounded-circle "
-                 alt="{{game.player2.username}}'s Gravatar">
-            <span class="fw-bold">
+            <div class="col">
+                <img src="{% gravatar_url game.player1.email 50 %}"
+                     class="img-fluid bg-body-tertiary rounded-circle "
+                     alt="{{game.player1.username}}'s Gravatar">
+                <a href="{{ game.player1.get_absolute_url }}">
+                    {{ game.player1 }}</a> ({{ game.score_p1 }})
+            </div>
+            <div class="col">
+                <img src="{% gravatar_url game.player2.email 50 %}"
+                     class="img-fluid bg-body-tertiary rounded-circle "
+                     alt="{{game.player2.username}}'s Gravatar">
+                <span class="fw-bold">
             <a href="{{ game.player2.get_absolute_url }}">
                 {{ game.player2 }}</a></span> ({{ game.score_p2 }})
+            </div>
             {% endif %}
-        </p>
-
+        </div>
     </div>
 </div>
 <hr class="mt-2 mb-5">
@@ -102,49 +107,59 @@
     </div>
     <div class="col">
         <!--Rule section-->
-        <div class="fs-4">
-            Special Stones -
-            {% if game.using_special_stones %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-toggle-on"
-                 viewBox="0 0 16 16">
-                <title>Toggle On Icon</title>
-                <desc>This icon represents a toggle switch in the 'on' position
-                    showing that special stones are active.
-                </desc>
-                <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
-            </svg>
-            {% else %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-toggle-off"
-                 viewBox="0 0 16 16">
-                <title>Toggle Off Icon</title>
-                <desc>This icon represents a toggle switch in the 'off' position
-                    showing that special stones are not active.
-                </desc>
-                <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
-            </svg>
-            {% endif %}
-            <span class="ps-3">
-            Standard Scoring -
-            {% if game.using_standard_scoring %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-toggle-on"
-                 viewBox="0 0 16 16">
-                <title>Toggle On Icon</title>
-                <desc>This icon represents a toggle switch in the 'on' position showing that standard scoring is in use for this game.</desc>
-                <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
-            </svg>
-            {% else %}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-toggle-off"
-                 viewBox="0 0 16 16">
-                <title>Toggle Off Icon</title>
-                <desc>This icon represents a toggle switch in the 'off' position showing that simple scoring is in use for this game.</desc>
-                <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
-            </svg>
-            {% endif %}
-            </span>
+        <div class="row row-cols-1 row-cols-lg-2 justify-content-between fs-5 mt-3 mt-lg-0">
+            <div class="col">
+                Special Stones -
+                {% if game.using_special_stones %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-toggle-on"
+                     viewBox="0 0 16 16">
+                    <title>Toggle On Icon</title>
+                    <desc>This icon represents a toggle switch in the 'on'
+                        position
+                        showing that special stones are active.
+                    </desc>
+                    <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+                </svg>
+                {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-toggle-off"
+                     viewBox="0 0 16 16">
+                    <title>Toggle Off Icon</title>
+                    <desc>This icon represents a toggle switch in the 'off'
+                        position
+                        showing that special stones are not active.
+                    </desc>
+                    <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
+                </svg>
+                {% endif %}
+            </div>
+            <div class="col">
+                Standard Scoring -
+                {% if game.using_standard_scoring %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-toggle-on"
+                     viewBox="0 0 16 16">
+                    <title>Toggle On Icon</title>
+                    <desc>This icon represents a toggle switch in the 'on'
+                        position showing that standard scoring is in use for
+                        this game.
+                    </desc>
+                    <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+                </svg>
+                {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-toggle-off"
+                     viewBox="0 0 16 16">
+                    <title>Toggle Off Icon</title>
+                    <desc>This icon represents a toggle switch in the 'off'
+                        position showing that simple scoring is in use for this
+                        game.
+                    </desc>
+                    <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
+                </svg>
+                {% endif %}
+            </div>
         </div>
         <!--Move list section-->
         <div id="moveList"
