@@ -5,8 +5,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from game_messages.models import SystemNotice
 from games.logic import game_rules
@@ -246,7 +251,9 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
         if similar_player_rating:
             user_rating = self.request.user.rating
             game_list = game_list.filter(
-                Q(player1__rating__gte=user_rating - 200) & Q(player1__rating__lte=user_rating + 200))
+                Q(player1__rating__gte=user_rating - 200)
+                & Q(player1__rating__lte=user_rating + 200)
+            )
         return game_list
 
 
