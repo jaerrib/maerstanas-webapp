@@ -79,10 +79,16 @@ class PlayerSearchResultsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("search")
+        similar_player_rating = self.request.GET.get("similar_player_rating")
+
+
         if query:
             player_list = get_user_model().objects.filter(
-                Q(username__icontains=query), is_active=True
+                Q(username__icontains=query) & Q(is_active=True)
             )
         else:
-            player_list = get_user_model().objects.none()
+            player_list = get_user_model().objects.all()
+        if similar_player_rating:
+            user_rating = self.request.user.rating
+            player_list = player_list.filter(Q(rating__gte=user_rating - 200) & Q(rating__lte=user_rating + 200))
         return player_list
