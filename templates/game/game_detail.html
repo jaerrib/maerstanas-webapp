@@ -71,7 +71,7 @@
             <div class="square">{{row}}</div>
             {% for col in 1|range_filter:8 %}
             <a href="{% url 'process_move' pk=game.id stone=request.session.active_stone row=row col=col %}">
-                <div class="square bg-secondary border border-secondary-subtle">
+                <div class="square board">
                     {% with row_cells=game.gameboard.data|index:row %}
                     {% with cell=row_cells|index:col %}
                     <!-- cell.0 is the player number and cell.1 is the stone type -->

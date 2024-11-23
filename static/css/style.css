@@ -13,6 +13,23 @@
     text-align: center;
 }
 
+.square.board {
+    background-color: var(--bs-secondary);
+    border: 1px solid var(--bs-secondary-border-subtle)
+}
+
+.square.board:hover {
+    background-color: var(--bs-primary);
+}
+
+.stone.dark:hover {
+    filter: brightness(1.5);
+}
+
+.stone.light:hover {
+    filter: brightness(0.75);
+}
+
 .score {
     font-size: 1em;
 }

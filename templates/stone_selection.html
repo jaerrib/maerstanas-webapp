@@ -6,11 +6,11 @@
         {% if request.session.active_stone == 1 and game.active_player == 1 %}
         <a href="{% url 'select_stone' pk=game.id stone=1 %}"><img
                 src="{% static 'images/dark_stone.svg' %}"
-                class="stone stone-selected" alt="dark stone"></a>
+                class="stone dark stone-selected" alt="dark stone"></a>
         {% else %}
         <a href="{% url 'select_stone' pk=game.id stone=1 %}"><img
                 src="{% static 'images/dark_stone.svg' %}"
-                class="stone" alt="dark stone"></a>
+                class="stone dark" alt="dark stone"></a>
         {% endif %}
     </div>
 
@@ -18,11 +18,11 @@
         {% if request.session.active_stone == 2 and game.active_player == 1 %}
         <a href="{% url 'select_stone' pk=game.id stone=2 %}"><img
                 src="{% static 'images/dark_thunder_stone.svg' %}"
-                class="stone stone-selected" alt="dark thunder stone"></a>
+                class="stone dark stone-selected" alt="dark thunder stone"></a>
         {% elif game.p1_has_thunder_stone %}
         <a href="{% url 'select_stone' pk=game.id stone=2 %}"><img
                 src="{% static 'images/dark_thunder_stone.svg' %}"
-                class="stone" alt="dark thunder stone"></a>
+                class="stone dark" alt="dark thunder stone"></a>
         {% else %}
         <img src="{% static 'images/dark_thunder_stone.svg' %}"
              class="stone stone-disabled" alt="dark thunder stone">
@@ -33,11 +33,11 @@
         {% if request.session.active_stone == 3 and game.active_player == 1 %}
         <a href="{% url 'select_stone' pk=game.id stone=3 %}"><img
                 src="{% static 'images/dark_woden_stone.svg' %}"
-                class="stone stone-selected" alt="dark Woden stone"></a>
+                class="stone dark stone-selected" alt="dark Woden stone"></a>
         {% elif game.p1_has_woden_stone %}
         <a href="{% url 'select_stone' pk=game.id stone=3 %}"><img
                 src="{% static 'images/dark_woden_stone.svg' %}"
-                class="stone stone" alt="dark Woden stone"></a>
+                class="stone dark stone" alt="dark Woden stone"></a>
         {% else %}
         <img src="{% static 'images/dark_woden_stone.svg' %}"
              class="stone stone-disabled" alt="dark Woden stone">
@@ -49,11 +49,11 @@
         {% if request.session.active_stone == 1 and game.active_player == 2 %}
         <a href="{% url 'select_stone' pk=game.id stone=1 %}"><img
                 src="{% static 'images/light_stone.svg' %}"
-                class="stone stone-selected" alt="light stone"></a>
+                class="stone light stone-selected" alt="light stone"></a>
         {% else %}
         <a href="{% url 'select_stone' pk=game.id stone=1 %}"><img
                 src="{% static 'images/light_stone.svg' %}"
-                class="stone" alt="light stone"></a>
+                class="stone light" alt="light stone"></a>
         {% endif %}
     </div>
 
@@ -61,11 +61,12 @@
         {% if request.session.active_stone == 2 and game.active_player == 2 %}
         <a href="{% url 'select_stone' pk=game.id stone=2 %}"><img
                 src="{% static 'images/light_thunder_stone.svg' %}"
-                class="stone stone-selected" alt="light thunder stone"></a>
+                class="stone light stone-selected"
+                alt="light thunder stone"></a>
         {% elif game.p2_has_thunder_stone %}
         <a href="{% url 'select_stone' pk=game.id stone=2 %}"><img
                 src="{% static 'images/light_thunder_stone.svg' %}"
-                class="stone" alt="light thunder stone"></a>
+                class="stone light" alt="light thunder stone"></a>
         {% else %}
         <img src="{% static 'images/light_thunder_stone.svg' %}"
              class="stone stone-disabled" alt="light thunder stone">
@@ -76,11 +77,11 @@
         {% if request.session.active_stone == 3 and game.active_player == 2 %}
         <a href="{% url 'select_stone' pk=game.id stone=3 %}"><img
                 src="{% static 'images/light_woden_stone.svg' %}"
-                class="stone stone-selected" alt="light Woden stone"></a>
+                class="stone light stone-selected" alt="light Woden stone"></a>
         {% elif game.p2_has_woden_stone %}
         <a href="{% url 'select_stone' pk=game.id stone=3 %}"><img
                 src="{% static 'images/light_woden_stone.svg' %}"
-                class="stone stone" alt="light Woden stone"></a>
+                class="stone light stone" alt="light Woden stone"></a>
         {% else %}
         <img src="{% static 'images/light_woden_stone.svg' %}"
              class="stone stone-disabled" alt="light Woden stone">
