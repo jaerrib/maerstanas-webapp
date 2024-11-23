@@ -51,6 +51,8 @@
             {% endif %}
             </span>
         </p>
+        <p class="m-0 text-secondary">Created on
+            {{ game.updated_at|date:"M j, Y" }}</p>
     </div>
     <div class="d-grid">
         <a href="{% url 'game_join' pk=game.id %}" class="btn btn-primary m-1">
