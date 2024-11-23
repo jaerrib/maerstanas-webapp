@@ -13,11 +13,12 @@
     </div>
     <div class="col">
         <!--Score section-->
+        {% if game.player2 != None %}
         <div class="row row-cols-1 row-cols-lg-2 justify-content-evenly fs-3">
             {% if game.active_player == 1 %}
             <div class="col">
                 <img src="{% gravatar_url game.player1.email 50 %}"
-                     class="img-fluid bg-body-tertiary rounded-circle "
+                     class="img-fluid bg-body-tertiary rounded-circle"
                      alt="{{game.player1.username}}'s Gravatar">
                 <span class="fw-bold">
                     <a href="{{ game.player1.get_absolute_url }}">
@@ -25,7 +26,7 @@
             </div>
             <div class="col">
                 <img src="{% gravatar_url game.player2.email 50 %}"
-                     class="img-fluid bg-body-tertiary rounded-circle "
+                     class="img-fluid bg-body-tertiary rounded-circle"
                      alt="{{game.player2.username}}'s Gravatar">
                 <a href="{{ game.player2.get_absolute_url }}">
                     {{ game.player2 }}</a> ({{ game.score_p2 }})
@@ -33,14 +34,14 @@
             {% else %}
             <div class="col">
                 <img src="{% gravatar_url game.player1.email 50 %}"
-                     class="img-fluid bg-body-tertiary rounded-circle "
+                     class="img-fluid bg-body-tertiary rounded-circle"
                      alt="{{game.player1.username}}'s Gravatar">
                 <a href="{{ game.player1.get_absolute_url }}">
                     {{ game.player1 }}</a> ({{ game.score_p1 }})
             </div>
             <div class="col">
                 <img src="{% gravatar_url game.player2.email 50 %}"
-                     class="img-fluid bg-body-tertiary rounded-circle "
+                     class="img-fluid bg-body-tertiary rounded-circle"
                      alt="{{game.player2.username}}'s Gravatar">
                 <span class="fw-bold">
             <a href="{{ game.player2.get_absolute_url }}">
@@ -48,6 +49,7 @@
             </div>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </div>
 <hr class="mt-2 mb-5">
@@ -116,8 +118,7 @@
                      viewBox="0 0 16 16">
                     <title>Toggle On Icon</title>
                     <desc>This icon represents a toggle switch in the 'on'
-                        position
-                        showing that special stones are active.
+                        position showing that special stones are active.
                     </desc>
                     <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
                 </svg>
@@ -127,8 +128,7 @@
                      viewBox="0 0 16 16">
                     <title>Toggle Off Icon</title>
                     <desc>This icon represents a toggle switch in the 'off'
-                        position
-                        showing that special stones are not active.
+                        position showing that special stones are not active.
                     </desc>
                     <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
                 </svg>
