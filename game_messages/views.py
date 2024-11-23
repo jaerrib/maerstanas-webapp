@@ -42,7 +42,7 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
     model = Invitation
     form_class = InvitationCreateForm
     template_name = "game_messages/invitation_create.html"
-    success_url = reverse_lazy("dashboard")
+    success_url = reverse_lazy("userprofile_list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,8 +76,7 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
 
 def accept_invitation(request, invitation_id):
     invitation = get_object_or_404(Invitation, id=invitation_id)
-    invitation.approved = True
-    invitation.save()
+    invitation.delete()
     message_text = f"{invitation.receiver.username} accepted your invitation."
     SystemNotice.objects.create(user=invitation.sender, message_text=message_text)
     return redirect(invitation.game.get_absolute_url())
