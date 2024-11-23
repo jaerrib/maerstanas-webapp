@@ -31,7 +31,7 @@
                     <li class="card-text">Rating: {{ player.rating }}</li>
                 </ul>
                 <p class="card-text"><small class="text-body-secondary">
-                    Last seen {{ player.last_login }}</small></p>
+                    Last seen: {{ player.last_login|date:"M j, Y" }}</small></p>
             </div>
         </div>
         {% if player != request.user %}
