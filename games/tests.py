@@ -477,7 +477,7 @@ class GameViewsTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "game/game_list.html")
-        self.assertContains(response, "Game List")
+        self.assertContains(response, "Open Games List")
         # Check to see if games created by the logged-in user do not appear in the list
         self.assertNotContains(response, "Test Game 2")
         # Check to see if games not created by the logged-in user do appear in the list
