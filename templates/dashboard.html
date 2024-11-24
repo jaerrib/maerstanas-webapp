@@ -31,18 +31,18 @@
                 <div id="collapseOne" class="accordion-collapse collapse"
                      data-bs-parent="#DashboardActions">
                     <div class="accordion-body">
+                        {% if system_notices %}
                         <a href="{% url 'delete_all_notices' %}" class="btn btn-sm btn-danger">Delete all notices</a>
                         <ul class="list-unstyled">
-                        {% if system_notices %}
                         {% for notice in system_notices %}
                         <li class="my-2">{{ notice }} - <a
                                 href="{% url 'delete_notice' notice.id %}">Delete</a>
                         </li>
                         {% endfor %}
+                        </ul>
                         {% else %}
-                        <li class="my-2">No notices</li>
+                        <p class="my-2">No notices</p>
                         {% endif %}
-                    </ul>
                     </div>
                 </div>
             </div>
@@ -98,8 +98,10 @@
                 <div id="collapseFour" class="accordion-collapse collapse"
                      data-bs-parent="#DashboardActions">
                     <div class="accordion-body">
+                        {% if total_completed_games > 0 %}
                         <a href="{% url 'game_archive_all' %}"
                            class="btn btn-sm btn-danger">Archive all games</a>
+                        {% endif %}
                         <a href="{% url 'my_archived_game_list' %}"
                            class="btn btn-sm btn-outline-secondary">
                             See archived games list</a>
