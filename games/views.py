@@ -103,9 +103,21 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             if game.player1 == self.request.user:
                 game.player1.games_abandoned += 1
                 game.player1.save()
+                message_text = (
+                    f"{game.player1.username} abandoned your game ({ game.name })."
+                )
+                SystemNotice.objects.create(
+                    user=game.player2, message_text=message_text
+                )
             if game.player2 == self.request.user:
                 game.player2.games_abandoned += 1
                 game.player2.save()
+                message_text = (
+                    f"{game.player2.username} abandoned your game ({ game.name })."
+                )
+                SystemNotice.objects.create(
+                    user=game.player1, message_text=message_text
+                )
         return super().form_valid(form)
 
 
