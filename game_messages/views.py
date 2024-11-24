@@ -76,16 +76,18 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
 
 def accept_invitation(request, invitation_id):
     invitation = get_object_or_404(Invitation, id=invitation_id)
+    message_text = f"{invitation.receiver.username} accepted your invitation ({ invitation.game.name })."
+    SystemNotice.objects.create(
+        user=invitation.sender, message_text=message_text, game=invitation.game
+    )
     invitation.delete()
-    message_text = f"{invitation.receiver.username} accepted your invitation."
-    SystemNotice.objects.create(user=invitation.sender, message_text=message_text)
     return redirect(invitation.game.get_absolute_url())
 
 
 def decline_invitation(request, invitation_id):
     invitation = get_object_or_404(Invitation, id=invitation_id)
     game = invitation.game
-    message_text = f"{invitation.receiver.username} declined your invitation."
+    message_text = f"{invitation.receiver.username} declined your invitation ({ invitation.game.name })."
     SystemNotice.objects.create(user=invitation.sender, message_text=message_text)
     invitation.delete()
     game.delete()

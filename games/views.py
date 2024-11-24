@@ -137,7 +137,7 @@ def join_open_game(request, pk):
                         f"{game.player2.username} joined your game ({ game.name })."
                     )
                     SystemNotice.objects.create(
-                        user=game.player1, message_text=message_text
+                        user=game.player1, message_text=message_text, game=game
                     )
                     return redirect("game_detail", pk=pk)
                 else:
@@ -149,7 +149,9 @@ def join_open_game(request, pk):
         game.player2 = request.user
         game.save()
         message_text = f"{game.player2.username} joined your game ({ game.name })."
-        SystemNotice.objects.create(user=game.player1, message_text=message_text)
+        SystemNotice.objects.create(
+            user=game.player1, message_text=message_text, game=game
+        )
         return redirect("game_detail", pk=pk)
 
 
@@ -180,7 +182,9 @@ def process_move(request, pk, stone, row, col):
         stones = ["standard stone", "thunder-stone", "Woden-stone"]
         played_stone = stones[stone - 1]
         message_text = f"{game.name}: {request.user.username} played {played_stone} at {convert_num_to_col(col)}{row}."
-        SystemNotice.objects.create(user=notification_user, message_text=message_text)
+        SystemNotice.objects.create(
+            user=notification_user, message_text=message_text, game=game
+        )
         game = game_rules.update_score(game)
         game = game_rules.change_player(game)
         game.game_over = game_rules.is_game_over(game)
