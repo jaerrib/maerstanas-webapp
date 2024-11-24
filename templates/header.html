@@ -16,6 +16,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'dashboard' %}">
                         My Dashboard
+                        {% if total_system_notices > 0 %}
+                        <span class="ms-1 badge rounded-pill text-bg-danger">
+                        {{ total_system_notices }}
+                      </span>
+                        {% endif %}
                     </a>
                 </li>
                 <li class="nav-item">
