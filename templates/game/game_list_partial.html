@@ -5,9 +5,17 @@
     <a href="{{ game.get_absolute_url }}">{{ game.name }}</a> -
     {{ game.player1 }} ({{ game.score_p1 }})
     vs {{ game.player2 }} ({{ game.score_p2 }})
-    <a href="{% url 'game_archive' pk=game.id %}"
-       class="btn btn-sm btn-outline-danger">
-        Archive</a>
+    <a href="{% url 'game_archive' pk=game.id %}" class="text-body">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+             fill="currentColor" class="bi bi-x-circle-fill mb-1 ms-1"
+             viewBox="0 0 16 16">
+            <title>Archive game</title>
+            <desc>This icon represents a button used to archive the associated
+                game.
+            </desc>
+            <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1M.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8z"/>
+        </svg>
+    </a>
     {% else %}
     <a href="{{ game.get_absolute_url }}">{{ game.name }}</a> -
     {% if game.active_player == 1 %}
