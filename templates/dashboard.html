@@ -17,7 +17,6 @@
                role="link">Create a Game</a>
         </div>
     </div>
-
     <div class="col">
         <div class="accordion accordion-flush" id="DashboardActions">
             <div class="accordion-item">
@@ -32,7 +31,7 @@
                 <div id="collapseOne" class="accordion-collapse collapse"
                      data-bs-parent="#DashboardActions">
                     <div class="accordion-body">
-                        <a href="" class="btn btn-sm btn-danger">Delete all notices</a>
+                        <a href="{% url 'delete_all_notices' %}" class="btn btn-sm btn-danger">Delete all notices</a>
                         <ul class="list-unstyled">
                         {% if system_notices %}
                         {% for notice in system_notices %}
@@ -47,8 +46,6 @@
                     </div>
                 </div>
             </div>
-
-
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button"
@@ -134,7 +131,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
