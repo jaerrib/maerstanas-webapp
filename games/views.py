@@ -121,6 +121,12 @@ def join_open_game(request, pk):
                 if game.check_password(form.cleaned_data["password"]):
                     game.player2 = request.user
                     game.save()
+                    message_text = (
+                        f"{game.player2.username} joined your game ({ game.name })."
+                    )
+                    SystemNotice.objects.create(
+                        user=game.player1, message_text=message_text
+                    )
                     return redirect("game_detail", pk=pk)
                 else:
                     form.add_error("password", "Incorrect password")
@@ -130,6 +136,8 @@ def join_open_game(request, pk):
     else:
         game.player2 = request.user
         game.save()
+        message_text = f"{game.player2.username} joined your game ({ game.name })."
+        SystemNotice.objects.create(user=game.player1, message_text=message_text)
         return redirect("game_detail", pk=pk)
 
 
