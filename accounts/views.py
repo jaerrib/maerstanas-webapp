@@ -91,4 +91,4 @@ class PlayerSearchResultsView(LoginRequiredMixin, ListView):
             player_list = player_list.filter(
                 Q(rating__gte=user_rating - 200) & Q(rating__lte=user_rating + 200)
             )
-        return player_list
+        return player_list.order_by("username")
