@@ -55,7 +55,8 @@
             {{ game.updated_at|date:"M j, Y" }}</p>
     </div>
     <div class="d-grid">
-        <a href="{% url 'game_join' pk=game.id %}" class="btn btn-primary m-1">
+        <a href="{% url 'game_join' pk=game.id %}"
+           class="btn btn-secondary m-1">
             {% if game.password == "" %}
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                  fill="currentColor" class="bi bi-unlock-fill"
