@@ -37,8 +37,8 @@
         {% if player != request.user %}
         <div class="d-grid">
             <a href="{% url 'invite' receiver_pk=player.id %}"
-               class="btn btn-primary m-1">
-                Invite</a>
+               class="btn btn-secondary m-1">
+                Invite to a Game</a>
         </div>
         {% endif %}
     </div>
