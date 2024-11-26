@@ -1,0 +1,103 @@
+{% block footer %}
+<footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 px-5">
+    <div class="col mb-3">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2 text-body-secondary">
+                &copy; 2024- John Beers
+            </li>
+            <li class="nav-item mb-2 text-body-secondary">
+                <span class="fs-6">v20241126</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col mb-3">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="https://codeberg.org/jaerrib/maerstanas-webapp"
+                   class="nav-link p-0 text-body-secondary">
+                    View the Source Code</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="https://www.djangoproject.com/"
+                   class="nav-link p-0 text-body-secondary">
+                    <img src="https://www.djangoproject.com/m/img/badges/djangomade124x25.gif"
+                         alt="Made with Django." title="Made with Django.">
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col mb-3">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="{% url 'home' %}"
+                                         class="nav-link p-0 text-body-secondary">Home</a>
+            </li>
+            <li class="nav-item mb-2"><a href="{% url 'dashboard' %}"
+                                         class="nav-link p-0 text-body-secondary">
+                My Dashboard</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="{% url 'game_list' %}"
+                   class="nav-link p-0 text-body-secondary">
+                    Open
+                    Games</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="{% url 'userprofile_list' %}"
+                   class="nav-link p-0 text-body-secondary">
+                    Player List</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col mb-3">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="{% url 'about' %}"
+                                         class="nav-link p-0 text-body-secondary">About</a>
+            </li>
+            <li class="nav-item mb-2"><a
+                    class="nav-link p-0 text-body-secondary"
+                    href="{% url 'privacy_policy' %}">
+                Privacy Policy</a>
+            </li>
+            <li class="nav-item mb-2"><a
+                    class="nav-link p-0 text-body-secondary"
+                    href="{% url 'terms_of_service' %}">
+                Terms of Service</a>
+            </li>
+            <li class="nav-item mb-2"><a
+                    class="nav-link p-0 text-body-secondary"
+                    href="{% url 'support' %}">
+                Support</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col mb-3">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a
+                    href="https://codeberg.org/jaerrib/maerstanas"
+                    class="nav-link p-0 text-body-secondary">Print-and-play
+                Version</a>
+            </li>
+            <li class="nav-item mb-2"><a
+                    href="https://maerstanas-python.fly.dev/"
+                    class="nav-link p-0 text-body-secondary">Python/Flask
+                Version</a>
+            </li>
+            <li class="nav-item mb-2"><a
+                    href="https://jaerrib.codeberg.page/maerstanas_js/"
+                    class="nav-link p-0 text-body-secondary">JavaScript
+                Version</a>
+            </li>
+            <li class="nav-item mb-2"><a
+                    href="https://jaerrib.codeberg.page/maerstanas/"
+                    class="nav-link p-0 text-body-secondary">Additional
+                Documentation</a>
+            </li>
+        </ul>
+    </div>
+
+</footer>
+{% endblock footer %}

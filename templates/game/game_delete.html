@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+
+{% block title %}
+{% if game.player2 is None %}
+Mǽrstánas: Delete Game ({{ game.name }})
+{% else %}
+Mǽrstánas: Abandon Game ({{ game.name }})
+{% endif %}
+{% endblock title %}
+
+{% block content %}
+
+{% if game.player2 is None %}
+<p class="fs-2">Delete Game ({{ game.name }})</p>
+<form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete this game?</p>
+    <button class="btn btn-danger" type="submit">Confirm</button>
+</form>
+{% else %}
+<p class="fs-2">Abandon Game ({{ game.name }})</p>
+<form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to abandon this game? The total number of games
+        you've abandoned is displayed in your profile.</p>
+    <button class="btn btn-danger" type="submit">Confirm</button>
+</form>
+{% endif %}
+{% endblock content %}

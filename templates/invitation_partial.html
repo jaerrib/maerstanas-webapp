@@ -1,0 +1,81 @@
+{% block content %}
+<div class="card mb-3 p-0">
+    <div class="card-header fs-5">
+        "{{ invitation.game.name }}"
+        {% if invitation.sender == request.user %}
+        sent to <a
+            href="{{ invitation.receiver.get_absolute_url }}">
+        {{ invitation.receiver.username }}</a>
+        ({{ invitation.receiver.rating }})
+        {% else %}
+        received from <a
+            href="{{ invitation.sender.get_absolute_url }}">
+        {{ invitation.sender.username }}</a>
+        ({{ invitation.sender.rating }})
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <div class="card-text">
+            Special Stones
+            {% if invitation.game.using_special_stones %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                 height="16"
+                 fill="currentColor" class="bi bi-toggle-on"
+                 viewBox="0 0 16 16">
+                <title>Toggle On Icon</title>
+                <desc>This icon represents a toggle switch in the 'on'
+                    position showing that special stones are active.
+                </desc>
+                <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+            </svg>
+            {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                 height="16"
+                 fill="currentColor" class="bi bi-toggle-off"
+                 viewBox="0 0 16 16">
+                <title>Toggle Off Icon</title>
+                <desc>This icon represents a toggle switch in the 'off'
+                    position showing that special stones are not active.
+                </desc>
+                <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
+            </svg>
+            {% endif %}
+            <span class="ps-3">
+                    Standard Scoring
+                    {% if invitation.game.using_standard_scoring %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                         height="16"
+                         fill="currentColor" class="bi bi-toggle-on"
+                         viewBox="0 0 16 16">
+                        <title>Toggle On Icon</title>
+                        <desc>This icon represents a toggle switch in the 'on' position showing that standard scoring is in use for this game.</desc>
+                        <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+                    </svg>
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                         height="16"
+                         fill="currentColor" class="bi bi-toggle-off"
+                         viewBox="0 0 16 16">
+                            <title>Toggle Off Icon</title>
+                        <desc>This icon represents a toggle switch in the 'off' position showing that simple scoring is in use for this game.</desc>
+                        <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
+                    </svg>
+            {% endif %}
+            </span>
+        </div>
+        <div class="mt-2">
+            {% if invitation.sender == request.user %}
+            <a href="{% url 'game_update' pk=invitation.game.id %}"
+               class="btn btn-sm btn-primary">Edit</a>
+            <a href="{% url 'game_delete' pk=invitation.game.id %}"
+               class="btn btn-sm btn-danger">Delete</a>
+            {% else %}
+            <a href="{% url 'accept_invitation' invitation.id %}"
+               class="btn btn-sm btn-success">Accept</a>
+            <a href="{% url 'decline_invitation' invitation.id %}"
+               class="btn btn-sm btn-danger">Decline</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

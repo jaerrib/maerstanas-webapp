@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+
+{% block title %}Mǽrstánas: My Archived Games{% endblock title %}
+
+{% block content %}
+<h1>My Archived Game List<span class="fs-5"> ({{ total_archived_games }})</span>
+</h1>
+{% if archived_games_list %}
+<ul class="list-unstyled">
+    {% for game in archived_games_list %}
+    <li class="my-2">
+        <a href="{{ game.get_absolute_url }}">{{ game.name }}</a> -
+        {{ game.player1 }} ({{ game.score_p1 }})
+        vs {{ game.player2 }} ({{ game.score_p2 }})
+        - {{ game.updated_at|date:"M j, Y" }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No archived games yet</p>
+{% endif %}
+{% endblock content %}

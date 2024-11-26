@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+
+{% block title %}Mǽrstánas: Player Profile ({{ player.username }}){% endblock title %}
+
+{% block content %}
+<p class="fs-2">Player Profile</p>
+<div class="row row-cols-1 row-cols-lg-2 justify-content-between">
+    <div class="col">
+        {% include "profile_partial.html" %}
+    </div>
+    <div class="col ps-2">
+        <p class="fs-4">Additional Details</p>
+        <hr>
+        <p class="mt-2">Active Games ({{ total_active_games }})</p>
+        <p class="mt-2">Open Game Sessions ({{ total_open_game_sessions }})</p>
+        <p class="mt-2">Invitations ({{ total_invitations }})</p>
+    </div>
+</div>
+{% endblock content %}

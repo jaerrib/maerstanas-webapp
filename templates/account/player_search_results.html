@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% load gravatar %}
+
+{% block title %}Mǽrstánas: Player Search Results{% endblock title %}
+
+{% block content %}
+<p class="fs-2">Player Search Results</p>
+<hr>
+{% if player_list %}
+<div class="row row-cols-1 row-cols-md-2 rows-cols-lg-3 justify-content-between">
+    {% for player in player_list %}
+    {% include "profile_partial.html" %}
+    {% endfor %}
+</div>
+{% else %}
+<p>No search results</p>
+{% endif %}
+{% endblock content %}

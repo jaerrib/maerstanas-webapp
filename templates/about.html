@@ -1,0 +1,134 @@
+{% extends "_base.html" %}
+
+{% block title %}Mǽrstánas: About{% endblock title %}
+
+{% block content %}
+<h1>About Mǽrstánas</h1>
+<h2>Overview</h2>
+<p>
+    <strong>Mǽrstánas</strong> is a <a
+        href="https://en.wikipedia.org/wiki/Free_software">free libre</a> <a
+        href="https://en.wikipedia.org/wiki/Open-source_software">open
+    source</a> <a href="https://en.wikipedia.org/wiki/Abstract_strategy_game">abstract
+    strategy</a> game by John Beers.
+</p>
+<p>
+    It was conceived in 2022 while working on <a
+        href="https://codeberg.org/jaerrib/oferhlyp"><strong>Oferhlýp</strong></a>.
+    As a fan of <a href="https://en.wikipedia.org/wiki/Tafl_games"
+>Hnefatafl</a>, I wanted to name my games
+    using Anglo-Saxon words to lend a quasi-historical feel to them. Both
+    <strong>Mǽrstánas</strong> and <strong>Oferhlýp</strong> utilize the same
+    7x7 grid because, if they were historical, it might make sense for people to
+    reuse an existing board, much like chess and checkers.
+</p>
+<h2>Objective</h2>
+<p>Players alternate placing stones within the squares of a 7x7 grid with the
+    goal of creating connection points ("hinges") between their own pieces or
+    the edges of the board in order to achieve the highest score.</p>
+<h2>How to Play</h2>
+<ul>
+    <li>
+        On a player's turn, the player places one stone (stán) on a square on
+        the game board.
+    </li>
+    <li>
+        Stones (<em>stánas</em>) must be placed within the square, not on the
+        intersections as in Go.
+    </li>
+    <li>
+        Stones may be placed on any empty square, either standing alone or
+        adjacent to another stone of either color (creating a heorr or "hinge").
+    </li>
+</ul>
+<h3>Passing rules</h3>
+<ul>
+    <li>
+        When playing with Special Stones, the opposing player may have viable
+        moves remaining while the active player may not. When this occurs, the
+        active player must pass.
+    </li>
+    <li>
+        If the opposing player uses a Thunder-stone, stones are removed from the
+        board so new moves may become available on the player's next turn.
+    </li>
+</ul>
+<h3>Placement limitations</h3>
+<ul>
+    <li>
+        Stones may have no more than three hinges; the fourth side must always
+        remain free.
+    </li>
+    <li>
+        Stones may not be placed such that four hinges are created immediately.
+    </li>
+    <li>
+        The edge of the board counts as one hinge; corners count as two because
+        they border two edges.
+    </li>
+    <li>
+        Play continues until no more viable moves remain.
+    </li>
+</ul>
+<h3>Thunder-stone rules</h3>
+<ul>
+    <li>
+        Players each have one thunder-stone (Þunor-stán), which may be placed on
+        the board during their turn instead of a regular stone.
+    </li>
+    <li>
+        Thunder-stones are the exception to the four hinge limitation. This is
+        because, when placed, a thunder-stone removes any and all stones
+        orthogonally adjacent to its position, whether they belong to the player
+        or the opponent.
+    </li>
+    <li>
+        Stones which have been removed from the board are returned to the
+        respective players and do not count as captures or contribute to scoring
+        in any way.
+    </li>
+    <li>
+        After placement, thunder-stones hinges and scoring are treated the same
+        as normal stones.
+    </li>
+</ul>
+<h3>Woden-stone rules</h3>
+<ul>
+    <li>
+        Players each have one Woden-stone (wóden-stán), which may be placed on
+        the board during their turn instead of a regular stone.
+    </li>
+    <li>
+        Unlike standard and thunder-stones, which are placed on an open square,
+        players use the Woden-stone to replace one of their opponent's stones
+        already on the board.
+    </li>
+    <li>
+        Being able to swap out an opponent's stone can create unique scoring and
+        blocking opportunities, so waiting to use the Woden-stone until later in
+        the game may offer greater strategic advantage.
+    </li>
+    <li>
+        After placement, Woden-stones are scored the same as normal stones.
+    </li>
+</ul>
+<h2>Scoring</h2>
+<h3>Standard</h3>
+<ul>
+    <li>
+        Players receive one point for each stone or edge that is adjacent to one
+        of their own stones (freóndlíc heorr or "friendly hinge").
+    </li>
+    <li>
+        The player with the highest score wins.
+    </li>
+    <li>
+        Note that tie games are possible.
+    </li>
+</ul>
+<h3>Simple</h3>
+<p>When playing with simple scoring, disregard scoring all edge hinges. This
+    results in a lower scoring game but may make it easier for new or younger
+    players to grasp scoring more quickly.</p>
+
+{% endblock content %}

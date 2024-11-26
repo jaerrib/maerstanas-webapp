@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+{% load gravatar %}
+
+{% block title %}Mǽrstánas: Player List{% endblock title %}
+
+{% block content %}
+<p class="fs-2">Player List</p>
+<form role="search" action="{% url 'player_search' %}" class="form-inline my-4">
+    <div class="form-group mx-sm-3 mb-2">
+        <input type="search" name="search" class="form-control"
+               placeholder="Search by username" aria-label="Search">
+    </div>
+    <div class="form-group mx-sm-3 mb-2 form-check">
+        <input type="checkbox" name="similar_player_rating" value="1"
+               class="form-check-input" aria-label="similar player rating">
+        <label class="form-check-label">Similar Player Rating (+/- 200)</label>
+    </div>
+    <button type="submit" class="btn btn-primary ms-3 mb-2">Search</button>
+</form>
+<hr>
+<div class="row row-cols-1 row-cols-md-2 rows-cols-lg-3 justify-content-between">
+    {% for player in profiles_list %}
+    {% include "profile_partial.html" %}
+    {% endfor %}
+</div>
+{% endblock content %}

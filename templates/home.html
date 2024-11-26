@@ -1,0 +1,90 @@
+{% extends "_base.html" %}
+
+{% block title %}Mǽrstánas: Home{% endblock title %}
+
+{% block content %}
+<p class="fs-2">Mǽrstánas</p>
+<hr class="my-3">
+
+<div class="row row-cols-1 row-cols-lg-2 justify-content-between">
+    <div class="col">
+        <p class="fs-5">What is Mǽrstánas?</p>
+        <p>
+            <a href="https://jaerrib.codeberg.page/maerstanas/">Mǽrstánas</a> is
+            a <a href="https://en.wikipedia.org/wiki/Free_software">free
+            libre</a> <a
+                href="https://en.wikipedia.org/wiki/Open-source_software">open
+            source</a> <a
+                href="https://en.wikipedia.org/wiki/Abstract_strategy_game">abstract
+            strategy</a> board game created in 2022 by John Beers. <a
+                href="{% url 'about' %}">Click here</a> to learn more about the
+            game and how to play.
+        </p>
+        <p class="fs-5">What does this app do?</p>
+        <p>
+            This web application (written using Python/Django) allows players to
+            enjoy asynchronous games of Mǽrstánas with people around the world.
+            Think of it like a platform that facilitates PBEM (play-by-email)
+            games. You can create public games, password-protected private
+            games, and invite players to a session. The app keeps track of your
+            win-loss record and incorporates an Elo rating system similar to the
+            one used for chess.
+        </p>
+        <p class="fs-5">Ready to play?</p>
+        <p><a href="{% url 'account_signup' %}">Sign
+            up for a free account.</a> Alternatively, learn to play against a
+            basic computer opponent or try a local game using one of the
+            predecessors of this application:</p>
+        <ul>
+            <li><a href="https://maerstanas-python.fly.dev/">Python/Flask-based
+                version</a> using the current rule set with either a local
+                player or a computer opponent that uses simulation to "decide"
+                what moves to play.
+            </li>
+            <li><a href="https://jaerrib.codeberg.page/maerstanas_js/">JavaScript-based
+                version</a> that uses a simpler rule set and a very basic
+                opponent that plays randomly without any consideration for
+                strategy <em>(good for beginners!)</em>
+            </li>
+        </ul>
+
+    </div>
+    <div class="col">
+        <div class="bg-body-tertiary p-3 rounded">
+            <p class="fs-3">Top 10 Players (by Rating)</p>
+            <ol>
+                {% for player in top_10_by_rating %}
+                <li>
+                    <a href="{{ player.get_absolute_url }}">
+                        {{ player.username }}</a> ({{ player.rating }})
+                </li>
+                {% endfor %}
+            </ol>
+            {% if player_list|length < 10 %}
+            (Currently fewer than 10 active players)
+            {% endif %}
+        </div>
+        <div class="bg-body-tertiary p-3 rounded mt-3">
+            <p class="fs-3">Top 10 Players (by Win Percentage)</p>
+            <ol>
+                {% for player in top_10_by_win_percentage %}
+                <li>
+                    <a href="{{ player.get_absolute_url }}">
+                        {{ player.username }}</a> ({{ player.win_percentage }})
+                </li>
+                {% endfor %}
+            </ol>
+            {% if player_list|length < 10 %}
+            (Currently fewer than 10 active players)
+            {% endif %}
+        </div>
+        <p class="fs-5 mt-3">There are currently <strong>
+            {{ total_active_games }}</strong> games being played by <strong>
+            {{ total_active_players }}</strong> active players.</p>
+        <p class="fs-5">There have been <strong>
+            {{ total_finished_games }}</strong> games finished since launch.</p>
+    </div>
+</div>
+{% endblock content %}
+
+

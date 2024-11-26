@@ -1,0 +1,16 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Mǽrstánas: New Game{% endblock title %}
+
+{% block content %}
+<h2>New Game</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <p>Setting a password creates a private game session which can only be
+        joined if another player knows the password. Leave the password field
+        blank to create a public game.</p>
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+{% endblock content %}

@@ -1,0 +1,85 @@
+{% block content %}
+<div class="card mb-3 p-0" style="max-width: 400px;">
+    <div class="card-header">
+        <a href="{{ game.get_absolute_url }}" class="fs-4">{{ game.name }}</a>
+    </div>
+    <div class="card-body">
+        <p class="card-title fs-5">Created by <a
+                href="{{ game.player1.get_absolute_url }}">
+            {{ game.player1.username }}</a> ({{ game.player1.rating }})</p>
+        <p class="card-text">
+            Special Stones -
+            {% if game.using_special_stones %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-toggle-on"
+                 viewBox="0 0 16 16">
+                <title>Toggle On Icon</title>
+                <desc>This icon represents a toggle switch in the 'on' position
+                    showing that special stones are active.
+                </desc>
+                <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+            </svg>
+            {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-toggle-off"
+                 viewBox="0 0 16 16">
+                <title>Toggle Off Icon</title>
+                <desc>This icon represents a toggle switch in the 'off' position
+                    showing that special stones are not active.
+                </desc>
+                <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
+            </svg>
+            {% endif %}
+            <span class="ps-3">
+            Standard Scoring -
+            {% if game.using_standard_scoring %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-toggle-on"
+                 viewBox="0 0 16 16">
+                <title>Toggle On Icon</title>
+                <desc>This icon represents a toggle switch in the 'on' position showing that standard scoring is in use for this game.</desc>
+                <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+            </svg>
+            {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-toggle-off"
+                 viewBox="0 0 16 16">
+                    <title>Toggle Off Icon</title>
+                <desc>This icon represents a toggle switch in the 'off' position showing that simple scoring is in use for this game.</desc>
+                <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
+            </svg>
+            {% endif %}
+            </span>
+        </p>
+        <p class="m-0 text-secondary">Created on
+            {{ game.updated_at|date:"M j, Y" }}</p>
+    </div>
+    <div class="d-grid">
+        <a href="{% url 'game_join' pk=game.id %}"
+           class="btn btn-secondary m-1">
+            {% if game.password == "" %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-unlock-fill mb-1 me-1"
+                 viewBox="0 0 16 16">
+                <title>An Open Lock Icon</title>
+                <desc>This icon represents a open lock, indicating that the game
+                    is public and not password protected.
+                </desc>
+                <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2"/>
+            </svg>
+            {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                 fill="currentColor" class="bi bi-lock-fill mb-1 me-1"
+                 viewBox="0 0 16 16">
+                <title>Lock Icon</title>
+                <desc>This icon represents a lock, indicating that the game is
+                    password protected.
+                </desc>
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+            </svg>
+            {% endif %}
+            Join Game</a>
+    </div>
+
+</div>
+{% endblock content %}
