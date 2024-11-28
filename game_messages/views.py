@@ -71,12 +71,16 @@ class InvitationCreateView(LoginRequiredMixin, CreateView):
         new_game = initialize_game(new_game)
         new_game.save()
         form.instance.game = new_game
+        message_text = f"{self.request.user} invited you to a game ({new_game.name}). Check your invitations to approve or deny."
+        SystemNotice.objects.create(
+            user=receiver, message_text=message_text
+        )
         return super().form_valid(form)
 
 
 def accept_invitation(request, invitation_id):
     invitation = get_object_or_404(Invitation, id=invitation_id)
-    message_text = f"{invitation.receiver.username} accepted your invitation ({ invitation.game.name })."
+    message_text = f"{invitation.receiver.username} accepted your invitation ({invitation.game.name})."
     SystemNotice.objects.create(
         user=invitation.sender, message_text=message_text, game=invitation.game
     )
@@ -87,8 +91,9 @@ def accept_invitation(request, invitation_id):
 def decline_invitation(request, invitation_id):
     invitation = get_object_or_404(Invitation, id=invitation_id)
     game = invitation.game
-    message_text = f"{invitation.receiver.username} declined your invitation ({ invitation.game.name })."
-    SystemNotice.objects.create(user=invitation.sender, message_text=message_text)
+    message_text = f"{invitation.receiver.username} declined your invitation ({invitation.game.name})."
+    SystemNotice.objects.create(user=invitation.sender,
+                                message_text=message_text)
     invitation.delete()
     game.delete()
     return redirect("dashboard")
