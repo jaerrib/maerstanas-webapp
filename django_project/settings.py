@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django_gravatar",
     # Local
     "accounts.apps.AccountsConfig",
+    "bots.apps.BotsConfig",
     "pages.apps.PagesConfig",
     "games.apps.GamesConfig",
     "game_messages.apps.GameMessagesConfig",

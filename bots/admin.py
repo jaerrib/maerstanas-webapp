@@ -1,16 +1,11 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm
-
-CustomUser = get_user_model()
+from .models import BotUser
 
 
-class CustomUserAdmin(UserAdmin):
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
-    model = CustomUser
+class BotUserAdmin(UserAdmin):
+    model = BotUser
     list_display = [
         "email",
         "username",
@@ -26,4 +21,4 @@ class CustomUserAdmin(UserAdmin):
     ]
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(BotUser, BotUserAdmin)
