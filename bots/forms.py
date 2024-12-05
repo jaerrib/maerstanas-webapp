@@ -11,12 +11,21 @@ class CheckBoxInput(forms.CheckboxInput):
 
 
 class BotGameCreateForm(ModelForm):
+    BOT_NAMES = [
+        ("Oswin", "Oswin"),
+        ("Aelfric", "Aelfric"),
+        # ("Aethelstan", "Aethelstan"),
+    ]
+    bot_name = forms.ChoiceField(choices=BOT_NAMES, required=True,
+                                 label="Opponent")
+
     class Meta:
         model = Game
         fields = [
             "name",
             "using_special_stones",
             "using_standard_scoring",
+            "bot_name",
         ]
         widgets = {
             "using_special_stones": CheckBoxInput(),
@@ -31,15 +40,14 @@ class BotGameCreateForm(ModelForm):
             game.p2_has_thunder_stone = False
             game.p2_has_woden_stone = False
 
-        # Check for existing bot user
+        bot_name = self.cleaned_data["bot_name"]
         bot_user, created = BotUser.objects.get_or_create(
-            username="Aelfric",
-            defaults={
-                "password": generate_random_password(),
-                "is_bot": True,
-                "email": "Aelfric@example.com",
-                "rating": 1000,
-            }
+            username=bot_name,
+            defaults={"password": generate_random_password(),
+                      "is_bot": True,
+                      "email": f"{bot_name}@example.com",
+                      "rating": 1000,
+                      }
         )
 
         game.player2 = bot_user
