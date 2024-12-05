@@ -100,11 +100,13 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def form_valid(self, form):
         game = self.get_object()
         if game.player2 is not None and not game.game_over:
+            if game.player2.is_bot:
+                return super().form_valid(form)
             if game.player1 == self.request.user:
                 game.player1.games_abandoned += 1
                 game.player1.save()
                 message_text = (
-                    f"{game.player1.username} abandoned your game ({ game.name })."
+                    f"{game.player1.username} abandoned your game ({game.name})."
                 )
                 SystemNotice.objects.create(
                     user=game.player2, message_text=message_text
@@ -113,7 +115,7 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
                 game.player2.games_abandoned += 1
                 game.player2.save()
                 message_text = (
-                    f"{game.player2.username} abandoned your game ({ game.name })."
+                    f"{game.player2.username} abandoned your game ({game.name})."
                 )
                 SystemNotice.objects.create(
                     user=game.player1, message_text=message_text
@@ -134,7 +136,7 @@ def join_open_game(request, pk):
                     game.player2 = request.user
                     game.save()
                     message_text = (
-                        f"{game.player2.username} joined your game ({ game.name })."
+                        f"{game.player2.username} joined your game ({game.name})."
                     )
                     SystemNotice.objects.create(
                         user=game.player1, message_text=message_text, game=game
@@ -144,11 +146,12 @@ def join_open_game(request, pk):
                     form.add_error("password", "Incorrect password")
         else:
             form = PasswordForm()
-        return render(request, "game/join_game.html", {"form": form, "game": game})
+        return render(request, "game/join_game.html",
+                      {"form": form, "game": game})
     else:
         game.player2 = request.user
         game.save()
-        message_text = f"{game.player2.username} joined your game ({ game.name })."
+        message_text = f"{game.player2.username} joined your game ({game.name})."
         SystemNotice.objects.create(
             user=game.player1, message_text=message_text, game=game
         )
@@ -163,12 +166,13 @@ def process_move(request, pk, stone, row, col):
         game = game_rules.pass_player_turn(game)
         game.save()
     elif (
-        active_game
-        and valid_move
-        and (
-            (game.active_player == 1 and game.player1 == request.user)
-            or (game.active_player == 2 and game.player2 == request.user)
-        )
+            active_game
+            and valid_move
+            and (
+                    (game.active_player == 1 and game.player1 == request.user)
+                    or (
+                            game.active_player == 2 and game.player2 == request.user)
+            )
     ):
         game = game_rules.assign_move(game, stone, row, col)
         game.moves_left_list = game_rules.remaining_standard_moves(
@@ -269,9 +273,11 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
         else:
             game_list = game_list.filter(using_standard_scoring=False)
         if private_games:
-            game_list = game_list.filter(password__isnull=False).exclude(password="")
+            game_list = game_list.filter(password__isnull=False).exclude(
+                password="")
         else:
-            game_list = game_list.filter(Q(password__isnull=True) | Q(password=""))
+            game_list = game_list.filter(
+                Q(password__isnull=True) | Q(password=""))
         if similar_player_rating:
             user_rating = self.request.user.rating
             game_list = game_list.filter(
