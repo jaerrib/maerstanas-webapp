@@ -4,151 +4,193 @@
 {% block title %}Mǽrstánas: My Dashboard{% endblock title %}
 
 {% block content %}
-<p class="fs-2">My Dashboard</p>
-<div class="row row-cols-1 row-cols-lg-2 justify-content-between">
-    <div class="col">
-        {% include "profile_partial.html" %}
-        <div>
-            <a href="{% url 'game_create' %}" class="m-1 btn btn-primary"
-               role="link">Create a Game</a>
-            <a href="{% url 'userprofile_update' %}"
-               class="m-1 btn btn-outline-secondary" role="link">Update Profile</a>
-            <a href="{% url 'userprofile_delete' %}"
-               class="m-1 btn btn-outline-danger" role="link">Delete Account</a>
+    <p class="fs-2">My Dashboard</p>
+    <div class="row row-cols-1 row-cols-lg-2 justify-content-between">
+        <div class="col">
+            {% include "profile_partial.html" %}
+            <div>
+                <a href="{% url 'game_create' %}" class="m-1 btn btn-primary"
+                   role="link">Create a Game</a>
+                <a href="{% url 'userprofile_update' %}"
+                   class="m-1 btn btn-outline-secondary" role="link">Update
+                    Profile</a>
+                <a href="{% url 'userprofile_delete' %}"
+                   class="m-1 btn btn-outline-danger" role="link">Delete
+                    Account</a>
+            </div>
+            <div class="mt-2 border p-3 rounded">
+                <p>Beta test a single-player game against an easy bot! (More
+                    functionality coming soon.)</p>
+                <a href="{% url 'bot_game_create' %}" class="btn btn-warning"
+                   role="link">Create a Bot Game</a>
+            </div>
         </div>
-    </div>
-    <div class="col">
-        <div class="accordion accordion-flush" id="DashboardActions">
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="false"
-                            aria-controls="collapseOne">
-                        System Notices ({{ total_system_notices }})
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse"
-                     data-bs-parent="#DashboardActions">
-                    <div class="accordion-body">
-                        {% if system_notices %}
-                        <a href="{% url 'delete_all_notices' %}" class="btn btn-sm btn-danger">Delete all notices</a>
-                        <ul class="list-unstyled">
-                        {% for notice in system_notices %}
-                        <li class="my-2">{{ notice }}
-                            {% if notice.game %}
-                            <a href="{% url 'game_detail' pk=notice.game.id %}" class="text-success">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-circle-fill mb-1 mx-1" viewBox="0 0 16 16">
-                                <title>Go to game</title>
-                                <desc>This icon represents a button used to go to the game associated with the notification.</desc>
-                                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
-                            </svg>Go to Game</a>
+        <div class="col">
+            <div class="accordion accordion-flush" id="DashboardActions">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne"
+                                aria-expanded="false"
+                                aria-controls="collapseOne">
+                            System Notices ({{ total_system_notices }})
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse"
+                         data-bs-parent="#DashboardActions">
+                        <div class="accordion-body">
+                            {% if system_notices %}
+                                <a href="{% url 'delete_all_notices' %}"
+                                   class="btn btn-sm btn-danger">Delete all
+                                    notices</a>
+                                <ul class="list-unstyled">
+                                    {% for notice in system_notices %}
+                                        <li class="my-2">{{ notice }}
+                                            {% if notice.game %}
+                                                <a href="{% url 'game_detail' pk=notice.game.id %}"
+                                                   class="text-success">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         width="22" height="22"
+                                                         fill="currentColor"
+                                                         class="bi bi-x-circle-fill mb-1 mx-1"
+                                                         viewBox="0 0 16 16">
+                                                        <title>Go to
+                                                            game</title>
+                                                        <desc>This icon
+                                                            represents a button
+                                                            used to go to the
+                                                            game associated with
+                                                            the notification.
+                                                        </desc>
+                                                        <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                                                    </svg>
+                                                    Go to Game</a>
+                                            {% endif %}
+                                            <a href="{% url 'delete_notice' notice.id %}"
+                                               class="text-danger">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="22" height="22"
+                                                     fill="currentColor"
+                                                     class="bi bi-x-circle-fill mb-1 mx-1"
+                                                     viewBox="0 0 16 16">
+                                                    <title>Delete
+                                                        notification</title>
+                                                    <desc>This icon represents a
+                                                        button used to delete
+                                                        the associated
+                                                        notification.
+                                                    </desc>
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                                </svg>
+                                                Delete</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p class="my-2">No notices</p>
                             {% endif %}
-                            <a href="{% url 'delete_notice' notice.id %}" class="text-danger">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-x-circle-fill mb-1 mx-1" viewBox="0 0 16 16">
-                                <title>Delete notification</title>
-                                <desc>This icon represents a button used to delete the associated notification.</desc>
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
-                            </svg>Delete</a>
-                        </li>
-                        {% endfor %}
-                        </ul>
-                        {% else %}
-                        <p class="my-2">No notices</p>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseTwo" aria-expanded="false"
-                            aria-controls="collapseTwo">
-                        Active Games ({{ total_active_games }})
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse"
-                     data-bs-parent="#DashboardActions">
-                    <div class="accordion-body">
-                        <ul class="list-unstyled">
-                            {% for game in active_games %}
-                            {% include 'game/game_list_partial.html' %}
-                            {% endfor %}
-                        </ul>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo"
+                                aria-expanded="false"
+                                aria-controls="collapseTwo">
+                            Active Games ({{ total_active_games }})
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse"
+                         data-bs-parent="#DashboardActions">
+                        <div class="accordion-body">
+                            <ul class="list-unstyled">
+                                {% for game in active_games %}
+                                    {% include 'game/game_list_partial.html' %}
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseThree" aria-expanded="false"
-                            aria-controls="collapseThree">
-                        Open game sessions ({{ total_open_game_sessions }})
-                    </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse"
-                     data-bs-parent="#DashboardActions">
-                    <div class="accordion-body">
-                        <ul class="list-unstyled">
-                            {% for game in open_game_sessions %}
-                            {% include 'game/game_list_partial.html' %}
-                            {% endfor %}
-                        </ul>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree"
+                                aria-expanded="false"
+                                aria-controls="collapseThree">
+                            Open game sessions ({{ total_open_game_sessions }})
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse"
+                         data-bs-parent="#DashboardActions">
+                        <div class="accordion-body">
+                            <ul class="list-unstyled">
+                                {% for game in open_game_sessions %}
+                                    {% include 'game/game_list_partial.html' %}
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseFour"
-                            aria-expanded="false" aria-controls="collapseFour">
-                        Completed Games ({{ total_completed_games }})
-                    </button>
-                </h2>
-                <div id="collapseFour" class="accordion-collapse collapse"
-                     data-bs-parent="#DashboardActions">
-                    <div class="accordion-body">
-                        {% if total_completed_games > 0 %}
-                        <a href="{% url 'game_archive_all' %}"
-                           class="btn btn-sm btn-secondary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-             fill="currentColor" class="bi bi-x-circle-fill mb-1 me-2"
-             viewBox="0 0 16 16">
-            <title>Archive game</title>
-            <desc>This icon represents a button used to archive the associated
-                game.
-            </desc>
-            <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1M.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8z"/>
-        </svg>Archive all games</a>
-                        {% endif %}
-                        <a href="{% url 'my_archived_game_list' %}"
-                           class="btn btn-sm btn-outline-secondary">
-                            See archived games list</a>
-                        <ul class="list-unstyled">
-                            {% for game in completed_games %}
-                            {% include 'game/game_list_partial.html' %}
-                            {% endfor %}
-                        </ul>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour"
+                                aria-expanded="false"
+                                aria-controls="collapseFour">
+                            Completed Games ({{ total_completed_games }})
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse"
+                         data-bs-parent="#DashboardActions">
+                        <div class="accordion-body">
+                            {% if total_completed_games > 0 %}
+                                <a href="{% url 'game_archive_all' %}"
+                                   class="btn btn-sm btn-secondary">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="16" height="16"
+                                         fill="currentColor"
+                                         class="bi bi-x-circle-fill mb-1 me-2"
+                                         viewBox="0 0 16 16">
+                                        <title>Archive game</title>
+                                        <desc>This icon represents a button used
+                                            to archive the associated
+                                            game.
+                                        </desc>
+                                        <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1M.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8z"/>
+                                    </svg>
+                                    Archive all games</a>
+                            {% endif %}
+                            <a href="{% url 'my_archived_game_list' %}"
+                               class="btn btn-sm btn-outline-secondary">
+                                See archived games list</a>
+                            <ul class="list-unstyled">
+                                {% for game in completed_games %}
+                                    {% include 'game/game_list_partial.html' %}
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseFive"
-                            aria-expanded="false" aria-controls="collapseFive">
-                        Invitations ({{ total_invitations }})
-                    </button>
-                </h2>
-                <div id="collapseFive" class="accordion-collapse collapse"
-                     data-bs-parent="#DashboardActions">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseFive"
+                                aria-expanded="false"
+                                aria-controls="collapseFive">
+                            Invitations ({{ total_invitations }})
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse"
+                         data-bs-parent="#DashboardActions">
                         <ul class="list-unstyled mt-3">
                             {% for invitation in invitations %}
-                            {% include "invitation_partial.html" %}
+                                {% include "invitation_partial.html" %}
                             {% endfor %}
                         </ul>
                     </div>
@@ -156,6 +198,6 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 
 {% endblock content %}
