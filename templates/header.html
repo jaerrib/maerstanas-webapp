@@ -13,6 +13,10 @@
              id="navbarNav">
             <ul class="navbar-nav nav-underline">
                 {% if user.is_authenticated %}
+                <li>
+                <a href="{% url 'bot_game_create' %}" class="btn btn-sm btn-warning mt-1"
+                   role="link">Create a Bot Game (Beta)</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'dashboard' %}">
                         My Dashboard
