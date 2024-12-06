@@ -13,6 +13,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from bots.bot import play_computer_move
 from game_messages.models import SystemNotice
 from games.logic import game_rules
 from games.logic.game_rules import convert_num_to_col
@@ -178,20 +179,23 @@ def process_move(request, pk, stone, row, col):
         game.moves_left_list = game_rules.remaining_standard_moves(
             game.gameboard["data"]
         )
-        # Add system notification for other player
-        if game.active_player == 1:
-            notification_user = game.player2
-        else:
-            notification_user = game.player1
-        stones = ["standard stone", "thunder-stone", "Woden-stone"]
-        played_stone = stones[stone - 1]
-        message_text = f"{game.name}: {request.user.username} played {played_stone} at {convert_num_to_col(col)}{row}."
-        SystemNotice.objects.create(
-            user=notification_user, message_text=message_text, game=game
-        )
-        game = game_rules.update_score(game)
+        # Add system notification for other human opponent
+        if not game.player2.is_bot:
+            if game.active_player == 1:
+                notification_user = game.player2
+            else:
+                notification_user = game.player1
+            stones = ["standard stone", "thunder-stone", "Woden-stone"]
+            played_stone = stones[stone - 1]
+            message_text = f"{game.name}: {request.user.username} played {played_stone} at {convert_num_to_col(col)}{row}."
+            SystemNotice.objects.create(
+                user=notification_user, message_text=message_text, game=game
+            )
         game = game_rules.change_player(game)
         game.game_over = game_rules.is_game_over(game)
+        if game.player2.is_bot and not game.game_over:
+            game = play_computer_move(game)
+        game = game_rules.update_score(game)
         if game.game_over:
             game = complete_game(game)
         game.save()

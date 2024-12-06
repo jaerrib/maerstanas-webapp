@@ -13,7 +13,7 @@ class CheckBoxInput(forms.CheckboxInput):
 class BotGameCreateForm(ModelForm):
     BOT_NAMES = [
         ("Oswin", "Oswin"),
-        ("Aelfric", "Aelfric"),
+        # ("Aelfric", "Aelfric"),
         # ("Aethelstan", "Aethelstan"),
     ]
     bot_name = forms.ChoiceField(choices=BOT_NAMES, required=True,
@@ -23,18 +23,21 @@ class BotGameCreateForm(ModelForm):
         model = Game
         fields = [
             "name",
-            "using_special_stones",
+            # "using_special_stones",
             "using_standard_scoring",
             "bot_name",
         ]
         widgets = {
-            "using_special_stones": CheckBoxInput(),
+            # "using_special_stones": CheckBoxInput(),
             "using_standard_scoring": CheckBoxInput(),
         }
 
     def save(self, commit=True):
         game = super().save(commit=False)
-        if not self.cleaned_data["using_special_stones"]:
+        game.using_special_stones = False
+
+        # if not self.cleaned_data["using_special_stones"]:
+        if not game.using_special_stones:
             game.p1_has_thunder_stone = False
             game.p1_has_woden_stone = False
             game.p2_has_thunder_stone = False
