@@ -12,8 +12,7 @@ def generate_random_password(length=12):
 
 def play_computer_move(game_state):
     if not game_state.game_over and game_rules.player_must_pass(game_state):
-        game = game_rules.pass_player_turn(game_state)
-        game.save()
+        game_state = game_rules.pass_player_turn(game_state)
     else:
         comp_move = secrets.choice(game_state.moves_left_list)
         row, col = comp_move[0], comp_move[1]
@@ -24,4 +23,4 @@ def play_computer_move(game_state):
         )
         game_state = game_rules.change_player(game_state)
         game_state.game_over = game_rules.is_game_over(game_state)
-        return game_state
+    return game_state
