@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     games_tied = models.IntegerField(default=0)
     games_abandoned = models.IntegerField(default=0)
     rating = models.FloatField(default=1000)
+    is_bot = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse("userprofile_detail", args=[str(self.id)])

@@ -22,6 +22,7 @@ class CustomUserAdmin(UserAdmin):
         "win_percentage",
         "games_abandoned",
         "rating",
+        "is_bot",
     ]
 
 
