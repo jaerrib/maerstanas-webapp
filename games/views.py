@@ -5,8 +5,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from bots.bot import play_computer_move
 from game_messages.models import SystemNotice
@@ -233,7 +238,7 @@ def update_stats_and_ratings(game):
     player2.save()
 
 
-def update_ratings(winner, loser=None, tie=False):
+def update_ratings(winner, loser, tie=False):
     k = 32
     if tie:
         rating_diff = abs(winner.rating - loser.rating)
@@ -246,7 +251,7 @@ def update_ratings(winner, loser=None, tie=False):
         expected_score_winner = 1 / (1 + pow(10, rating_diff / 400))
         expected_score_loser = 1 - expected_score_winner
         winner.rating += k * (1 - expected_score_winner)
-        loser.rating += k * (0 - expected_score_loser)
+        loser.rating -= k * expected_score_loser
 
 
 class GameSearchResultsView(LoginRequiredMixin, ListView):
