@@ -233,7 +233,8 @@ def update_stats_and_ratings(game):
         player1.games_tied += 1
         player2.games_tied += 1
         update_ratings(winner=player1, loser=player2, tie=True)
-    player1.save()
+    if not game.player2.is_bot:
+        player1.save()
     player2.save()
 
 
