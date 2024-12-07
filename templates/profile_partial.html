@@ -28,7 +28,7 @@
                     <li class="card-text">
                         Games abandoned: {{ player.games_abandoned }}
                     </li>
-                    <li class="card-text">Rating: {{ player.rating }}</li>
+                    <li class="card-text">Rating: {{ player.display_rating }}</li>
                 </ul>
                 <p class="card-text"><small class="text-body-secondary">
                     Last seen: {{ player.last_login|date:"M j, Y" }}</small></p>

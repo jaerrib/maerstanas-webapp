@@ -29,5 +29,9 @@ class CustomUser(AbstractUser):
         total_games = self.games_played
         winning_games = self.games_won or 0
         if total_games == 0:
-            return 0
+            return 0.0
         return (winning_games / total_games) * 100
+
+    @property
+    def display_rating(self):
+        return int(self.rating)

@@ -56,7 +56,7 @@
                 {% for player in top_10_by_rating %}
                 <li>
                     <a href="{{ player.get_absolute_url }}">
-                        {{ player.username }}</a> ({{ player.rating }})
+                        {{ player.username }}</a> ({{ player.display_rating }})
                 </li>
                 {% endfor %}
             </ol>
