@@ -46,11 +46,12 @@ class BotGameCreateForm(ModelForm):
         bot_name = self.cleaned_data["bot_name"]
         bot_user, created = BotUser.objects.get_or_create(
             username=bot_name,
-            defaults={"password": generate_random_password(),
-                      "is_bot": True,
-                      "email": f"{bot_name}@example.com",
-                      "rating": 1000,
-                      }
+            defaults={
+                "password": generate_random_password(),
+                "is_bot": True,
+                "email": f"{bot_name}@example.com",
+                "rating": 1000,
+            },
         )
 
         game.player2 = bot_user

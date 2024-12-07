@@ -1,10 +1,19 @@
 from django.urls import path
 
-from .views import (GameCreateView, GameDeleteView, GameDetailView,
-                    GameListView, GameSearchResultsView, GameUpdateView,
-                    MyArchivedGameListView, archive_all_finished_games,
-                    archive_finished_game, join_open_game, process_move,
-                    stone_selector)
+from .views import (
+    GameCreateView,
+    GameDeleteView,
+    GameDetailView,
+    GameListView,
+    GameSearchResultsView,
+    GameUpdateView,
+    MyArchivedGameListView,
+    archive_all_finished_games,
+    archive_finished_game,
+    join_open_game,
+    process_move,
+    stone_selector,
+)
 
 urlpatterns = [
     path("game_list/", GameListView.as_view(), name="game_list"),
