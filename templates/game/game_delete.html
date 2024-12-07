@@ -22,7 +22,8 @@ Mǽrstánas: Abandon Game ({{ game.name }})
 <form method="post">
     {% csrf_token %}
     <p>Are you sure you want to abandon this game? The total number of games
-        you've abandoned is displayed in your profile.</p>
+        you've abandoned is displayed in your profile. (Games versus bots do not count
+        towards this total.)</p>
     <button class="btn btn-danger" type="submit">Confirm</button>
 </form>
 {% endif %}

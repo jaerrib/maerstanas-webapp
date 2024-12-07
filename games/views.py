@@ -5,14 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
+from bots.bot import play_computer_move
 from game_messages.models import SystemNotice
 from games.logic import game_rules
 from games.logic.game_rules import convert_num_to_col
@@ -100,11 +96,13 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def form_valid(self, form):
         game = self.get_object()
         if game.player2 is not None and not game.game_over:
+            if game.player2.is_bot:
+                return super().form_valid(form)
             if game.player1 == self.request.user:
                 game.player1.games_abandoned += 1
                 game.player1.save()
                 message_text = (
-                    f"{game.player1.username} abandoned your game ({ game.name })."
+                    f"{game.player1.username} abandoned your game ({game.name})."
                 )
                 SystemNotice.objects.create(
                     user=game.player2, message_text=message_text
@@ -113,7 +111,7 @@ class GameDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
                 game.player2.games_abandoned += 1
                 game.player2.save()
                 message_text = (
-                    f"{game.player2.username} abandoned your game ({ game.name })."
+                    f"{game.player2.username} abandoned your game ({game.name})."
                 )
                 SystemNotice.objects.create(
                     user=game.player1, message_text=message_text
@@ -134,7 +132,7 @@ def join_open_game(request, pk):
                     game.player2 = request.user
                     game.save()
                     message_text = (
-                        f"{game.player2.username} joined your game ({ game.name })."
+                        f"{game.player2.username} joined your game ({game.name})."
                     )
                     SystemNotice.objects.create(
                         user=game.player1, message_text=message_text, game=game
@@ -144,11 +142,12 @@ def join_open_game(request, pk):
                     form.add_error("password", "Incorrect password")
         else:
             form = PasswordForm()
-        return render(request, "game/join_game.html", {"form": form, "game": game})
+        return render(request, "game/join_game.html",
+                      {"form": form, "game": game})
     else:
         game.player2 = request.user
         game.save()
-        message_text = f"{game.player2.username} joined your game ({ game.name })."
+        message_text = f"{game.player2.username} joined your game ({game.name})."
         SystemNotice.objects.create(
             user=game.player1, message_text=message_text, game=game
         )
@@ -163,31 +162,35 @@ def process_move(request, pk, stone, row, col):
         game = game_rules.pass_player_turn(game)
         game.save()
     elif (
-        active_game
-        and valid_move
-        and (
-            (game.active_player == 1 and game.player1 == request.user)
-            or (game.active_player == 2 and game.player2 == request.user)
-        )
+            active_game
+            and valid_move
+            and (
+                    (game.active_player == 1 and game.player1 == request.user)
+                    or (
+                            game.active_player == 2 and game.player2 == request.user)
+            )
     ):
         game = game_rules.assign_move(game, stone, row, col)
         game.moves_left_list = game_rules.remaining_standard_moves(
             game.gameboard["data"]
         )
-        # Add system notification for other player
-        if game.active_player == 1:
-            notification_user = game.player2
-        else:
-            notification_user = game.player1
-        stones = ["standard stone", "thunder-stone", "Woden-stone"]
-        played_stone = stones[stone - 1]
-        message_text = f"{game.name}: {request.user.username} played {played_stone} at {convert_num_to_col(col)}{row}."
-        SystemNotice.objects.create(
-            user=notification_user, message_text=message_text, game=game
-        )
-        game = game_rules.update_score(game)
+        # Add system notification for other human opponent
+        if not game.player2.is_bot:
+            if game.active_player == 1:
+                notification_user = game.player2
+            else:
+                notification_user = game.player1
+            stones = ["standard stone", "thunder-stone", "Woden-stone"]
+            played_stone = stones[stone - 1]
+            message_text = f"{game.name}: {request.user.username} played {played_stone} at {convert_num_to_col(col)}{row}."
+            SystemNotice.objects.create(
+                user=notification_user, message_text=message_text, game=game
+            )
         game = game_rules.change_player(game)
         game.game_over = game_rules.is_game_over(game)
+        if game.player2.is_bot and not game.game_over:
+            game = play_computer_move(game)
+        game = game_rules.update_score(game)
         if game.game_over:
             game = complete_game(game)
         game.save()
@@ -225,7 +228,8 @@ def update_stats_and_ratings(game):
         player1.games_tied += 1
         player2.games_tied += 1
         update_ratings(winner=player1, loser=player2, tie=True)
-    player1.save()
+    if not game.player2.is_bot:
+        player1.save()
     player2.save()
 
 
@@ -269,9 +273,11 @@ class GameSearchResultsView(LoginRequiredMixin, ListView):
         else:
             game_list = game_list.filter(using_standard_scoring=False)
         if private_games:
-            game_list = game_list.filter(password__isnull=False).exclude(password="")
+            game_list = game_list.filter(password__isnull=False).exclude(
+                password="")
         else:
-            game_list = game_list.filter(Q(password__isnull=True) | Q(password=""))
+            game_list = game_list.filter(
+                Q(password__isnull=True) | Q(password=""))
         if similar_player_rating:
             user_rating = self.request.user.rating
             game_list = game_list.filter(
