@@ -1,52 +1,59 @@
 {% block content %}
-{% load gravatar %}
-<div class="card mb-3" style="max-width: 540px;">
-    <div class="row g-0">
-        <div class="col-md-4 text-center pt-3">
-            <img src="{% gravatar_url player.email 150 %}"
-                 class="img-fluid bg-body-tertiary rounded-circle "
-                 alt="{{profile.username}}'s Gravatar">
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-                <p class="fs-5 card-title">
-                    <a href="{{ player.get_absolute_url }}">
-                        {{ player.username }}</a></p>
-                <ul class="list-unstyled">
-                    <li class="card-text">
-                        Record (W-L-T):
-                        {{ player.games_won }}
-                        -{{ player.games_lost }}
-                        -{{ player.games_tied }}
-                    </li>
-                    <li class="card-text">
-                        Total games played: {{ player.games_played }}
-                    </li>
-                    <li class="card-text">
-                        Win percentage: {{ player.win_percentage }}
-                    </li>
-                    <li class="card-text">
-                        Games abandoned: {{ player.games_abandoned }}
-                    </li>
-                    <li class="card-text">Rating: {{ player.display_rating }}</li>
-                </ul>
-                <p class="card-text"><small class="text-body-secondary">
-                    Last seen: {{ player.last_login|date:"M j, Y" }}</small></p>
+    {% load gravatar %}
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4 text-center pt-3">
+                <img src="{% gravatar_url player.email 150 %}"
+                     class="img-fluid bg-body-tertiary rounded-circle "
+                     alt="{{ profile.username }}'s Gravatar">
             </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <p class="fs-5 card-title">
+                        <a href="{{ player.get_absolute_url }}">
+                            {{ player.username }}</a>
+                    {%  if player.is_bot %}
+                        (bot)
+                    {% endif %}
+                    </p>
+                    <ul class="list-unstyled">
+                        <li class="card-text">
+                            Record (W-L-T):
+                            {{ player.games_won }}
+                            -{{ player.games_lost }}
+                            -{{ player.games_tied }}
+                        </li>
+                        <li class="card-text">
+                            Total games played: {{ player.games_played }}
+                        </li>
+                        <li class="card-text">
+                            Win percentage: {{ player.win_percentage }}
+                        </li>
+                        <li class="card-text">
+                            Games abandoned: {{ player.games_abandoned }}
+                        </li>
+                        <li class="card-text">
+                            Rating: {{ player.display_rating }}</li>
+                    </ul>
+                    <p class="card-text"><small class="text-body-secondary">
+                        Last seen: {{ player.last_login|date:"M j, Y" }}</small>
+                    </p>
+                </div>
+            </div>
+            {% if player != request.user  and not player.is_bot %}
+                <div class="d-grid">
+                    <a href="{% url 'invite' receiver_pk=player.id %}"
+                       class="btn btn-secondary m-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                             height="16"
+                             fill="currentColor"
+                             class="bi bi-calendar-event-fill mb-1 me-1"
+                             viewBox="0 0 16 16">
+                            <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"/>
+                        </svg>
+                        Invite to a Game</a>
+                </div>
+            {% endif %}
         </div>
-        {% if player != request.user %}
-        <div class="d-grid">
-            <a href="{% url 'invite' receiver_pk=player.id %}"
-               class="btn btn-secondary m-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                     fill="currentColor"
-                     class="bi bi-calendar-event-fill mb-1 me-1"
-                     viewBox="0 0 16 16">
-                    <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5"/>
-                </svg>
-                Invite to a Game</a>
-        </div>
-        {% endif %}
     </div>
-</div>
 {% endblock content %}
