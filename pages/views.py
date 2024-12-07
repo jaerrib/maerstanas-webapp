@@ -14,17 +14,21 @@ class HomePageView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         User = get_user_model()
-        active_players = User.objects.filter(is_active=True)
+        active_players = User.objects.filter(is_active=True).exclude(
+            is_bot=True)
         context["top_10_by_rating"] = active_players.order_by("-rating")[:10]
         context["total_active_players"] = active_players.count()
-        users_sorted_by_win_percentage = sorted(active_players, key=lambda user: user.win_percentage,
-                              reverse=True)
-        context["top_10_by_win_percentage"] = users_sorted_by_win_percentage[:10]
+        users_sorted_by_win_percentage = sorted(
+            active_players, key=lambda user: user.win_percentage, reverse=True
+        )
+        context["top_10_by_win_percentage"] = users_sorted_by_win_percentage[
+                                              :10]
         game = Game
         context["total_active_games"] = (
             game.objects.filter(game_over=False).exclude(player2=None).count()
         )
-        context["total_finished_games"] = game.objects.filter(game_over=True).count()
+        context["total_finished_games"] = game.objects.filter(
+            game_over=True).count()
         return context
 
 
@@ -61,7 +65,8 @@ class DashboardPageView(LoginRequiredMixin, DetailView):
             | Q(player2=user, is_archived_for_p2=False)
         )
 
-        active_games = participating_games.exclude(player2=None).filter(game_over=False)
+        active_games = participating_games.exclude(player2=None).filter(
+            game_over=False)
         context["active_games"] = active_games.order_by("-updated_at")
         context["total_active_games"] = active_games.count()
 
@@ -69,8 +74,10 @@ class DashboardPageView(LoginRequiredMixin, DetailView):
         context["completed_games"] = completed_games.order_by("-updated_at")
         context["total_completed_games"] = completed_games.count()
 
-        open_game_sessions = participating_games.filter(Q(player1=user, player2=None))
-        context["open_game_sessions"] = open_game_sessions.order_by("-updated_at")
+        open_game_sessions = participating_games.filter(
+            Q(player1=user, player2=None))
+        context["open_game_sessions"] = open_game_sessions.order_by(
+            "-updated_at")
         context["total_open_game_sessions"] = open_game_sessions.count()
 
         invitations = Invitation.objects.filter(
