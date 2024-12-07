@@ -13,7 +13,7 @@ class CheckBoxInput(forms.CheckboxInput):
 class BotGameCreateForm(ModelForm):
     BOT_NAMES = [
         ("Oswin", "Oswin"),
-        # ("Aelfric", "Aelfric"),
+        ("Aelfric", "Aelfric"),
         # ("Aethelstan", "Aethelstan"),
     ]
     bot_name = forms.ChoiceField(choices=BOT_NAMES, required=True,
