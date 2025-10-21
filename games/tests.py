@@ -23,7 +23,6 @@ class GamesTestCase(TestCase):
         cls.player1.delete()
 
     def setUp(self):
-
         self.game = Game.objects.create(
             name="Test Game",
             player1=self.player1,
@@ -31,15 +30,24 @@ class GamesTestCase(TestCase):
         self.game = game_rules.initialize_game(self.game)
 
         self.game.gameboard["data"] = [
-            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
-            [[3, 3], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [2, 1], [3, 3]],
-            [[3, 3], [0, 0], [1, 1], [1, 1], [1, 1], [2, 1], [2, 1], [2, 1], [3, 3]],
-            [[3, 3], [0, 0], [1, 1], [1, 1], [0, 0], [0, 0], [2, 1], [0, 0], [3, 3]],
-            [[3, 3], [1, 1], [0, 0], [2, 2], [0, 0], [2, 1], [1, 1], [1, 1], [3, 3]],
-            [[3, 3], [0, 0], [1, 1], [2, 1], [2, 1], [0, 0], [0, 0], [0, 0], [3, 3]],
-            [[3, 3], [0, 0], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0], [0, 0], [3, 3]],
-            [[3, 3], [2, 1], [2, 1], [0, 0], [1, 1], [2, 1], [1, 1], [0, 0], [3, 3]],
-            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3],
+             [3, 3]],
+            [[3, 3], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [2, 1],
+             [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [1, 1], [1, 1], [2, 1], [2, 1], [2, 1],
+             [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [1, 1], [0, 0], [0, 0], [2, 1], [0, 0],
+             [3, 3]],
+            [[3, 3], [1, 1], [0, 0], [2, 2], [0, 0], [2, 1], [1, 1], [1, 1],
+             [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [2, 1], [2, 1], [0, 0], [0, 0], [0, 0],
+             [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [0, 0], [1, 1], [0, 0], [0, 0], [0, 0],
+             [3, 3]],
+            [[3, 3], [2, 1], [2, 1], [0, 0], [1, 1], [2, 1], [1, 1], [0, 0],
+             [3, 3]],
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3],
+             [3, 3]],
         ]
 
     def test_game_setup(self):
@@ -131,41 +139,50 @@ class GamesTestCase(TestCase):
 
     def test_check_default_stone(self):
         self.assertEqual(
-            game_rules.check_default_stone(self.game.gameboard["data"], row=10, col=6),
+            game_rules.check_default_stone(self.game.gameboard["data"], row=10,
+                                           col=6),
             False,
         )
         self.assertEqual(
-            game_rules.check_default_stone(self.game.gameboard["data"], row=1, col=1),
+            game_rules.check_default_stone(self.game.gameboard["data"], row=1,
+                                           col=1),
             False,
         )
         self.assertEqual(
-            game_rules.check_default_stone(self.game.gameboard["data"], row=3, col=7),
+            game_rules.check_default_stone(self.game.gameboard["data"], row=3,
+                                           col=7),
             False,
         )
         self.assertEqual(
-            game_rules.check_default_stone(self.game.gameboard["data"], row=5, col=6),
+            game_rules.check_default_stone(self.game.gameboard["data"], row=5,
+                                           col=6),
             False,
         )
         self.assertEqual(
-            game_rules.check_default_stone(self.game.gameboard["data"], row=6, col=7),
+            game_rules.check_default_stone(self.game.gameboard["data"], row=6,
+                                           col=7),
             True,
         )
 
     def test_check_thunder_stone(self):
         self.assertEqual(
-            game_rules.check_thunder_stone(self.game.gameboard["data"], row=10, col=10),
+            game_rules.check_thunder_stone(self.game.gameboard["data"], row=10,
+                                           col=10),
             False,
         )
         self.assertEqual(
-            game_rules.check_thunder_stone(self.game.gameboard["data"], row=1, col=1),
+            game_rules.check_thunder_stone(self.game.gameboard["data"], row=1,
+                                           col=1),
             False,
         )
         self.assertEqual(
-            game_rules.check_thunder_stone(self.game.gameboard["data"], row=3, col=1),
+            game_rules.check_thunder_stone(self.game.gameboard["data"], row=3,
+                                           col=1),
             True,
         )
         self.assertEqual(
-            game_rules.check_thunder_stone(self.game.gameboard["data"], row=3, col=7),
+            game_rules.check_thunder_stone(self.game.gameboard["data"], row=3,
+                                           col=7),
             True,
         )
 
@@ -198,24 +215,30 @@ class GamesTestCase(TestCase):
     def test_is_valid_move(self):
         # Test standard stones
         self.assertTrue(
-            game_rules.is_valid_move(self.game, played_stone=1, row=3, col=1), True
+            game_rules.is_valid_move(self.game, played_stone=1, row=3, col=1),
+            True
         )
         self.assertFalse(
-            game_rules.is_valid_move(self.game, played_stone=1, row=1, col=6), False
+            game_rules.is_valid_move(self.game, played_stone=1, row=1, col=6),
+            False
         )
         # Test thunder stones
         self.assertTrue(
-            game_rules.is_valid_move(self.game, played_stone=2, row=4, col=4), True
+            game_rules.is_valid_move(self.game, played_stone=2, row=4, col=4),
+            True
         )
         self.assertFalse(
-            game_rules.is_valid_move(self.game, played_stone=2, row=2, col=5), False
+            game_rules.is_valid_move(self.game, played_stone=2, row=2, col=5),
+            False
         )
         # Test Woden stones
         self.assertTrue(
-            game_rules.is_valid_move(self.game, played_stone=3, row=7, col=1), True
+            game_rules.is_valid_move(self.game, played_stone=3, row=7, col=1),
+            True
         )
         self.assertFalse(
-            game_rules.is_valid_move(self.game, played_stone=3, row=7, col=3), False
+            game_rules.is_valid_move(self.game, played_stone=3, row=7, col=3),
+            False
         )
 
     def test_check_score(self):
@@ -263,7 +286,8 @@ class GamesTestCase(TestCase):
         self.assertEqual(
             game_rules.determine_winner(score_p1=15, score_p2=20), "Player 2"
         )
-        self.assertEqual(game_rules.determine_winner(score_p1=20, score_p2=20), "Tie")
+        self.assertEqual(game_rules.determine_winner(score_p1=20, score_p2=20),
+                         "Tie")
         self.assertNotEqual(
             game_rules.determine_winner(score_p1=20, score_p2=15), "Player 2"
         )
@@ -289,124 +313,28 @@ class GamesTestCase(TestCase):
         )
         self.assertEqual(
             self.game.gameboard["data"],
-            [
-                [
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [1, 1],
-                    [1, 1],
-                    [0, 0],
-                    [1, 1],
-                    [0, 0],
-                    [0, 0],
-                    [0, 0],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [0, 0],
-                    [1, 1],
-                    [1, 1],
-                    [1, 1],
-                    [2, 1],
-                    [0, 0],
-                    [2, 1],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [0, 0],
-                    [1, 1],
-                    [1, 1],
-                    [0, 0],
-                    [0, 0],
-                    [2, 1],
-                    [0, 0],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [1, 1],
-                    [0, 0],
-                    [2, 2],
-                    [0, 0],
-                    [2, 1],
-                    [1, 1],
-                    [1, 1],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [0, 0],
-                    [1, 1],
-                    [2, 1],
-                    [2, 1],
-                    [0, 0],
-                    [0, 0],
-                    [0, 0],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [0, 0],
-                    [1, 1],
-                    [0, 0],
-                    [1, 1],
-                    [0, 0],
-                    [0, 0],
-                    [0, 0],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [2, 1],
-                    [2, 1],
-                    [0, 0],
-                    [1, 1],
-                    [2, 1],
-                    [1, 1],
-                    [0, 0],
-                    [3, 3],
-                ],
-                [
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                    [3, 3],
-                ],
-            ],
+            "xE1/G1/F2",
         )
 
     def test_assign_move(self):
         # test standard stone assignment
-        self.game = game_rules.assign_move(self.game, active_stone=1, row=5, col=7)
+        self.game = game_rules.assign_move(self.game, active_stone=1, row=5,
+                                           col=7)
         self.assertEqual(self.game.gameboard["data"][5][7], [1, 1])
         self.assertIn(
-            "G5 - standard stone (Player 1)", self.game.played_moves_list["data"]
+            "G5 - standard stone (Player 1)",
+            self.game.played_moves_list["data"]
         )
         # test thunder stone assignment
-        self.game = game_rules.assign_move(self.game, active_stone=2, row=4, col=4)
+        self.game = game_rules.assign_move(self.game, active_stone=2, row=4,
+                                           col=4)
         self.assertEqual(self.game.gameboard["data"][4][4], [1, 2])
         self.assertIn(
             "D4 - thunder-stone (Player 1)", self.game.played_moves_list["data"]
         )
         # test Woden stone assignment
-        self.game = game_rules.assign_move(self.game, active_stone=3, row=1, col=5)
+        self.game = game_rules.assign_move(self.game, active_stone=3, row=1,
+                                           col=5)
         self.assertEqual(self.game.gameboard["data"][1][5], [1, 3])
         self.assertIn(
             "E1 - Woden-stone (Player 1)", self.game.played_moves_list["data"]
@@ -420,15 +348,24 @@ class GamesTestCase(TestCase):
 
     def test_player_must_pass(self):
         self.game.gameboard["data"] = [
-            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
-            [[3, 3], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [2, 1], [3, 3]],
-            [[3, 3], [0, 0], [1, 1], [1, 1], [1, 1], [2, 1], [2, 1], [2, 1], [3, 3]],
-            [[3, 3], [2, 1], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [3, 3]],
-            [[3, 3], [1, 1], [0, 0], [2, 1], [1, 1], [2, 1], [1, 1], [1, 1], [3, 3]],
-            [[3, 3], [2, 2], [1, 1], [2, 1], [2, 1], [0, 0], [0, 0], [1, 1], [3, 3]],
-            [[3, 3], [0, 0], [1, 1], [0, 0], [1, 1], [0, 0], [1, 1], [1, 1], [3, 3]],
-            [[3, 3], [2, 1], [2, 1], [0, 0], [1, 1], [2, 1], [1, 1], [0, 0], [3, 3]],
-            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3]],
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3],
+             [3, 3]],
+            [[3, 3], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0], [2, 1],
+             [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [1, 1], [1, 1], [2, 1], [2, 1], [2, 1],
+             [3, 3]],
+            [[3, 3], [2, 1], [1, 1], [1, 1], [0, 0], [1, 1], [2, 1], [0, 0],
+             [3, 3]],
+            [[3, 3], [1, 1], [0, 0], [2, 1], [1, 1], [2, 1], [1, 1], [1, 1],
+             [3, 3]],
+            [[3, 3], [2, 2], [1, 1], [2, 1], [2, 1], [0, 0], [0, 0], [1, 1],
+             [3, 3]],
+            [[3, 3], [0, 0], [1, 1], [0, 0], [1, 1], [0, 0], [1, 1], [1, 1],
+             [3, 3]],
+            [[3, 3], [2, 1], [2, 1], [0, 0], [1, 1], [2, 1], [1, 1], [0, 0],
+             [3, 3]],
+            [[3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3], [3, 3],
+             [3, 3]],
         ]
         self.game.moves_left_list["data"] = game_rules.remaining_standard_moves(
             self.game.gameboard["data"]
@@ -498,9 +435,11 @@ class GameViewsTestCase(TestCase):
         self.assertContains(response, "Log In")
 
     class GameDetailViewTestCase(TestCase):
-        @patch("game.templatetags.custom_filters.range_filter", return_value=range(9))
+        @patch("game.templatetags.custom_filters.range_filter",
+               return_value=range(9))
         def test_game_detail_view_for_logged_in_user(self, mock_range_filter):
-            self.client.login(email="testuser@email.com", password="testpass123")
+            self.client.login(email="testuser@email.com",
+                              password="testpass123")
             response = self.client.get(self.game.get_absolute_url())
             no_response = self.client.get("/games/12345")
             self.assertEqual(response.status_code, 200)
@@ -527,6 +466,7 @@ class GameViewsTestCase(TestCase):
                 email="other_user@email.com",
                 password="testpass123",
             )
-            self.client.login(email="other_user@email.com", password="testpass123")
+            self.client.login(email="other_user@email.com",
+                              password="testpass123")
             response = self.client.get(self.game.get_absolute_url())
             self.assertEqual(response.status_code, 403)
