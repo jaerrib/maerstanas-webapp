@@ -1,12 +1,30 @@
-FROM python:3.10.4-slim-bullseye
+ARG PYTHON_VERSION=3.13-slim
 
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+FROM python:${PYTHON_VERSION}
+
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /repositories
+# install psycopg2 dependencies.
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN mkdir -p /code
 
-COPY . .
+WORKDIR /code
+
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+COPY . /code
+
+ENV SECRET_KEY "oIvbOnOTk9OB1oD4mUQFZJI8iAtgMSxXOumPvprucEBVFJkiT3"
+RUN python manage.py collectstatic --noinput
+
+EXPOSE 8000
+
+CMD ["gunicorn","--bind",":8000","--workers","2","django_project.wsgi"]
